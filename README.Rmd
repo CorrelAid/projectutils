@@ -25,14 +25,10 @@ remotes::install_github("CorrelAid/projectutils")
 
 
 #### Create new projects data
+This package can help you to create new entries for the [CorrelAid project "database"]().
 
-#### Download applications for your project 
-
-
-Please see the README of the [`surveymonkey`](https://github.com/tntp/surveymonkey#add-your-oauth-token-to-your-rprofile) package on how to make this token accessible to your R session.
-
-
-```{r}
+```{r eval=FALSE}
 library(projectutils)
-test <- load_project_applications("TES-2020-02")
+projectutils::new_project("FOO", 2020, 10)
 ```
+

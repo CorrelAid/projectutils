@@ -10,7 +10,6 @@ test_that("test that loading project works", {
   expect_equal(is.list(p), TRUE)
 })
 
-
 # update project
 test_that("test that non-existing field throws error", {
     project <- load_project("2020-01-TES", data = "tests/testthat/test_data")
