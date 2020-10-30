@@ -1,0 +1,70 @@
+{
+  "project_id": "",
+  "project_id_path": "",
+  "published": false,
+  "title": {
+    "de": "",
+    "en": ""
+  },
+  "year": 1970,
+  "start": "1970-01",
+  "end": "1970-02",
+  "repo": {
+    "url": "",
+    "public": false
+  },
+  "links": {
+    "en": [
+      "markdown strings that will be piped through markdownify",
+      "markdown strings that will be piped through markdownify"
+    ],
+    "de": [
+      "markdown strings that will be piped through markdownify",
+      "markdown strings that will be piped through markdownify"
+    ]
+  },
+  "organization": {
+    "name": "",
+    "website": "",
+    "about": {
+      "de": {
+        "text": "actual description",
+        "source": "markdown describing the source (if applicable)"
+      },
+      "en": {
+        "text": "actual description",
+        "source": "markdown describing the source (if applicable) - if translated from German original source write 'translated from [url]()'"
+      }
+    }
+  },
+  "description": {
+    "en": {
+      "summary": "injected from 00_summary.md",
+      "about": "injected from 00_about.md",
+      "problem": "injected from 01_problem.md",
+      "data": "injected from 02_data.md",
+      "approach": "injected from 03_approach.md",
+      "impact": "injected from 04_impact.md"
+    },
+    "de": {
+      "summary": "injected from 00_summary.md",
+      "about": "injected from 00_about.md",
+      "problem": "injected from 01_problem.md",
+      "data": "injected from 02_data.md",
+      "approach": "injected from 03_approach.md",
+      "impact": "injected from 04_impact.md"
+    }
+  },
+  "team": [
+    {
+      "first_name": "",
+      "last_name": "",
+      "github": "",
+      "twitter": "",
+      "linkedin": "",
+      "website": "",
+      "email": "",
+      "pgp": ""
+    }
+  ]
+}

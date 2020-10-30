@@ -1,0 +1,33 @@
+Package: projectutils
+Title: "Small utility functions maintaining the CorrelAid
+    project 'database'"
+Version: 0.1
+Authors@R: 
+    person(given = "Frie",
+           family = "Preu",
+           role = c("aut", "cre"),
+           email = "frie.p@correlaid.org")
+Description: "This packages helps to maintain the ad-hoc
+    CorrelAid 'database'. It contains functions to create the necessary
+    json and markdown files to fill out etc."
+License: MIT
+Depends: 
+    R (>= 3.5.0)
+Imports:
+    dplyr,
+    glue,
+    here,
+    lubridate,
+    magrittr,
+    readr,
+    tibble,
+    usethis,
+    surveymonkey,
+    janitor
+Suggests: 
+    mockery,
+    testthat
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Remotes: tntp/surveymonkey

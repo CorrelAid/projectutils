@@ -1,0 +1,47 @@
+{
+  "project_id": "TES-01-2020",
+  "project_id_path": "2020-01-TES",
+  "title": "Weltladen",
+  "year": 2020,
+  "start": "2020-01",
+  "end": "2020-04",
+  "published": true,
+  "organization": {
+    "name": "Weltladen Dachverband",
+    "website": "https://www.weltladen.de/",
+    "about": {
+      "de": {
+        "text": "actual description",
+        "source": "link to source for description (if applicable)"
+      },
+      "en": {
+        "text": "actual description",
+        "source": "link to source for description (if applicable) - if translated from German original source write 'translated from {URL}'"
+      }
+    }
+  },
+  "description": {
+    "en": {
+      "problem": "",
+      "data": "",
+      "approach": "",
+      "impact": ""
+    },
+    "de": {
+      "problem": "",
+      "data": "",
+      "approach": "",
+      "impact": ""
+    }
+  },
+  "team": [
+    {
+      "first_name": "Timo",
+      "last_name": "Bar",
+      "github": "",
+      "twitter": "",
+      "linkedin": "",
+      "website": ""
+    }
+  ]
+}
