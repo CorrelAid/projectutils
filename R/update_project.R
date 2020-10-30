@@ -5,6 +5,7 @@
 #' @param value the new value.
 #' @return list. the project.
 #' @description load all data for all projects in the data subfolder
+#' @export
 update_project <- function(project, field, value) {
   if (is.null(project[[field]])) {
     usethis::ui_stop(glue::glue("Field {field} does not exist."))
@@ -19,6 +20,7 @@ update_project <- function(project, field, value) {
 #'@param data_folder character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".
 #'@description loads the data for all projects and writes the list as json to the data subfolder
 #'and the docs subfolder (the latter to "publish" it).
+#' @export
 update_projects_json <- function(data_folder = "") {
   projects <- load_projects()
   projects %>%
@@ -30,8 +32,9 @@ update_projects_json <- function(data_folder = "") {
 
 #' writes back meta.json for a project.
 #' @param project. the project.
-#' @param data_folder character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".
+#' @param data_folder character. path to data folder where the project folder is. starts at root of the project as defined by here::here. Defaults to "".
 #' @return the project (invisibly)
+#' @export
 write_project <- function(project, data_folder = "") {
   project_id_path <- project$project_id_path
   pretty_json <- project %>%

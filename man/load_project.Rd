@@ -9,11 +9,11 @@ load_project(project_id_path, data_folder = "")
 \arguments{
 \item{project_id_path}{character. the project id used for folder names, i.e. in the format YYYY-mm-prefix}
 
-\item{data_folder}{character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".}
+\item{data_folder}{character. path to data folder. starts at root of the project as defined by here::here. Defaults to "".}
 }
 \value{
 a list
 }
 \description{
-loads all data related to a project from the data subfolder.
+loads all data related to a project from its folder.
 }

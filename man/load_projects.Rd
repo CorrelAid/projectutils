@@ -7,7 +7,7 @@
 load_projects(data_folder = "")
 }
 \arguments{
-\item{data_folder}{character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".}
+\item{data_folder}{character. path to data folder. starts at root of the project as defined by here::here. Defaults to "".}
 }
 \value{
 a list of lists where each element represents a project.

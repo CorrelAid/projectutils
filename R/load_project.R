@@ -1,8 +1,9 @@
 #'load all data for a project from the project files.
 #'@param project_id_path character. the project id used for folder names, i.e. in the format YYYY-mm-prefix
-#'@param data_folder character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".
+#'@param data_folder character. path to data folder. starts at root of the project as defined by here::here. Defaults to "".
 #'@return a list
-#'@description loads all data related to a project from the data subfolder.
+#'@description loads all data related to a project from its folder.
+#' @export
 load_project <- function(project_id_path, data_folder = "") {
   # error if folder does not exist
   if (!dir.exists(here::here(data_folder, project_id_path))) {
@@ -59,8 +60,9 @@ load_project <- function(project_id_path, data_folder = "") {
 
 #'load all data for all projects in the data subfolder
 #'@return a list of lists where each element represents a project.
-#'@param data_folder character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".
+#'@param data_folder character. path to data folder. starts at root of the project as defined by here::here. Defaults to "".
 #'@description load all data for all projects in the data subfolder
+#'@export
 load_projects <- function(data_folder = "") {
   project_id_paths <-
     list.dirs(here::here(data_folder),

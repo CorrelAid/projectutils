@@ -3,6 +3,7 @@
 #'@param year numeric. year the project was started in, e.g. 2019.
 #'@param month numeric. month the project was started in 
 #'@param data_folder character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".
+#'@export
 new_project <- function(prefix, year, month, data_folder = "") {
   
   usethis::ui_info(glue::glue("processing {prefix} {year} {month}"))
