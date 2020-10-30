@@ -23,6 +23,7 @@ Imports:
     tibble,
     usethis,
     surveymonkey,
+    magrittr,
     janitor
 Suggests: 
     mockery,
