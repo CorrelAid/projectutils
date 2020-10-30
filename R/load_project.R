@@ -68,6 +68,7 @@ load_projects <- function(data_folder = "") {
     list.dirs(here::here(data_folder),
               recursive = FALSE,
               full.names = FALSE)
-  projects <- purrr::map(project_id_paths, load_project)
+  project_id_paths <- stringr::str_subset(project_id_paths, pattern = "\\d{4}-\\d{2}-[:upper:]{3}")
+  projects <- purrr::map(project_id_paths, load_project, data_folder = data_folder)
   return(projects)
 }
