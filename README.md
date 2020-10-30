@@ -7,6 +7,8 @@ projectutils
 coverage](https://codecov.io/gh/CorrelAid/projectutils/branch/master/graph/badge.svg)](https://codecov.io/gh/CorrelAid/projectutils?branch=master)
 [![R build
 status](https://github.com/CorrelAid/projectutils/workflows/R-CMD-check/badge.svg)](https://github.com/CorrelAid/projectutils/actions)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 This R package aims to make it easier to coordinate CorrelAid projects
