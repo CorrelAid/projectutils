@@ -24,11 +24,15 @@ remotes::install_github("CorrelAid/projectutils")
 ```
 
 
-#### Create new projects data
-This package can help you to create new entries for the [CorrelAid project "database"]().
+## Manage project data
 
-```{r eval=FALSE}
-library(projectutils)
-projectutils::new_project("FOO", 2020, 10)
-```
+This package can help you to create and update entries for the [CorrelAid project "database"](). For instructions related to this functionality, please refer to the README of the [CorrelAid project "database"]().
 
+## Surveymonkey integration
+We use [surveymonkey](https://surveymonkey.de) for the following project-related things:
+
+- collect applications for projects
+- collect feedback on the project from NPOs
+- collect feedback on the project from volunteers
+
+Functions to get data from surveymonkey are under development (see branch `applications`)
