@@ -51,4 +51,4 @@ project-related things:
   - collect feedback on the project from volunteers
 
 Functions to get data from surveymonkey are under development (see
-branch `applications`)
+branch `surveymonkey`)
