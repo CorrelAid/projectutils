@@ -1,3 +1,4 @@
+context("creating projects")
 test_that("invalid year throws error", {
   expect_error(new_project("ERL", 293, 12), regexp = "Invalid year", class = "usethis_error")
 })

@@ -9,9 +9,6 @@ update_projects_json(data_folder = "")
 \arguments{
 \item{data_folder}{character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".}
 }
-\value{
-
-}
 \description{
 loads the data for all projects and writes the list as json to the data subfolder
 and the docs subfolder (the latter to "publish" it).

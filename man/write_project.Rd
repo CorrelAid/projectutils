@@ -7,9 +7,9 @@
 write_project(project, data_folder = "")
 }
 \arguments{
-\item{data_folder}{character. path to data folder where the project folder is. starts at root of the project as defined by here::here. Defaults to "".}
+\item{project}{the project.}
 
-\item{project.}{the project.}
+\item{data_folder}{character. path to data folder where the project folder is. starts at root of the project as defined by here::here. Defaults to "".}
 }
 \value{
 the project (invisibly)

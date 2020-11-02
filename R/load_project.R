@@ -6,8 +6,9 @@
 #' @export
 load_project <- function(project_id_path, data_folder = "") {
   # error if folder does not exist
-  if (!dir.exists(here::here(data_folder, project_id_path))) {
-    usethis::ui_stop(glue::glue("Folder {data_folder}/{project_id_path} does not exist."))
+  full_path <- here::here(data_folder, project_id_path)
+  if (!dir.exists(full_path)) {
+    usethis::ui_stop(glue::glue("Folder {full_path} does not exist."))
   }
   
   # load meta data

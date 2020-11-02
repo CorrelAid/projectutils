@@ -1,6 +1,5 @@
 Package: projectutils
-Title: "Small utility functions maintaining the CorrelAid
-    project 'database'"
+Title: "Small Utility Functions Maintaining the CorrelAid Project 'database'""
 Version: 0.1
 Authors@R: 
     person(given = "Frie",
@@ -10,7 +9,7 @@ Authors@R:
 Description: "This packages helps to maintain the ad-hoc
     CorrelAid 'database'. It contains functions to create the necessary
     json and markdown files to fill out etc."
-License: MIT
+License: MIT + file LICENSE
 Depends: 
     R (>= 3.5.0)
 Imports:
@@ -23,7 +22,11 @@ Imports:
     tibble,
     usethis,
     surveymonkey,
-    janitor
+    janitor,
+    fs,
+    jsonlite,
+    purrr,
+    stringr
 Suggests: 
     mockery,
     testthat,
