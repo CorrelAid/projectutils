@@ -5,11 +5,14 @@ on:
     branches:
       - main
       - master
+    paths-ignore:
+      - '**/README.**'
   pull_request:
     branches:
       - main
       - master
-
+    paths-ignore:
+      - '**/README.**'
 name: R-CMD-check
 
 jobs:
