@@ -66,6 +66,7 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("covr")
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
@@ -81,3 +82,8 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
+
+      - name: Test coverage
+        if: runner.os == 'macOS'
+        run: covr::codecov()
+        shell: Rscript {0}
