@@ -40,4 +40,4 @@ We use [surveymonkey](https://surveymonkey.de) for the following project-related
 - collect feedback on the project from NPOs
 - collect feedback on the project from volunteers
 
-Functions to get data from surveymonkey are under development (see branch `applications`)
+Functions to get data from surveymonkey are under development (see branch `surveymonkey`)
