@@ -36,9 +36,10 @@ remotes::install_github("CorrelAid/projectutils")
 ## Manage project data
 
 This package can help you to create and update entries for the
-[CorrelAid project “database”](). For instructions related to this
-functionality, please refer to the README of the [CorrelAid project
-“database”]().
+[CorrelAid project “database”](https://github.com/correlaid/projectsdb).
+For instructions related to this functionality, please refer to the
+README of the [CorrelAid project
+“database”](https://github.com/correlaid/projectsdb).
 
 ## Surveymonkey integration
 
