@@ -80,6 +80,14 @@ get_surveymonkey <- function(id) {
 }
 
 
+rename_techniques_en <- function(col_name) {
+  stringr::str_replace(col_name, ".+following_techniques_(.+?)$", "techniques_\\1")
+}
+
+rename_topics_en <- function(col_name) {
+  stringr::str_replace(col_name, ".+following_topics_(.+?)$", "topics_\\1")
+}
+
 rename_programming_en <- function(col_name) {
   # this question has the explanation of the scale before the actual question
   # the explanation is in italic which appears as "em" in the variable name
@@ -98,14 +106,26 @@ clean_application_colnames <- function(survey_df, lang = "en") {
   }
   
   survey_df <- survey_df %>% 
-    janitor::clean_names() # initial clean up with janitor
+    janitor::clean_names() %>% # initial clean up with janitor
+    dplyr::mutate(dplyr::across(where(is.factor), as.character))
+  
   if (lang == "en") {
     # clean english column names
     survey_df <- survey_df %>% 
-      tidyr::separate(which_project_would_you_like_to_apply_for, c("project_id", "project_title"), sep = ":") # extract project id
+      tidyr::separate(which_project_would_you_like_to_apply_for, c("project_id", "project_title"), sep = ":") %>% # extract project id
+      dplyr::mutate(gender = dplyr::coalesce(!!! dplyr::select(., dplyr::contains("what_is_your_gender"))))
     
-    # rename programming skills
-    survey_df <- survey_df %>% dplyr::rename_with(rename_programming_en, dplyr::starts_with("please_rate_your_experience_with_the_following_technologies"))
+    # rename column names
+    survey_df <- survey_df %>% 
+      dplyr::rename_with(rename_programming_en, dplyr::contains("experience_with_the_following_technologies")) %>% 
+      dplyr::rename_with(rename_techniques_en, dplyr::contains("experience_with_the_following_techniques")) %>% 
+      dplyr::rename_with(rename_topics_en, dplyr::contains("experience_with_the_following_topics")) %>% 
+      dplyr::rename_with(~ "consent_privacy_policy", dplyr::contains("consent_to_privacy_policy")) %>% 
+      dplyr::rename_with(~ "motivation_why_involved", dplyr::contains("why_you_want_to_get_involved")) %>% 
+      dplyr::rename_with(~ "motivation_skills", dplyr::contains("what_skills_you_would_bring")) %>% 
+      dplyr::rename_with(~ "project_role", dplyr::contains("what_role_do_you_want_to_assume")) %>% 
+      dplyr::rename_with(~ "first_name", dplyr::contains("first_name")) %>% 
+      dplyr::rename_with(~ "email", dplyr::contains("which_email_address"))
   } else {
     usethis::ui_stop("German is currently not supported.")
     # TODO once we have collected some responses in german, fix the column name here.
