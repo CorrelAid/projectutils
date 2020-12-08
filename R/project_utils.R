@@ -1,9 +1,9 @@
 #'load all data for a project from the project files.
 #'@param project_id_path character. the project id used for folder names, i.e. in the format YYYY-mm-prefix
-#'@param data_folder character. path to data folder starting at root of the project. defaults to "data"
-#'@return a list 
-#'@description loads all data related to a project from the data subfolder.
-load_project <- function(project_id_path, data_folder = "data") {
+#'@param data_folder character. path to data folder starting at root of the project. defaults to here::here()
+#'@return a list representing a project.
+#'@description loads all data related to a project from the project folder.
+load_project <- function(project_id_path, data_folder = here::here()) {
   # error if folder does not exist
   if (!dir.exists(here::here(data_folder, project_id_path))) {
     usethis::ui_stop(glue::glue("Folder {data_folder}/{project_id_path} does not exist."))
@@ -26,7 +26,7 @@ load_project <- function(project_id_path, data_folder = "data") {
   set_description_data <- function(lang) {
     # if no files in language, skip
     if (length(list.files(here::here(data_folder, project_id_path, lang))) == 0) {
-      usethis::ui_info("no files found.")
+      usethis::ui_warn(glue::glue("no {lang} markdown files found."))
       return(j)
     }
     
@@ -51,11 +51,13 @@ load_project <- function(project_id_path, data_folder = "data") {
 }
 
 #'load all data for all projects in the data subfolder
+#'@param data_folder character. path to data folder starting at root of the project. defaults to here::here()
 #'@return a list of lists where each element represents a project.
-#'@description load all data for all projects in the data subfolder
-load_projects <- function() {
-  project_id_paths <- list.dirs(here::here("data"), recursive = FALSE, full.names = FALSE)
-  projects <- purrr::map(project_id_paths, load_project)
+#'@description load all data for all projects 
+load_projects <- function(data_folder = here::here()) {
+  project_id_paths <- list.dirs(data_folder, recursive = FALSE, full.names = FALSE)
+  project_id_paths <- stringr::str_subset(project_id_paths, pattern = "\\d{4}-\\d{2}-[:upper:]{3}")
+  projects <- purrr::map(project_id_paths, load_project, data_folder = data_folder)
   return(projects)
 }
 
@@ -64,7 +66,6 @@ load_projects <- function() {
 #' @param field character. the field that needs to be updated. only top-level fields work currently 
 #' @param value the new value.
 #' @return list. the project.
-#' @description load all data for all projects in the data subfolder
 update_project <- function(project, field, value) {
   if (is.null(project[[field]])) {
     usethis::ui_stop(glue::glue("Field {field} does not exist."))
@@ -90,9 +91,9 @@ update_projects_json <- function() {
 
 #' writes back meta.json for a project.
 #' @param project. the project.
-#' @param data_folder. data folder path. defaults to "data"
+#' @param data_folder. data folder path. defaults to here::here()
 #' @return the project (invisibly) 
-write_project <- function(project, data_folder = "data") {
+write_project <- function(project, data_folder = here::here()) {
   project_id_path <- project$project_id_path 
   pretty_json <- project %>%
     jsonlite::toJSON(auto_unbox = TRUE) %>% 

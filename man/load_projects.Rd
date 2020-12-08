@@ -4,11 +4,14 @@
 \alias{load_projects}
 \title{load all data for all projects in the data subfolder}
 \usage{
-load_projects()
+load_projects(data_folder = here::here())
+}
+\arguments{
+\item{data_folder}{character. path to data folder starting at root of the project. defaults to here::here()}
 }
 \value{
 a list of lists where each element represents a project.
 }
 \description{
-load all data for all projects in the data subfolder
+load all data for all projects
 }

@@ -4,12 +4,12 @@
 \alias{write_project}
 \title{writes back meta.json for a project.}
 \usage{
-write_project(project, data_folder = "data")
+write_project(project, data_folder = here::here())
 }
 \arguments{
 \item{project.}{the project.}
 
-\item{data_folder.}{data folder path. defaults to "data"}
+\item{data_folder.}{data folder path. defaults to here::here()}
 }
 \value{
 the project (invisibly)

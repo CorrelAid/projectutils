@@ -6,7 +6,7 @@
 #' @export
 #' @importFrom surveymonkey fetch_survey_obj parse_survey 
 #' @importFrom dplyr filter
-load_project_applications <- function(project_id, lang = "en") {
+load_applications <- function(project_id, lang = "en") {
   if (!lang %in% c("en", "de")) {
     usethis::ui_stop("lang must be either 'de' or 'en'.")
   }
@@ -16,55 +16,93 @@ load_project_applications <- function(project_id, lang = "en") {
   } else {
     survey_id <- 284359289 # Bewerbungsformular für Projektteams
   }
-  
+  proj_id <- project_id
   survey_df <- survey_id %>% 
-    surveymonkey::fetch_survey_obj() %>%
-    surveymonkey::parse_survey() %>% 
+    get_surveymonkey() %>% 
     clean_application_colnames(lang = lang) %>% 
-    dplyr::filter(project_id == project_id) %>% 
+    dplyr::filter(project_id == proj_id) %>% 
     dplyr::mutate(applicant_id = 1:dplyr::n()) %>%  # give participant integer id
     dplyr::select(applicant_id, dplyr::everything())
   return(survey_df)
 }
 
-# helper function
-clean_application_colnames <- function(survey_df, lang) {
+
+#' anonymize_applications
+#' @param survey_df tibble. Tibble with the applications. 
+#' @param lang. character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
+#' @export
+anonymize_applications <- function(survey_df, lang = "en") {
+  if (!lang %in% c("en", "de")) {
+    usethis::ui_stop("lang must be either 'de' or 'en'.")
+  }
+  
+  if (lang == "en") {
+    survey_df <- survey_df %>% 
+      dplyr::select_if(stringr::str_detect(colnames(.), "email") == FALSE) %>% 
+      dplyr::select_if(stringr::str_detect(colnames(.), "name") == FALSE) %>% 
+      dplyr::select(-ip_address)
+  } else {
+    usethis::ui_stop("German is currently not supported.")
+    # TODO: implement for german
+  }
+  return(survey_df)
+}
+
+#' extract_motivation_questions
+#' @param survey_df tibble. Tibble with the applications. 
+#' @param lang. character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
+#' @export
+extract_motivation_questions <- function(survey_df, lang = "en") {
+  if (!lang %in% c("en", "de")) {
+    usethis::ui_stop("lang must be either 'de' or 'en'.")
+  }
+  
+  if (lang == "en") {
+  motivation <- survey_df %>% 
+    dplyr::select(applicant_id, skills_text = please_describe_here_what_skills_you_would_bring_to_the_project_max_5_sentences, 
+           motivation_text = please_describe_here_why_you_want_to_get_involved_in_this_project_max_5_sentences)
+  } else {
+    # TODO
+    usethis::ui_stop("German is currently not supported.")
+  }
+  md_text <- glue::glue("## Applicant {motivation$applicant_id} \n ### What skills qualify you? \n {motivation$skills_text} \n ### Why do you want to get involved? \n {motivation$motivation_text}")
+  md_text
+}
+
+
+#' get_surveymonkey
+#' @param id character. internal surveymonkey id for the survey
+#' @return tibble with answers to the survey
+get_surveymonkey <- function(id) {
+  id %>% 
+    surveymonkey::fetch_survey_obj() %>%
+    surveymonkey::parse_survey()
+}
+
+#' clean_application_colnames
+#' @param survey_df tibble. Tibble with the applications. 
+#' @param lang. character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
+#' @return tibble with clean column names
+#' @description snakecases column names and splits the title into "project_id" and "project_title"
+clean_application_colnames <- function(survey_df, lang = "en") {
+  if (!lang %in% c("en", "de")) {
+    usethis::ui_stop("lang must be either 'de' or 'en'.")
+  }
+  
   survey_df <- survey_df %>% 
     janitor::clean_names() # initial clean up with janitor
   if (lang == "en") {
     # clean english column names
     survey_df <- survey_df %>% 
       tidyr::separate(which_project_would_you_like_to_apply_for, c("project_id", "project_title"), sep = ":") # extract project id
-
+    
   } else {
+    usethis::ui_stop("German is currently not supported.")
     # TODO once we have collected some responses in german, fix the column name here.
   }
+  
+  # trim character variables
+  survey_df <- survey_df %>% 
+    dplyr::mutate(dplyr::across(where(is.character), stringr::str_trim))
   return(survey_df)
-}
-
-#'
-#'@export
-anonymize_applications <- function(survey_df, lang) {
-  if (lang == "en") {
-    survey_df <- cit %>% 
-      dplyr::select_if(stringr::str_detect(colnames(.), "email") == FALSE) %>% 
-      dplyr::select_if(stringr::str_detect(colnames(.), "name") == FALSE) %>% 
-      dplyr::select(-ip_address)
-  } else {
-    # TODO: implement for german
-  }
-  return(survey_df)
-}
-
-#' @export
-extract_motivation <- function(survey_df, lang) {
-  if (lang == "en") {
-  motivation <- cit %>% 
-    dplyr::select(applicant_id, skills_text = please_describe_here_which_of_your_skills_particularly_qualify_you_for_the_participation_in_this_project_max_5_sentences, 
-           motivation_text = please_describe_here_why_you_want_to_get_involved_in_this_project_max_5_sentences)
-  } else {
-    # TODO
-  }
-  md_text <- glue::glue("## Applicant {motivation$applicant_id} \n ### What skills qualify you? \n {motivation$skills_text} \n ### Why do you want to get involved? \n {motivation$motivation_text}")
-  md_text %>% readr::write_lines("2020-10-cit_motivation.md")
 }

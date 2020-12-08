@@ -6,6 +6,9 @@
 \usage{
 update_projects_json()
 }
+\value{
+
+}
 \description{
 loads the data for all projects and writes the list as json to the data subfolder
 and the docs subfolder (the latter to "publish" it).

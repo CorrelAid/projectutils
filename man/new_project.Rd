@@ -4,7 +4,7 @@
 \alias{new_project}
 \title{creates folder for a new project and adds templates for all the necessary files.}
 \usage{
-new_project(prefix, year, month)
+new_project(prefix, year, month, data_folder = here::here())
 }
 \arguments{
 \item{prefix}{character. 3 character, alphabetic uppercase prefix to be used for the project. Usually the first three letters of the organization name.}
@@ -12,6 +12,8 @@ new_project(prefix, year, month)
 \item{year}{numeric. year the project was started in, e.g. 2019.}
 
 \item{month}{numeric. month the project was started in}
+
+\item{data_folder}{character. path to data folder starting at root of the project. defaults to here::here()}
 }
 \description{
 creates folder for a new project and adds templates for all the necessary files.

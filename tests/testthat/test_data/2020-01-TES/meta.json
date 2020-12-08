@@ -1,14 +1,14 @@
 {
   "project_id": "TES-01-2020",
   "project_id_path": "2020-01-TES",
-  "title": "Weltladen",
+  "title": "Test organization project",
   "year": 2020,
   "start": "2020-01",
   "end": "2020-04",
   "published": true,
   "organization": {
-    "name": "Weltladen Dachverband",
-    "website": "https://www.weltladen.de/",
+    "name": "test organization",
+    "website": "https://www.testorg.de/",
     "about": {
       "de": {
         "text": "actual description",

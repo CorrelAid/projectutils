@@ -17,5 +17,5 @@ update_project(project, field, value)
 list. the project.
 }
 \description{
-load all data for all projects in the data subfolder
+updates a top level field of a project
 }
