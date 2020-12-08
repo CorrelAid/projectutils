@@ -79,6 +79,5 @@ test_that("coalescing gender works", {
   test_data <- readr::read_csv("test_data/surveymonkey/applications_fake_en.csv")
   mockery::stub(load_applications, 'get_surveymonkey', test_data)
   applications <- load_applications("CIT-10-2020")
-  print(applications$gender %>% unique())
   expect_setequal(c("Male", "Female", "Non-binary", "I do not want to disclose my gender", "agender"), unique(applications$gender))
 })

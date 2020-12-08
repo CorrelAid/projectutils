@@ -50,25 +50,37 @@ anonymize_applications <- function(survey_df, lang = "en") {
 
 #' extract_motivation_questions
 #' @param survey_df tibble. Tibble with the applications. 
-#' @param lang. character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
 #' @export
-extract_motivation_questions <- function(survey_df, lang = "en") {
-  if (!lang %in% c("en", "de")) {
-    usethis::ui_stop("lang must be either 'de' or 'en'.")
-  }
-  
-  if (lang == "en") {
+extract_motivation_questions <- function(survey_df) {
+
   motivation <- survey_df %>% 
-    dplyr::select(applicant_id, skills_text = please_describe_here_what_skills_you_would_bring_to_the_project_max_5_sentences, 
-           motivation_text = please_describe_here_why_you_want_to_get_involved_in_this_project_max_5_sentences)
-  } else {
-    # TODO
-    usethis::ui_stop("German is currently not supported.")
-  }
+    dplyr::select(applicant_id, skills_text = motivation_skills, 
+           motivation_text = motivation_why_involved)
   md_text <- glue::glue("## Applicant {motivation$applicant_id} \n ### What skills qualify you? \n {motivation$skills_text} \n ### Why do you want to get involved? \n {motivation$motivation_text}")
   md_text
 }
 
+#'Use download applications script template
+#'@param project_id_path project id in path form, e.g. 2020-11-COR
+#'@param data_folder character. path to data folder starting at root of the project. defaults to "", i.e. root
+use_download_applications <- function(project_id_path, data_folder = "") {
+  
+  project_id <- id_surveymonkey(project_id_path)
+  # template_path <- tryCatch(
+  #   fs::path_package(package = "projectutils", "templates", "download_applications.R"), # installed in library
+  #   error = function(e) fs::path_package(package = "projectutils", "inst", "templates", "download_applications.R") # development mode
+  # )
+  # fs::file_copy(template_path, fs::path(data_folder, project_id_path, "download_applications.R"))
+  # 
+  
+  usethis::use_template(
+    "download_applications.R",
+    save_as = fs::path(data_folder, project_id_path, "download_applications.R"),
+    data = list(project_id = project_id),
+    package = "projectutils",
+    open = TRUE
+  )
+}
 
 #' get_surveymonkey
 #' @param id character. internal surveymonkey id for the survey
