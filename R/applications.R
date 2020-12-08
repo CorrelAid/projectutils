@@ -63,16 +63,10 @@ extract_motivation_questions <- function(survey_df) {
 #'Use download applications script template
 #'@param project_id_path project id in path form, e.g. 2020-11-COR
 #'@param data_folder character. path to data folder starting at root of the project. defaults to "", i.e. root
+#'@export 
 use_download_applications <- function(project_id_path, data_folder = "") {
   
   project_id <- id_surveymonkey(project_id_path)
-  # template_path <- tryCatch(
-  #   fs::path_package(package = "projectutils", "templates", "download_applications.R"), # installed in library
-  #   error = function(e) fs::path_package(package = "projectutils", "inst", "templates", "download_applications.R") # development mode
-  # )
-  # fs::file_copy(template_path, fs::path(data_folder, project_id_path, "download_applications.R"))
-  # 
-  
   usethis::use_template(
     "download_applications.R",
     save_as = fs::path(data_folder, project_id_path, "download_applications.R"),
@@ -126,6 +120,10 @@ clean_application_colnames <- function(survey_df, lang = "en") {
     survey_df <- survey_df %>% 
       tidyr::separate(which_project_would_you_like_to_apply_for, c("project_id", "project_title"), sep = ":") %>% # extract project id
       dplyr::mutate(gender = dplyr::coalesce(!!! dplyr::select(., dplyr::contains("what_is_your_gender"))))
+    
+    # drop original gender variables
+    survey_df <- survey_df %>% 
+      dplyr::select(-contains("what_is_your_gender"))
     
     # rename column names
     survey_df <- survey_df %>% 
