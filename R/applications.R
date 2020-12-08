@@ -79,6 +79,14 @@ get_surveymonkey <- function(id) {
     surveymonkey::parse_survey()
 }
 
+
+rename_programming_en <- function(col_name) {
+  # this question has the explanation of the scale before the actual question
+  # the explanation is in italic which appears as "em" in the variable name
+  # after the last "em" there is the value of the row
+  stringr::str_replace(col_name, ".+em_(.+?)$", "skills_\\1")
+}
+
 #' clean_application_colnames
 #' @param survey_df tibble. Tibble with the applications. 
 #' @param lang. character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
@@ -96,6 +104,8 @@ clean_application_colnames <- function(survey_df, lang = "en") {
     survey_df <- survey_df %>% 
       tidyr::separate(which_project_would_you_like_to_apply_for, c("project_id", "project_title"), sep = ":") # extract project id
     
+    # rename programming skills
+    survey_df <- survey_df %>% dplyr::rename_with(rename_programming_en, dplyr::starts_with("please_rate_your_experience_with_the_following_technologies"))
   } else {
     usethis::ui_stop("German is currently not supported.")
     # TODO once we have collected some responses in german, fix the column name here.
