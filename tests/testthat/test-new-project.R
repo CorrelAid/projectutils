@@ -33,7 +33,7 @@ test_that("invalid prefix throws an error", {
 
 test_that("project creation works as expected", {
   # create files
-  new_project("FOO", 2020, 10, "tests/testthat/test_data/")
+  new_project("FOO", 2020, 10, here::here("tests/testthat/test_data/"))
   expect_true(dir.exists(here::here("tests/testthat/test_data/2020-10-FOO/")))
   expect_true(dir.exists(here::here("tests/testthat/test_data/2020-10-FOO/en")))
   expect_true(dir.exists(here::here("tests/testthat/test_data/2020-10-FOO/de")))
