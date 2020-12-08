@@ -2,6 +2,11 @@
 title: "projectutils"
 output: github_document
 ---
+<!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/CorrelAid/projectutils/branch/master/graph/badge.svg)](https://codecov.io/gh/CorrelAid/projectutils?branch=master)
+[![R build status](https://github.com/CorrelAid/projectutils/workflows/R-CMD-check/badge.svg)](https://github.com/CorrelAid/projectutils/actions)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -24,15 +29,15 @@ remotes::install_github("CorrelAid/projectutils")
 ```
 
 
-#### Create new projects data
+## Manage project data
 
-#### Download applications for your project 
+This package can help you to create and update entries for the [CorrelAid project "database"](https://github.com/correlaid/projectsdb). For instructions related to this functionality, please refer to the README of the [CorrelAid project "database"](https://github.com/correlaid/projectsdb).
 
+## Surveymonkey integration
+We use [surveymonkey](https://surveymonkey.de) for the following project-related things:
 
-Please see the README of the [`surveymonkey`](https://github.com/tntp/surveymonkey#add-your-oauth-token-to-your-rprofile) package on how to make this token accessible to your R session.
+- collect applications for projects
+- collect feedback on the project from NPOs
+- collect feedback on the project from volunteers
 
-
-```{r}
-library(projectutils)
-test <- load_project_applications("TES-2020-02")
-```
+Functions to get data from surveymonkey are under development (see branch `surveymonkey`)

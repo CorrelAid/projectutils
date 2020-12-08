@@ -1,2 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
+^codecov\.yml$
+^\.github$
+README.Rmd
+^LICENSE\.md$
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
