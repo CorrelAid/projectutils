@@ -1,12 +1,12 @@
 #' load project applications 
 #' @description loads the applications for a given project
-#' @param project_id character. ID of the project, e.g. ERL-03-2020. 
+#' @param project_id character. ID of the project, e.g. ERL-03-2020. Defaults to NULL which means not to filter by project
 #' @param lang. character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.
 #' @return data frame containing the responses to the questions
 #' @export
 #' @importFrom surveymonkey fetch_survey_obj parse_survey 
 #' @importFrom dplyr filter
-load_applications <- function(project_id, lang = "en") {
+load_applications <- function(project_id = NULL, lang = "en") {
   if (!lang %in% c("en", "de")) {
     usethis::ui_stop("lang must be either 'de' or 'en'.")
   }
@@ -16,13 +16,17 @@ load_applications <- function(project_id, lang = "en") {
   } else {
     survey_id <- 284359289 # Bewerbungsformular für Projektteams
   }
-  proj_id <- project_id
   survey_df <- survey_id %>% 
     get_surveymonkey() %>% 
     clean_application_colnames(lang = lang) %>% 
-    dplyr::filter(project_id == proj_id) %>% 
     dplyr::mutate(applicant_id = 1:dplyr::n()) %>%  # give participant integer id
     dplyr::select(applicant_id, dplyr::everything())
+  
+  if (!is.null(project_id)) {
+    proj_id <- project_id
+    survey_df <- survey_df %>% 
+      dplyr::filter(project_id == proj_id)
+  }
   return(survey_df)
 }
 
@@ -31,20 +35,9 @@ load_applications <- function(project_id, lang = "en") {
 #' @param survey_df tibble. Tibble with the applications. 
 #' @param lang. character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
 #' @export
-anonymize_applications <- function(survey_df, lang = "en") {
-  if (!lang %in% c("en", "de")) {
-    usethis::ui_stop("lang must be either 'de' or 'en'.")
-  }
-  
-  if (lang == "en") {
-    survey_df <- survey_df %>% 
-      dplyr::select_if(stringr::str_detect(colnames(.), "email") == FALSE) %>% 
-      dplyr::select_if(stringr::str_detect(colnames(.), "name") == FALSE) %>% 
-      dplyr::select(-ip_address)
-  } else {
-    usethis::ui_stop("German is currently not supported.")
-    # TODO: implement for german
-  }
+anonymize_applications <- function(survey_df) {
+  survey_df <- survey_df %>% 
+    select(-email, -first_name, -ip_address)
   return(survey_df)
 }
 

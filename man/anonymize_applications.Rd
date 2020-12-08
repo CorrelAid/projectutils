@@ -4,7 +4,7 @@
 \alias{anonymize_applications}
 \title{anonymize_applications}
 \usage{
-anonymize_applications(survey_df, lang = "en")
+anonymize_applications(survey_df)
 }
 \arguments{
 \item{survey_df}{tibble. Tibble with the applications.}
