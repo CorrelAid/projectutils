@@ -5,8 +5,6 @@
 \title{load all data for all projects in the data subfolder}
 \usage{
 load_projects(data_folder = here::here())
-
-load_projects(data_folder = here::here())
 }
 \arguments{
 \item{data_folder}{character. path to data folder starting at root of the project. defaults to here::here()}

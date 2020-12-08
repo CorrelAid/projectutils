@@ -6,7 +6,6 @@
 \usage{
 update_projects_json(data_folder = "")
 
-update_projects_json(data_folder = "")
 }
 \arguments{
 \item{data_folder}{character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".}

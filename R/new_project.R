@@ -3,8 +3,8 @@
 #'@param year numeric. year the project was started in, e.g. 2019.
 #'@param month numeric. month the project was started in 
 #'@param data_folder character. path to data folder starting at root of the project. defaults to here::here()
+#'@export  
 new_project <- function(prefix, year, month, data_folder = here::here()) {
-  
   usethis::ui_info(glue::glue("processing {prefix} {year} {month}"))
   # check validity of inputs
   if (!is.numeric(year) | nchar(as.character(year)) != 4) {
@@ -25,7 +25,6 @@ new_project <- function(prefix, year, month, data_folder = here::here()) {
   # project id path 
   project_id_path <- glue::glue("{year}-{month}-{prefix}")
   dir.create(fs::path(data_folder, project_id_path), showWarnings = FALSE)
-             ?fs::path()
   
   # meta data file (meta.json)
   template_meta <- get_meta_template()
@@ -37,6 +36,7 @@ new_project <- function(prefix, year, month, data_folder = here::here()) {
   template_meta$start <- glue::glue("{year}-{month}")
   
   meta_path <- fs::path(data_folder, project_id_path, "meta.json")
+
   answer <- TRUE
   if (file.exists(meta_path)) {
     usethis::ui_warn("meta.json already exists in {meta_path}")
@@ -52,6 +52,7 @@ new_project <- function(prefix, year, month, data_folder = here::here()) {
   markdown_files <- c("00_about.md", "00_summary.md", "01_problem.md", "02_data.md", "03_approach.md", "04_impact.md")
   for (lang in c("de", "en")) {
     dir.create(fs::path(data_folder, project_id_path, lang), showWarnings = FALSE)
+
     purrr::walk(markdown_files, function(x) {
         file_path <- fs::path(data_folder, project_id_path, lang, x)
         
