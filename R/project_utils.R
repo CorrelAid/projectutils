@@ -80,9 +80,7 @@ update_project <- function(project, field, value) {
 
 #'update the list of projects
 #'@param data_folder character. path to data folder starting at root of the project. defaults to here::here()
-#'@return 
 #'@description loads the data for all projects and writes the list as json to the data subfolder
-#'and the docs subfolder (the latter to "publish" it).
 #'@export 
 update_projects_json <- function(data_folder = here::here()) {
   projects <- load_projects()
@@ -94,8 +92,8 @@ update_projects_json <- function(data_folder = here::here()) {
 }
 
 #' writes back meta.json for a project.
-#' @param project. the project.
-#' @param data_folder. data folder path. defaults to here::here()
+#' @param project the project.
+#' @param data_folder data folder path. defaults to here::here()
 #' @return the project (invisibly) 
 write_project <- function(project, data_folder = here::here()) {
   project_id_path <- project$project_id_path 

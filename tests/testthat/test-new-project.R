@@ -33,19 +33,20 @@ test_that("invalid prefix throws an error", {
 
 test_that("project creation works as expected", {
   # create files
-  new_project("FOO", 2020, 10, here::here("tests/testthat/test_data/"))
-  expect_true(dir.exists(here::here("tests/testthat/test_data/2020-10-FOO/")))
-  expect_true(dir.exists(here::here("tests/testthat/test_data/2020-10-FOO/en")))
-  expect_true(dir.exists(here::here("tests/testthat/test_data/2020-10-FOO/de")))
-  expect_true(file.exists(here::here("tests/testthat/test_data/2020-10-FOO/meta.json")))
-  expect_true(file.exists(here::here("tests/testthat/test_data/2020-10-FOO/en/00_about.md")))
-  expect_true(file.exists(here::here("tests/testthat/test_data/2020-10-FOO/en/00_summary.md")))
-  expect_true(file.exists(here::here("tests/testthat/test_data/2020-10-FOO/en/01_problem.md")))
-  expect_true(file.exists(here::here("tests/testthat/test_data/2020-10-FOO/en/02_data.md")))
-  expect_true(file.exists(here::here("tests/testthat/test_data/2020-10-FOO/en/03_approach.md")))
-  expect_true(file.exists(here::here("tests/testthat/test_data/2020-10-FOO/en/04_impact.md")))
+  fs::path_file(".")
+  new_project("FOO", 2020, 10)
+  expect_true(dir.exists(here::here("2020-10-FOO/")))
+  expect_true(dir.exists(here::here("2020-10-FOO/en")))
+  expect_true(dir.exists(here::here("2020-10-FOO/de")))
+  expect_true(file.exists(here::here("2020-10-FOO/meta.json")))
+  expect_true(file.exists(here::here("2020-10-FOO/en/00_about.md")))
+  expect_true(file.exists(here::here("2020-10-FOO/en/00_summary.md")))
+  expect_true(file.exists(here::here("2020-10-FOO/en/01_problem.md")))
+  expect_true(file.exists(here::here("2020-10-FOO/en/02_data.md")))
+  expect_true(file.exists(here::here("2020-10-FOO/en/03_approach.md")))
+  expect_true(file.exists(here::here("2020-10-FOO/en/04_impact.md")))
 })
 
 teardown({
-  unlink(here::here("tests/testthat/test_data/2020-10-FOO/"), recursive = TRUE)
+  unlink(here::here("2020-10-FOO/"), recursive = TRUE)
 })

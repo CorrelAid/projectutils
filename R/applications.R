@@ -1,11 +1,15 @@
+utils::globalVariables("where") # https://github.com/r-lib/tidyselect/issues/201
+utils::globalVariables(".")
+
 #' load project applications 
 #' @description loads the applications for a given project
 #' @param project_id character. ID of the project, e.g. ERL-03-2020. Defaults to NULL which means not to filter by project
-#' @param lang. character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.
+#' @param lang character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.
 #' @return data frame containing the responses to the questions
 #' @export
 #' @importFrom surveymonkey fetch_survey_obj parse_survey 
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 load_applications <- function(project_id = NULL, lang = "en") {
   if (!lang %in% c("en", "de")) {
     usethis::ui_stop("lang must be either 'de' or 'en'.")
@@ -23,12 +27,12 @@ load_applications <- function(project_id = NULL, lang = "en") {
   if (!is.null(project_id)) {
     proj_id <- project_id
     survey_df <- survey_df %>% 
-      dplyr::filter(project_id == proj_id)
+      dplyr::filter(.data$project_id == proj_id)
   }
   
   survey_df <- survey_df %>% 
     dplyr::mutate(applicant_id = 1:dplyr::n()) %>%  # give participant integer id
-    dplyr::select(applicant_id, gender, dplyr::everything())
+    dplyr::select(.data$applicant_id, .data$gender, dplyr::everything())
 
   return(survey_df)
 }
@@ -36,22 +40,23 @@ load_applications <- function(project_id = NULL, lang = "en") {
 
 #' anonymize_applications
 #' @param survey_df tibble. Tibble with the applications. 
-#' @param lang. character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
+#' @importFrom rlang .data
 #' @export
 anonymize_applications <- function(survey_df) {
   survey_df <- survey_df %>% 
-    dplyr::select(-email, -first_name, -ip_address)
+    dplyr::select(-.data$email, -.data$first_name, -.data$ip_address)
   return(survey_df)
 }
 
 #' extract_motivation_questions
 #' @param survey_df tibble. Tibble with the applications. 
+#' @importFrom rlang .data
 #' @export
 extract_motivation_questions <- function(survey_df) {
 
   motivation <- survey_df %>% 
-    dplyr::select(applicant_id, skills_text = motivation_skills, 
-           motivation_text = motivation_why_involved)
+    dplyr::select(.data$applicant_id, skills_text = .data$motivation_skills, 
+           motivation_text = .data$motivation_why_involved)
   md_text <- glue::glue("## Applicant {motivation$applicant_id} \n ### What skills qualify you? \n {motivation$skills_text} \n ### Why do you want to get involved? \n {motivation$motivation_text}")
   md_text
 }
@@ -99,8 +104,10 @@ rename_programming_en <- function(col_name) {
 
 #' clean_application_colnames
 #' @param survey_df tibble. Tibble with the applications. 
-#' @param lang. character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
+#' @param lang character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
 #' @return tibble with clean column names
+#' @importFrom dplyr contains
+#' @importFrom rlang .data
 #' @description snakecases column names and splits the title into "project_id" and "project_title"
 clean_application_colnames <- function(survey_df, lang = "en") {
   if (!lang %in% c("en", "de")) {
@@ -114,7 +121,7 @@ clean_application_colnames <- function(survey_df, lang = "en") {
   if (lang == "en") {
     # clean english column names
     survey_df <- survey_df %>% 
-      tidyr::separate(which_project_would_you_like_to_apply_for, c("project_id", "project_title"), sep = ":") %>% # extract project id
+      tidyr::separate(.data$which_project_would_you_like_to_apply_for, c("project_id", "project_title"), sep = ":") %>% # extract project id
       dplyr::mutate(gender = dplyr::coalesce(!!! dplyr::select(., dplyr::contains("what_is_your_gender"))))
     
     # drop original gender variables
@@ -145,22 +152,35 @@ clean_application_colnames <- function(survey_df, lang = "en") {
 
 
 
-#' get_selected_emails
+#' get_emails_selected
 #' @param mapping_df tibble. Tibble with the mapping from applicant id to name & email
-#' @param selected numeric. vector with numeric ids of those who were selected from the team.
+#' @param selected_ids numeric. vector with numeric ids of those who were selected from the team.
 #' @return email addresses of those who were selected
-get_selected_emails <- function(mapping_df, selected_ids) {
-  mapping_df %>% 
-    dplyr::filter(applicant_id %in% selected_ids) %>% 
-    dplyr::pull(email)
+#' @importFrom rlang .data
+#' @export
+get_emails_selected <- function(mapping_df, selected_ids) {
+  emails <- mapping_df %>% 
+    dplyr::filter(.data$applicant_id %in% selected_ids) %>% 
+    dplyr::pull(.data$email)
+  
+  if (clipr::clipr_available()) {
+    clipr::write_clip(emails %>% paste(collapse = ";"))
+  }
+  invisible(emails)
 }
 
-#' get_discarded_emails
+#' get_emails_discarded
 #' @param mapping_df tibble. Tibble with the mapping from applicant id to name & email
-#' @param selected numeric. vector with numeric ids of those who were selected from the team.
+#' @param selected_ids numeric. vector with numeric ids of those who were selected from the team.
 #' @return email addresses of those who were selected
-get_discarded_emails <- function(mapping_df, selected_ids) {
-  mapping_df %>% 
-    dplyr::filter(!applicant_id %in% selected_ids) %>% 
-    dplyr::pull(email)
+#' @export
+#' @importFrom rlang .data
+get_emails_discarded <- function(mapping_df, selected_ids) {
+  emails <- mapping_df %>% 
+    dplyr::filter(!.data$applicant_id %in% selected_ids) %>% 
+    dplyr::pull(.data$email)
+  if (clipr::clipr_available()) {
+    clipr::write_clip(emails %>% paste(collapse = ";"))
+  }
+  invisible(emails)
 }

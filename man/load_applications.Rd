@@ -9,7 +9,7 @@ load_applications(project_id = NULL, lang = "en")
 \arguments{
 \item{project_id}{character. ID of the project, e.g. ERL-03-2020. Defaults to NULL which means not to filter by project}
 
-\item{lang.}{character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.}
+\item{lang}{character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.}
 }
 \value{
 data frame containing the responses to the questions

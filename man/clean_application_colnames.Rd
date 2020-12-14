@@ -9,7 +9,7 @@ clean_application_colnames(survey_df, lang = "en")
 \arguments{
 \item{survey_df}{tibble. Tibble with the applications.}
 
-\item{lang.}{character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".}
+\item{lang}{character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".}
 }
 \value{
 tibble with clean column names

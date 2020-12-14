@@ -8,8 +8,6 @@ anonymize_applications(survey_df)
 }
 \arguments{
 \item{survey_df}{tibble. Tibble with the applications.}
-
-\item{lang.}{character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".}
 }
 \description{
 anonymize_applications
