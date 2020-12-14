@@ -3,6 +3,7 @@
 #'@param data_folder character. path to data folder starting at root of the project. defaults to here::here()
 #'@return a list representing a project.
 #'@description loads all data related to a project from the project folder.
+#'@export
 load_project <- function(project_id_path, data_folder = here::here()) {
   # error if folder does not exist
   if (!dir.exists(here::here(data_folder, project_id_path))) {
@@ -54,6 +55,7 @@ load_project <- function(project_id_path, data_folder = here::here()) {
 #'@param data_folder character. path to data folder starting at root of the project. defaults to here::here()
 #'@return a list of lists where each element represents a project.
 #'@description load all data for all projects 
+#'@export
 load_projects <- function(data_folder = here::here()) {
   project_id_paths <- list.dirs(data_folder, recursive = FALSE, full.names = FALSE)
   project_id_paths <- stringr::str_subset(project_id_paths, pattern = "\\d{4}-\\d{2}-[:upper:]{3}")
@@ -66,6 +68,7 @@ load_projects <- function(data_folder = here::here()) {
 #' @param field character. the field that needs to be updated. only top-level fields work currently 
 #' @param value the new value.
 #' @return list. the project.
+#' @export
 update_project <- function(project, field, value) {
   if (is.null(project[[field]])) {
     usethis::ui_stop(glue::glue("Field {field} does not exist."))
@@ -76,16 +79,17 @@ update_project <- function(project, field, value) {
 
 
 #'update the list of projects
+#'@param data_folder character. path to data folder starting at root of the project. defaults to here::here()
 #'@return 
 #'@description loads the data for all projects and writes the list as json to the data subfolder
 #'and the docs subfolder (the latter to "publish" it).
-update_projects_json <- function() {
+#'@export 
+update_projects_json <- function(data_folder = here::here()) {
   projects <- load_projects()
   projects %>% 
     jsonlite::toJSON(auto_unbox = TRUE) %>% 
     jsonlite::prettify() %T>% 
-    readr::write_lines(here::here("data", "projects.json")) %>% 
-    readr::write_lines(here::here("docs", "projects.json"))
+    readr::write_lines(fs::path(data_folder, "projects.json"))
   usethis::ui_done("updated projects.json")
 }
 
@@ -98,7 +102,7 @@ write_project <- function(project, data_folder = here::here()) {
   pretty_json <- project %>%
     jsonlite::toJSON(auto_unbox = TRUE) %>% 
     jsonlite::prettify()
-  readr::write_lines(pretty_json, here::here(data_folder, project_id_path, "meta.json"))
+  readr::write_lines(pretty_json, fs::path(data_folder, project_id_path, "meta.json"))
   usethis::ui_done(glue::glue("saved to {data_folder}/{project_id_path}/meta.json"))
   
   return(invisible(project))

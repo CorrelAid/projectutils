@@ -5,6 +5,8 @@
 \title{writes back meta.json for a project.}
 \usage{
 write_project(project, data_folder = "")
+
+write_project(project, data_folder = "")
 }
 \arguments{
 \item{project}{the project.}
@@ -16,10 +18,12 @@ write_project(project, data_folder = "")
 \item{data_folder.}{data folder path. defaults to here::here()}
 }
 \value{
+the project (invisibly)
 
 the project (invisibly)
 }
 \description{
+writes back meta.json for a project.
 
 writes back meta.json for a project.
 }

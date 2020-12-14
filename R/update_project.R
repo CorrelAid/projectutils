@@ -16,17 +16,17 @@ update_project <- function(project, field, value) {
 
 
 #'update the list of projects
-#'@param data_folder character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".
+#'@param data_folder character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to here::here().
 #'@description loads the data for all projects and writes the list as json to the data subfolder
 #'and the docs subfolder (the latter to "publish" it).
 #'@importFrom magrittr %T>%
 #'@export
-update_projects_json <- function(data_folder = "") {
+update_projects_json <- function(data_folder = here::here()) {
   projects <- load_projects()
   projects %>%
     jsonlite::toJSON(auto_unbox = TRUE) %>%
     jsonlite::prettify() %T>%
-    readr::write_lines(here::here(data_folder, "projects.json"))
+    readr::write_lines(fs::path(data_folder, "projects.json"))
   usethis::ui_done("updated projects.json")
 }
 

@@ -18,15 +18,18 @@ load_applications <- function(project_id = NULL, lang = "en") {
   }
   survey_df <- survey_id %>% 
     get_surveymonkey() %>% 
-    clean_application_colnames(lang = lang) %>% 
-    dplyr::mutate(applicant_id = 1:dplyr::n()) %>%  # give participant integer id
-    dplyr::select(applicant_id, dplyr::everything())
+    clean_application_colnames(lang = lang)
   
   if (!is.null(project_id)) {
     proj_id <- project_id
     survey_df <- survey_df %>% 
       dplyr::filter(project_id == proj_id)
   }
+  
+  survey_df <- survey_df %>% 
+    dplyr::mutate(applicant_id = 1:dplyr::n()) %>%  # give participant integer id
+    dplyr::select(applicant_id, gender, dplyr::everything())
+
   return(survey_df)
 }
 
@@ -37,7 +40,7 @@ load_applications <- function(project_id = NULL, lang = "en") {
 #' @export
 anonymize_applications <- function(survey_df) {
   survey_df <- survey_df %>% 
-    select(-email, -first_name, -ip_address)
+    dplyr::select(-email, -first_name, -ip_address)
   return(survey_df)
 }
 
@@ -138,4 +141,26 @@ clean_application_colnames <- function(survey_df, lang = "en") {
   survey_df <- survey_df %>% 
     dplyr::mutate(dplyr::across(where(is.character), stringr::str_trim))
   return(survey_df)
+}
+
+
+
+#' get_selected_emails
+#' @param mapping_df tibble. Tibble with the mapping from applicant id to name & email
+#' @param selected numeric. vector with numeric ids of those who were selected from the team.
+#' @return email addresses of those who were selected
+get_selected_emails <- function(mapping_df, selected_ids) {
+  mapping_df %>% 
+    dplyr::filter(applicant_id %in% selected_ids) %>% 
+    dplyr::pull(email)
+}
+
+#' get_discarded_emails
+#' @param mapping_df tibble. Tibble with the mapping from applicant id to name & email
+#' @param selected numeric. vector with numeric ids of those who were selected from the team.
+#' @return email addresses of those who were selected
+get_discarded_emails <- function(mapping_df, selected_ids) {
+  mapping_df %>% 
+    dplyr::filter(!applicant_id %in% selected_ids) %>% 
+    dplyr::pull(email)
 }

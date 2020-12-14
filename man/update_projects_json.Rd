@@ -4,11 +4,12 @@
 \alias{update_projects_json}
 \title{update the list of projects}
 \usage{
-update_projects_json(data_folder = "")
+update_projects_json(data_folder = here::here())
 
+update_projects_json(data_folder = here::here())
 }
 \arguments{
-\item{data_folder}{character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to "".}
+\item{data_folder}{character. path to data folder where the project folder should be created. starts at root of the project as defined by here::here. Defaults to here::here().}
 }
 \value{
 

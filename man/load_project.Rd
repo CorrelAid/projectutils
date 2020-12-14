@@ -5,6 +5,8 @@
 \title{load all data for a project from the project files.}
 \usage{
 load_project(project_id_path, data_folder = here::here())
+
+load_project(project_id_path, data_folder = here::here())
 }
 \arguments{
 \item{project_id_path}{character. the project id used for folder names, i.e. in the format YYYY-mm-prefix}
@@ -17,5 +19,7 @@ a list
 a list representing a project.
 }
 \description{
+loads all data related to a project from its folder.
+
 loads all data related to a project from the project folder.
 }
