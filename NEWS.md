@@ -1,3 +1,6 @@
+# projectutils 0.2.1
+* export again `write_project` function
+
 # projectutils 0.2.0
 * several bug fixes and small improvments
 * no usage of `here::here` within functions, only as default arguments
