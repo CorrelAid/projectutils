@@ -10,7 +10,9 @@ load_project <- function(project_id_path, data_folder = here::here()) {
   if (!dir.exists(full_path)) {
     wd <- getwd()
     dirs <- list.dirs(wd, full.names = TRUE, recursive = TRUE)
-    usethis::ui_stop(glue::glue("Folder {full_path} does not exist. \nCurrent working directory: {wd}\nDirectories: {dirs}"))
+    usethis::ui_info(glue::glue("Current working directory: {wd}"))
+    usethis::ui_info(glue::glue("Directories: {dirs}"))
+    usethis::ui_stop(glue::glue("Folder {full_path} does not exist."))
   }
   
   # load meta data
@@ -70,7 +72,7 @@ load_projects <- function(data_folder = here::here()) {
   project_id_paths <-
     list.dirs(data_folder,
               recursive = FALSE,
-              full.names = FALSE)
+              full.names = TRUE)
   project_id_paths <- stringr::str_subset(project_id_paths, pattern = "\\d{4}-\\d{2}-[:upper:]{3}")
   projects <- purrr::map(project_id_paths, load_project, data_folder = data_folder)
   return(projects)
