@@ -150,35 +150,25 @@ clean_application_colnames <- function(survey_df, lang = "en") {
   return(survey_df)
 }
 
-
-
-#' get_emails_selected
+#' get_application_emails
 #' @param mapping_df tibble. Tibble with the mapping from applicant id to name & email
 #' @param selected_ids numeric. vector with numeric ids of those who were selected from the team.
-#' @return email addresses of those who were selected
-#' @importFrom rlang .data
+#' @param get_discarded boolean. whether to invert the selection in order to get the email addresses of those who didn't make the team. defaults to FALSE.
+#' @return character. invisibly returns vector of email addresses.
+#' @description if clipr is available writes ; separated string of email addresses to the clipboard ready to copy into outlook
 #' @export
-get_emails_selected <- function(mapping_df, selected_ids) {
-  emails <- mapping_df %>% 
-    dplyr::filter(.data$applicant_id %in% selected_ids) %>% 
-    dplyr::pull(.data$email)
-  
-  if (clipr::clipr_available()) {
-    clipr::write_clip(emails %>% paste(collapse = ";"))
+#' @importFrom rlang .data
+get_application_emails <- function(mapping_df, selected_ids, get_discarded = FALSE) {
+  if (get_discarded) {
+    emails <- mapping_df %>% 
+      dplyr::filter(!.data$applicant_id %in% selected_ids) %>% 
+      dplyr::pull(.data$email)
+  } else {
+    emails <- mapping_df %>% 
+      dplyr::filter(.data$applicant_id %in% selected_ids) %>% 
+      dplyr::pull(.data$email)
   }
-  invisible(emails)
-}
-
-#' get_emails_discarded
-#' @param mapping_df tibble. Tibble with the mapping from applicant id to name & email
-#' @param selected_ids numeric. vector with numeric ids of those who were selected from the team.
-#' @return email addresses of those who were selected
-#' @export
-#' @importFrom rlang .data
-get_emails_discarded <- function(mapping_df, selected_ids) {
-  emails <- mapping_df %>% 
-    dplyr::filter(!.data$applicant_id %in% selected_ids) %>% 
-    dplyr::pull(.data$email)
+  
   if (clipr::clipr_available()) {
     clipr::write_clip(emails %>% paste(collapse = ";"))
   }

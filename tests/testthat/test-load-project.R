@@ -2,6 +2,8 @@ context("loading projects")
 # find out who is testing - devtools or cmd check
 tb <- rlang::trace_back(1)
 call_fn_name <- as.character(tb[[1]][[1]][1])
+print(call_fn_name)
+print(here::here())
 if (call_fn_name == "devtools::test") {
   DATA_FOLDER <- here::here("tests/testthat/test_data")
 } else if (call_fn_name == "testthat::test_check") {
