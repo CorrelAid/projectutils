@@ -8,7 +8,9 @@ load_project <- function(project_id_path, data_folder = here::here()) {
   # error if folder does not exist
   full_path <- fs::path(data_folder, project_id_path)
   if (!dir.exists(full_path)) {
-    usethis::ui_stop(glue::glue("Folder {full_path} does not exist."))
+    wd <- getwd()
+    dirs <- list.dirs(wd, full.names = TRUE, recursive = TRUE)
+    usethis::ui_stop(glue::glue("Folder {full_path} does not exist. \nCurrent working directory: {wd}\nDirectories: {dirs}"))
   }
   
   # load meta data
