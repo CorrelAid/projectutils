@@ -68,6 +68,22 @@ new_project <- function(prefix, year, month, data_folder = here::here()) {
   }
 }
 
+
+#'Use download applications script template
+#'@param project_id_path project id in path form, e.g. 2020-11-COR
+#'@param data_folder character. path to data folder starting at root of the project. defaults to "", i.e. root
+#'@export 
+use_fill_project <- function(project_id_path, data_folder = "") {
+  
+  usethis::use_template(
+    "fill_project.R",
+    save_as = fs::path(data_folder, project_id_path, "fill_project.R"),
+    data = list(project_id = project_id_path),
+    package = "projectutils",
+    open = TRUE
+  )
+}
+
 get_meta_template <- function() {
   path <- tryCatch(
     fs::path_package(package = "projectutils", "templates", "template_meta.json"), # installed in library
