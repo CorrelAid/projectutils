@@ -7,7 +7,7 @@ PROJECT_ID <- "{{{project_id}}}"
 project_id_lower <- tolower(PROJECT_ID)
 
 data_folder <- here::here() # change this if your data folder is somewhere else than in project root
-project_folder <- fs::path(data_folder, id_path(PROJECT_ID))
+project_folder <- fs::path(data_folder, id_path(PROJECT_ID), "team_selection")
 appl <- load_applications(PROJECT_ID)
 
 # mapping of ids to emails / names -> only for project coordinator / local

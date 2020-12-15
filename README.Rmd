@@ -33,7 +33,29 @@ remotes::install_github("CorrelAid/projectutils")
 
 This package can help you to create and update entries for the [CorrelAid project "database"](https://github.com/correlaid/projectsdb). For instructions related to this functionality, please refer to the README of the [CorrelAid project "database"](https://github.com/correlaid/projectsdb).
 
-## Surveymonkey integration
+## Manage applications
+
+### Before the team selection meeting
+`projectutils` provides a template for a script with all the necessary workflow steps to:
+
+- download applications from surveymonkey and do data cleaning (`load_applications()`)
+- create and store an anonymized version of the applications (`anonymize_applications()`)
+- store the mapping of applicant_ids to emails and names
+- extract open-ended questions into a markdown file for easier reading (`extract_motivation_questions()`)
+
+```{r eval=FALSE}
+use_download_applications("2020-12-TES")
+```
+
+### After the team selection meeting
+`projectutils` provides a template for a script with all the necessary workflow steps to extract the email addresses for both the applicants who were selected and not:
+
+```{r eval=FALSE}
+use_get_emails("2020-12-TES")
+```
+
+## Reporting on projects
+
 We use [surveymonkey](https://surveymonkey.de) for the following project-related things:
 
 - collect applications for projects

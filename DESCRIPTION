@@ -1,6 +1,6 @@
 Package: projectutils
 Title: "Small Utility Functions Maintaining the CorrelAid Project 'database'""
-Version: 0.1
+Version: 0.1.0
 Authors@R: 
     person(given = "Frie",
            family = "Preu",
@@ -15,7 +15,6 @@ Depends:
 Imports: 
     dplyr,
     glue,
-    here,
     magrittr,
     readr,
     tidyr,

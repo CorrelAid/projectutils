@@ -82,39 +82,40 @@ get_application_emails <- function(mapping_df, selected_ids, get_discarded = FAL
   }
   
   if (clipr::clipr_available()) {
-    clipr::write_clip(emails %>% paste(collapse = ";"))
+    emails_str <- emails %>% paste(collapse = ";")
+    clipr::write_clip(emails_str)
+    usethis::ui_done(glue::glue("Wrote to clipboard: \n{emails_str}"))
   }
   invisible(emails)
 }
 
-#'Use download applications script template
+#'Use team selection workflow
 #'@param project_id_path project id in path form, e.g. 2020-11-COR
-#'@param data_folder character. path to data folder starting at root of the project. defaults to "", i.e. root
+#'@param data_folder character. path to data folder starting at root of the project. defaults to ".", i.e. root
 #'@export 
-use_download_applications <- function(project_id_path, data_folder = "") {
+use_team_selection_workflow <- function(project_id_path, data_folder = ".") {
   
-  project_id <- id_surveymonkey(project_id_path)
+  
+  # create subfolder for team selection if not already there
+  team_selection_folder <- fs::path(data_folder, project_id_path, "team_selection")
+  if (!dir.exists(team_selection_folder)) {
+    dir.create(team_selection_folder)
+  }
+  
+  # use templates
+  project_id <- id_surveymonkey(project_id_path) # needed to download from surveymonkey
   usethis::use_template(
-    "download_applications.R",
-    save_as = fs::path(data_folder, project_id_path, "download_applications.R"),
+    "01_prepare_team_selection.R",
+    save_as = fs::path(team_selection_folder, "01_prepare_team_selection.R"),
     data = list(project_id = project_id),
     package = "projectutils",
     open = TRUE
   )
-}
-
-#'Use get_application_emails script template
-#'@param project_id_path project id in path form, e.g. 2020-11-COR
-#'@param selected_ids numeric. vector of applicant_id's of selected team members
-#'@param data_folder character. path to data folder starting at root of the project. defaults to "", i.e. root
-#'@export 
-use_get_emails <- function(project_id_path, selected_ids, data_folder = "") {
   
-  project_id <- id_surveymonkey(project_id_path)
   usethis::use_template(
-    "get_application_emails.R",
-    save_as = fs::path(data_folder, project_id_path, "get_application_emails.R"),
-    data = list(project_id = project_id, selected_ids = selected_ids),
+    "02_get_application_emails.R",
+    save_as = fs::path(team_selection_folder, "02_get_application_emails.R"),
+    data = list(project_id = project_id),
     package = "projectutils",
     open = TRUE
   )
