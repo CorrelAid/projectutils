@@ -1,14 +1,13 @@
 Package: projectutils
-Title: "Small Utility Functions Maintaining the CorrelAid Project 'database'""
-Version: 0.1.0
+Title: "Small Utility Functions Managing CorrelAid Projects"
+Version: 0.2.0
 Authors@R: 
     person(given = "Frie",
            family = "Preu",
            role = c("aut", "cre"),
            email = "frie.p@correlaid.org")
 Description: "This packages helps to maintain the ad-hoc
-    CorrelAid 'database'. It contains functions to create the necessary
-    json and markdown files to fill out etc."
+    CorrelAid 'database' and in general with project coordination tasks."
 License: MIT + file LICENSE
 Depends: 
     R (>= 3.5.0)
