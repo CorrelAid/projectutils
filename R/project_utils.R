@@ -8,10 +8,6 @@ load_project <- function(project_id_path, data_folder = here::here()) {
   # error if folder does not exist
   full_path <- fs::path(data_folder, project_id_path)
   if (!dir.exists(full_path)) {
-    wd <- getwd()
-    dirs <- list.dirs(wd, full.names = TRUE, recursive = TRUE)
-    usethis::ui_info(glue::glue("Current working directory: {wd}"))
-    usethis::ui_info(glue::glue("Directories: {dirs}"))
     usethis::ui_stop(glue::glue("Folder {full_path} does not exist."))
   }
   
@@ -72,7 +68,7 @@ load_projects <- function(data_folder = here::here()) {
   project_id_paths <-
     list.dirs(data_folder,
               recursive = FALSE,
-              full.names = TRUE)
+              full.names = FALSE)
   project_id_paths <- stringr::str_subset(project_id_paths, pattern = "\\d{4}-\\d{2}-[:upper:]{3}")
   projects <- purrr::map(project_id_paths, load_project, data_folder = data_folder)
   return(projects)

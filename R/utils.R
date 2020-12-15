@@ -22,3 +22,13 @@ id_surveymonkey <- function(project_id_path) {
   year <- stringr::str_replace(project_id_path, pattern, "\\1")
   paste(prefix, month, year, sep = "-")
 }
+
+
+#' get_surveymonkey
+#' @param id character. internal surveymonkey id for the survey
+#' @return tibble with answers to the survey
+get_surveymonkey <- function(id) {
+  id %>% 
+    surveymonkey::fetch_survey_obj() %>%
+    surveymonkey::parse_survey()
+}

@@ -9,11 +9,16 @@ if (call_fn_name == "devtools::test") {
   DATA_FOLDER <- "test_data"
 } 
 
+test_that("that non-project folders are ignored when loading projects", {
+  projects <- load_projects(data_folder = DATA_FOLDER)
+  expect_equal(length(projects), 1)
+})
+
 # load project 
 test_that("test that non-existing folder throws error", {
-  expect_message(load_project("foo", data_folder = DATA_FOLDER), regexp = "Current working directory")
   expect_error(load_project("foo", data_folder = DATA_FOLDER), regexp = "foo does not exist.", class = "usethis_error")
 })
+
 
 test_that("test that loading project works", {
   p <- load_project("2020-01-TES", data_folder = DATA_FOLDER)

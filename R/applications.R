@@ -77,16 +77,6 @@ use_download_applications <- function(project_id_path, data_folder = "") {
   )
 }
 
-#' get_surveymonkey
-#' @param id character. internal surveymonkey id for the survey
-#' @return tibble with answers to the survey
-get_surveymonkey <- function(id) {
-  id %>% 
-    surveymonkey::fetch_survey_obj() %>%
-    surveymonkey::parse_survey()
-}
-
-
 rename_techniques_en <- function(col_name) {
   stringr::str_replace(col_name, ".+following_techniques_(.+?)$", "techniques_\\1")
 }

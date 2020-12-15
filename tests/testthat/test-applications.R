@@ -1,3 +1,4 @@
+context("applications")
 test_that("cleaning colnames works", {
   test_data <- readr::read_csv("test_data/surveymonkey/applications_fake_en.csv")
   expect_true("project_id" %in% colnames(clean_application_colnames(test_data, "en")))
