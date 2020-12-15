@@ -4,10 +4,16 @@ tb <- rlang::trace_back(1)
 call_fn_name <- as.character(tb[[1]][[1]][1])
 print(call_fn_name)
 print(here::here())
+print(Sys.getenv("CI"))
+print(getwd())
 if (call_fn_name == "devtools::test") {
   DATA_FOLDER <- here::here("tests/testthat/test_data")
 } else if (call_fn_name == "testthat::test_check") {
-  DATA_FOLDER <- "test_data"
+  if (Sys.getenv("CI") == TRUE) {
+    DATA_FOLDER <- here::here("tests/testthat/test_data") # on github actions similar behavior that devtools::test (WHY though?)
+  } else {
+    DATA_FOLDER <- "test_data" # locally tests are run from tests/testthat
+  }
 } 
 
 
