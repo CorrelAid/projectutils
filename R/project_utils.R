@@ -105,6 +105,7 @@ update_projects_json <- function(data_folder = here::here()) {
 #' writes back meta.json for a project.
 #' @param project the project.
 #' @param data_folder data folder path. defaults to here::here()
+#' @export
 #' @return the project (invisibly) 
 write_project <- function(project, data_folder = here::here()) {
   project_id_path <- project$project_id_path 
