@@ -63,10 +63,6 @@ use_team_selection_workflow("2020-12-TES")
 -   extract open-ended questions into a markdown file for easier reading
     (`extract_motivation_questions()`)
 
-``` r
-use_download_applications("2020-12-TES")
-```
-
 #### 02\_get\_application\_emails.R
 
 -   based on the `applicant_id`s of the selected team members, extract
