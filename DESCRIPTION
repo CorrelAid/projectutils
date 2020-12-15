@@ -28,6 +28,7 @@ Imports:
     stringr
 Suggests: 
     mockery,
+    here,
     testthat,
     covr
 Encoding: UTF-8
