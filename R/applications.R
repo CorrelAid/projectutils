@@ -61,6 +61,32 @@ extract_motivation_questions <- function(survey_df) {
   md_text
 }
 
+
+#' get_application_emails
+#' @param mapping_df tibble. Tibble with the mapping from applicant id to name & email
+#' @param selected_ids numeric. vector with numeric ids of those who were selected from the team.
+#' @param get_discarded boolean. whether to invert the selection in order to get the email addresses of those who didn't make the team. defaults to FALSE.
+#' @return character. invisibly returns vector of email addresses.
+#' @description if clipr is available writes ; separated string of email addresses to the clipboard ready to copy into outlook
+#' @export
+#' @importFrom rlang .data
+get_application_emails <- function(mapping_df, selected_ids, get_discarded = FALSE) {
+  if (get_discarded) {
+    emails <- mapping_df %>% 
+      dplyr::filter(!.data$applicant_id %in% selected_ids) %>% 
+      dplyr::pull(.data$email)
+  } else {
+    emails <- mapping_df %>% 
+      dplyr::filter(.data$applicant_id %in% selected_ids) %>% 
+      dplyr::pull(.data$email)
+  }
+  
+  if (clipr::clipr_available()) {
+    clipr::write_clip(emails %>% paste(collapse = ";"))
+  }
+  invisible(emails)
+}
+
 #'Use download applications script template
 #'@param project_id_path project id in path form, e.g. 2020-11-COR
 #'@param data_folder character. path to data folder starting at root of the project. defaults to "", i.e. root
@@ -72,6 +98,23 @@ use_download_applications <- function(project_id_path, data_folder = "") {
     "download_applications.R",
     save_as = fs::path(data_folder, project_id_path, "download_applications.R"),
     data = list(project_id = project_id),
+    package = "projectutils",
+    open = TRUE
+  )
+}
+
+#'Use get_application_emails script template
+#'@param project_id_path project id in path form, e.g. 2020-11-COR
+#'@param selected_ids numeric. vector of applicant_id's of selected team members
+#'@param data_folder character. path to data folder starting at root of the project. defaults to "", i.e. root
+#'@export 
+use_get_emails <- function(project_id_path, selected_ids, data_folder = "") {
+  
+  project_id <- id_surveymonkey(project_id_path)
+  usethis::use_template(
+    "get_application_emails.R",
+    save_as = fs::path(data_folder, project_id_path, "get_application_emails.R"),
+    data = list(project_id = project_id, selected_ids = selected_ids),
     package = "projectutils",
     open = TRUE
   )
@@ -138,29 +181,4 @@ clean_application_colnames <- function(survey_df, lang = "en") {
   survey_df <- survey_df %>% 
     dplyr::mutate(dplyr::across(where(is.character), stringr::str_trim))
   return(survey_df)
-}
-
-#' get_application_emails
-#' @param mapping_df tibble. Tibble with the mapping from applicant id to name & email
-#' @param selected_ids numeric. vector with numeric ids of those who were selected from the team.
-#' @param get_discarded boolean. whether to invert the selection in order to get the email addresses of those who didn't make the team. defaults to FALSE.
-#' @return character. invisibly returns vector of email addresses.
-#' @description if clipr is available writes ; separated string of email addresses to the clipboard ready to copy into outlook
-#' @export
-#' @importFrom rlang .data
-get_application_emails <- function(mapping_df, selected_ids, get_discarded = FALSE) {
-  if (get_discarded) {
-    emails <- mapping_df %>% 
-      dplyr::filter(!.data$applicant_id %in% selected_ids) %>% 
-      dplyr::pull(.data$email)
-  } else {
-    emails <- mapping_df %>% 
-      dplyr::filter(.data$applicant_id %in% selected_ids) %>% 
-      dplyr::pull(.data$email)
-  }
-  
-  if (clipr::clipr_available()) {
-    clipr::write_clip(emails %>% paste(collapse = ";"))
-  }
-  invisible(emails)
 }
