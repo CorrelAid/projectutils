@@ -1,5 +1,4 @@
 # projectutils 0.1.1
-* Added a `NEWS.md` file to track changes to the package.
 * several bug fixes and small improvments
 * no usage of `here::here` within functions, only as default arguments
 * new `usethis`-like function `use_fill_project` that creates a script that contains all the necessary workflow steps to fill a `meta.json` of a project.
