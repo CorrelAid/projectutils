@@ -11,6 +11,7 @@ if (call_fn_name == "devtools::test") {
 
 # load project 
 test_that("test that non-existing folder throws error", {
+  expect_message(load_project("foo", data_folder = DATA_FOLDER), regexp = "Current working directory")
   expect_error(load_project("foo", data_folder = DATA_FOLDER), regexp = "foo does not exist.", class = "usethis_error")
 })
 
