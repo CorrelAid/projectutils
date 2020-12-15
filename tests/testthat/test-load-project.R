@@ -6,10 +6,11 @@ print(call_fn_name)
 print(here::here())
 print(Sys.getenv("CI"))
 print(getwd())
+print(list.dirs("."))
 if (call_fn_name == "devtools::test") {
   DATA_FOLDER <- here::here("tests/testthat/test_data")
 } else if (call_fn_name == "testthat::test_check") {
-  if (Sys.getenv("CI") == TRUE) {
+  if (Sys.getenv("CI") == "true") {
     DATA_FOLDER <- here::here("tests/testthat/test_data") # on github actions similar behavior that devtools::test (WHY though?)
   } else {
     DATA_FOLDER <- "test_data" # locally tests are run from tests/testthat
