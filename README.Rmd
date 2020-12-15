@@ -33,10 +33,17 @@ remotes::install_github("CorrelAid/projectutils")
 
 This package can help you to create and update entries for the [CorrelAid project "database"](https://github.com/correlaid/projectsdb). For instructions related to this functionality, please refer to the README of the [CorrelAid project "database"](https://github.com/correlaid/projectsdb).
 
-## Manage applications
+## Manage team selection
 
-### Before the team selection meeting
-`projectutils` provides a template for a script with all the necessary workflow steps to:
+`projectutils` provides templates for scripts with all the necessary workflow steps for team selection.
+
+Those templates can be installed / created in a (newly created) `team_selection` subfolder with:
+
+```{r eval=FALSE}
+use_team_selection_workflow("2020-12-TES")
+```
+
+#### 01_prepare_team_selection.R
 
 - download applications from surveymonkey and do data cleaning (`load_applications()`)
 - create and store an anonymized version of the applications (`anonymize_applications()`)
@@ -47,19 +54,13 @@ This package can help you to create and update entries for the [CorrelAid projec
 use_download_applications("2020-12-TES")
 ```
 
-### After the team selection meeting
-`projectutils` provides a template for a script with all the necessary workflow steps to extract the email addresses for both the applicants who were selected and not:
+#### 02_get_application_emails.R
 
-```{r eval=FALSE}
-use_get_emails("2020-12-TES")
-```
+- based on the `applicant_id`s of the selected team members, extract the email addresses of the selected / declined applicants and write a ";" - separated string to the clipboard for convenient copy-pasting into Outlook. 
 
 ## Reporting on projects
 
-We use [surveymonkey](https://surveymonkey.de) for the following project-related things:
+Yet to be implemented:
 
-- collect applications for projects
-- collect feedback on the project from NPOs
-- collect feedback on the project from volunteers
-
-Functions to get data from surveymonkey are under development (see branch `surveymonkey`)
+- reports on the feedback on the project from NPOs
+- reports on the feedback on the project from volunteers

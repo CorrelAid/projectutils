@@ -41,14 +41,42 @@ For instructions related to this functionality, please refer to the
 README of the [CorrelAid project
 “database”](https://github.com/correlaid/projectsdb).
 
-## Surveymonkey integration
+## Manage team selection
 
-We use [surveymonkey](https://surveymonkey.de) for the following
-project-related things:
+`projectutils` provides templates for scripts with all the necessary
+workflow steps for team selection.
 
-  - collect applications for projects
-  - collect feedback on the project from NPOs
-  - collect feedback on the project from volunteers
+Those templates can be installed / created in a (newly created)
+`team_selection` subfolder with:
 
-Functions to get data from surveymonkey are under development (see
-branch `surveymonkey`)
+``` r
+use_team_selection_workflow("2020-12-TES")
+```
+
+#### 01\_prepare\_team\_selection.R
+
+-   download applications from surveymonkey and do data cleaning
+    (`load_applications()`)
+-   create and store an anonymized version of the applications
+    (`anonymize_applications()`)
+-   store the mapping of applicant\_ids to emails and names
+-   extract open-ended questions into a markdown file for easier reading
+    (`extract_motivation_questions()`)
+
+``` r
+use_download_applications("2020-12-TES")
+```
+
+#### 02\_get\_application\_emails.R
+
+-   based on the `applicant_id`s of the selected team members, extract
+    the email addresses of the selected / declined applicants and write
+    a “;” - separated string to the clipboard for convenient
+    copy-pasting into Outlook.
+
+## Reporting on projects
+
+Yet to be implemented:
+
+-   reports on the feedback on the project from NPOs
+-   reports on the feedback on the project from volunteers
