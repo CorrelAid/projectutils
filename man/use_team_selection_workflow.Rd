@@ -4,12 +4,18 @@
 \alias{use_team_selection_workflow}
 \title{Use team selection workflow}
 \usage{
-use_team_selection_workflow(project_id_path, data_folder = ".")
+use_team_selection_workflow(
+  project_id_path,
+  data_folder = ".",
+  export_csv_file = NULL
+)
 }
 \arguments{
 \item{project_id_path}{project id in path form, e.g. 2020-11-COR}
 
 \item{data_folder}{character. path to data folder starting at root of the project. defaults to ".", i.e. root}
+
+\item{export_csv_file}{character. file name of csv export file within the team_selection folder. Defaults to NULL, i.e. using the API to get the data.}
 }
 \description{
 Use team selection workflow

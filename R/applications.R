@@ -37,6 +37,67 @@ load_applications <- function(project_id = NULL, lang = "en") {
   return(survey_df)
 }
 
+#' load project applications from export
+#' @description loads the applications for a given project from the csv export
+#' @param export_csv_path character. path to csv export from surveymonkey containing the applications 
+#' @param project_id character. ID of the project, e.g. ERL-03-2020. Defaults to NULL which means not to filter by project
+#' @param lang character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.
+#' @return data frame containing the responses to the questions
+#' @export
+#' @importFrom dplyr filter
+#' @importFrom rlang .data
+load_applications_export <- function(export_csv_path, project_id = NULL, lang = "en") {
+  if (!lang %in% c("en", "de")) {
+    usethis::ui_stop("lang must be either 'de' or 'en'.")
+  }
+  
+  export_raw <- readr::read_csv(export_csv_path)
+  export_raw <- export_raw %>% 
+    dplyr::select(-.data$`First Name`, -.data$`Last Name`, -.data$`Email Address`)
+
+  # the exported format has two rows for the column names :facepalm:
+  # do some cleaning
+  colnames_row_1 <- colnames(export_raw)
+  # answer options for dropdowns and matrizes have X in the first row (except for the first option), the actual value in the second row
+  # replace first row with NA
+  colnames_row_1[stringr::str_detect(colnames_row_1, "^X\\d{1,2}$")] <- NA 
+  colnames_row_1 <- data.frame(colnames_row_1 = colnames_row_1) %>% tidyr::fill(colnames_row_1) %>% dplyr::pull(colnames_row_1) # fill NA with previous question
+  # add "em" to the technologies and tools question to emulate the API export, see rename_programming_en
+  colnames_row_1 <- ifelse(stringr::str_detect(colnames_row_1, ".+?functions and packages\\.$"),
+                            paste(colnames_row_1, "em", sep = " "), 
+                            colnames_row_1)
+
+  # promote second row to colnames and simultaneously drop it from the data
+  survey_df <- export_raw %>% 
+           dplyr::slice(2:dplyr::n())
+          
+  colnames_row_2 <- export_raw %>% 
+           dplyr::slice(1) %>% 
+           unlist(., use.names=FALSE)
+
+  # combine
+  # answer format not important
+  colnames_row_2[is.na(colnames_row_2) | colnames_row_2 == "Response" | colnames_row_2 == "Open-Ended Response"] <- ""
+  colnames_combined <- paste(colnames_row_1, colnames_row_2, sep = " ")
+  colnames(survey_df) <- colnames_combined
+  
+  # cleaning with janitor (to snakecase, remove special chars) and our own custom function 
+  survey_df <- survey_df %>% 
+    janitor::clean_names() %>% 
+    clean_application_colnames(lang = lang)
+  
+  if (!is.null(project_id)) {
+    proj_id <- project_id
+    survey_df <- survey_df %>% 
+      dplyr::filter(.data$project_id == proj_id)
+  }
+  
+  survey_df <- survey_df %>% 
+    dplyr::mutate(applicant_id = 1:dplyr::n()) %>%  # give participant integer id
+    dplyr::select(.data$applicant_id, .data$gender, dplyr::everything())
+  
+  return(survey_df)
+}
 
 #' anonymize_applications
 #' @param survey_df tibble. Tibble with the applications. 
@@ -92,8 +153,9 @@ get_application_emails <- function(mapping_df, selected_ids, get_discarded = FAL
 #'Use team selection workflow
 #'@param project_id_path project id in path form, e.g. 2020-11-COR
 #'@param data_folder character. path to data folder starting at root of the project. defaults to ".", i.e. root
+#'@param export_csv_file character. file name of csv export file within the team_selection folder. Defaults to NULL, i.e. using the API to get the data. 
 #'@export 
-use_team_selection_workflow <- function(project_id_path, data_folder = ".") {
+use_team_selection_workflow <- function(project_id_path, data_folder = ".", export_csv_file = NULL) {
   
   
   # create subfolder for team selection if not already there
@@ -107,7 +169,7 @@ use_team_selection_workflow <- function(project_id_path, data_folder = ".") {
   usethis::use_template(
     "01_prepare_team_selection.R",
     save_as = fs::path(team_selection_folder, "01_prepare_team_selection.R"),
-    data = list(project_id = project_id),
+    data = list(project_id = project_id, export_csv_file = export_csv_file),
     package = "projectutils",
     open = TRUE
   )
