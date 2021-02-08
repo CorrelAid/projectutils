@@ -69,7 +69,7 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
 
   # promote second row to colnames and simultaneously drop it from the data
   survey_df <- export_raw %>% 
-           dplyr::slice(2:n())
+           dplyr::slice(2:dplyr::n())
           
   colnames_row_2 <- export_raw %>% 
            dplyr::slice(1) %>% 
