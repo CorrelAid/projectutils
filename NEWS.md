@@ -1,3 +1,8 @@
+# projectutils 0.3.0
+Two changes related to #7 
+- adds a new function `load_applications_export` that loads applications from a csv export done via the surveymonkey UI.  (#7)
+- `use_team_selection_workflow` gains a new optional argument `export_csv_file` (#7) 
+ 
 # projectutils 0.2.1
 * export again `write_project` function
 
