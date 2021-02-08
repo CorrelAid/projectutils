@@ -153,8 +153,9 @@ get_application_emails <- function(mapping_df, selected_ids, get_discarded = FAL
 #'Use team selection workflow
 #'@param project_id_path project id in path form, e.g. 2020-11-COR
 #'@param data_folder character. path to data folder starting at root of the project. defaults to ".", i.e. root
+#'@param export_csv_file character. file name of csv export file within the team_selection folder. Defaults to NULL, i.e. using the API to get the data. 
 #'@export 
-use_team_selection_workflow <- function(project_id_path, data_folder = ".") {
+use_team_selection_workflow <- function(project_id_path, data_folder = ".", export_csv_file = NULL) {
   
   
   # create subfolder for team selection if not already there
@@ -168,7 +169,7 @@ use_team_selection_workflow <- function(project_id_path, data_folder = ".") {
   usethis::use_template(
     "01_prepare_team_selection.R",
     save_as = fs::path(team_selection_folder, "01_prepare_team_selection.R"),
-    data = list(project_id = project_id),
+    data = list(project_id = project_id, export_csv_file = export_csv_file),
     package = "projectutils",
     open = TRUE
   )
