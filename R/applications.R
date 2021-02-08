@@ -53,7 +53,7 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
   
   export_raw <- readr::read_csv(export_csv_path)
   export_raw <- export_raw %>% 
-    dplyr::select(-`First Name`, -`Last Name`, -`Email Address`)
+    dplyr::select(-.data$`First Name`, -.data$`Last Name`, -.data$`Email Address`)
 
   # the exported format has two rows for the column names :facepalm:
   # do some cleaning
