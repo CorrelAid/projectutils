@@ -61,7 +61,7 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
   # answer options for dropdowns and matrizes have X in the first row (except for the first option), the actual value in the second row
   # replace first row with NA
   colnames_row_1[stringr::str_detect(colnames_row_1, "^X\\d{1,2}$")] <- NA 
-  colnames_row_1 <- tibble(colnames_row_1) %>% tidyr::fill(colnames_row_1) %>% pull(colnames_row_1) # fill NA with previous question
+  colnames_row_1 <- tibble::tibble(colnames_row_1) %>% tidyr::fill(colnames_row_1) %>% dplyr::pull(colnames_row_1) # fill NA with previous question
   # add "em" to the technologies and tools question to emulate the API export, see rename_programming_en
   colnames_row_1 <- ifelse(stringr::str_detect(colnames_row_1, ".+?functions and packages\\.$"),
                             paste(colnames_row_1, "em", sep = " "), 
@@ -69,10 +69,10 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
 
   # promote second row to colnames and simultaneously drop it from the data
   survey_df <- export_raw %>% 
-           slice(2:n())
+           dplyr::slice(2:n())
           
   colnames_row_2 <- export_raw %>% 
-           slice(1) %>% 
+           dplyr::slice(1) %>% 
            unlist(., use.names=FALSE)
 
   # combine
