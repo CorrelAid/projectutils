@@ -139,7 +139,7 @@ extract_motivation_questions <- function(survey_df, lang = "en") {
   if (lang == "en") {
     md_text <- glue::glue("## Applicant {motivation$applicant_id} \n ### What skills qualify you? \n {motivation$skills_text} \n ### Why do you want to get involved? \n {motivation$motivation_text}")
   } else {
-    md_text <- glue::glue("## Bewerber:in {motivation$applicant_id} \n ### Bitte beschreibe hier, welche Deiner Fähigkeiten Dich besonders für die Teilnahme an diesem Projekt qualifizieren \n {motivation$skills_text} \n ### Bitte beschreibe hier, warum Du Dich für dieses Projekt engagieren moechtest  \n {motivation$motivation_text}")
+    md_text <- glue::glue("## Bewerber:in {motivation$applicant_id} \n ### Bitte beschreibe hier, welche Deiner Faehigkeiten Dich besonders fuer die Teilnahme an diesem Projekt qualifizieren \n {motivation$skills_text} \n ### Bitte beschreibe hier, warum Du Dich fuer dieses Projekt engagieren moechtest  \n {motivation$motivation_text}")
   }
   md_text
 }
