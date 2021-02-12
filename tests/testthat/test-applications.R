@@ -117,3 +117,21 @@ test_that("cleaning data exported via UI works", {
   expect_true("techniques_processing_of_image_data" %in% colnames(applications))
   expect_true("techniques_processing_of_audio_data" %in% colnames(applications))
 })
+
+
+context("exported data")
+test_that("cleaning data exported via UI works for German data", {
+  applications <- load_applications_export("test_data/surveymonkey/applications_fake_export_de.csv", "CIT-10-2020", lang = "de")
+  expect_equal(nrow(applications), 30)
+  expect_true("consent_privacy_policy" %in% colnames(applications))
+  expect_true("motivation_skills" %in% colnames(applications))
+  expect_true("motivation_why_involved" %in% colnames(applications))
+  expect_true("project_role" %in% colnames(applications))
+  expect_true("gender" %in% colnames(applications))
+  expect_true("first_name" %in% colnames(applications))
+  expect_true("email" %in% colnames(applications))
+  expect_equal(length(colnames(applications)[stringr::str_detect(colnames(applications), "^techniques_.+?")]), 13)
+  expect_equal(length(colnames(applications)[stringr::str_detect(colnames(applications), "^skills.+?")]), 5)
+  expect_equal(length(colnames(applications)[stringr::str_detect(colnames(applications), "^topics.+?")]), 8)
+
+})
