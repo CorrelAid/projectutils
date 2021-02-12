@@ -1,3 +1,8 @@
+# projectutils 0.4.0
+Adds basic support for responses to the German form (see #2)
+-  implements data cleaning for German form (`clean_application_colnames`, `load_applications_export`) 
+-  `use_team_selection_workflow` and `extract_motivation_questions` gain a new argument `lang` which defaults to "en" but can be changed to "de" 
+
 # projectutils 0.3.0
 Two changes related to #7 
 - adds a new function `load_applications_export` that loads applications from a csv export done via the surveymonkey UI.  (#7)
