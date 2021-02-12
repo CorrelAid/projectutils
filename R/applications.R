@@ -52,8 +52,14 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
   }
   
   export_raw <- readr::read_csv(export_csv_path)
-  export_raw <- export_raw %>% 
-    dplyr::select(-.data$`First Name`, -.data$`Last Name`, -.data$`Email Address`)
+  # remove columns which are added by surveymonkey automatically but are empty 
+  if (lang == "en") {
+    export_raw <- export_raw %>% 
+      dplyr::select(-.data$`First Name`, -.data$`Last Name`, -.data$`Email Address`)
+  } else {
+    export_raw <- export_raw %>% 
+      dplyr::select(-.data$email_address, -.data$last_name, -.data$first_name)
+  }
 
   # the exported format has two rows for the column names :facepalm:
   # do some cleaning
@@ -62,12 +68,19 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
   # replace first row with NA
   colnames_row_1[stringr::str_detect(colnames_row_1, "^X\\d{1,2}$")] <- NA 
   colnames_row_1 <- data.frame(colnames_row_1 = colnames_row_1) %>% tidyr::fill(colnames_row_1) %>% dplyr::pull(colnames_row_1) # fill NA with previous question
-  # add "em" to the technologies and tools question to emulate the API export, see rename_programming_en
-  colnames_row_1 <- ifelse(stringr::str_detect(colnames_row_1, ".+?functions and packages\\.$"),
-                            paste(colnames_row_1, "em", sep = " "), 
-                            colnames_row_1)
+  
+  # add "em" to the technologies and tools question to emulate the API export, see rename_programming
+  if (lang == "en") {
+    colnames_row_1 <- ifelse(stringr::str_detect(colnames_row_1, ".+?functions and packages\\.$"),
+                              paste(colnames_row_1, "em", sep = " "), 
+                              colnames_row_1)
+  } else {
+    colnames_row_1 <- ifelse(stringr::str_detect(colnames_row_1, ".+?Funktionen und Packages\\.$"),
+                             paste(colnames_row_1, "em", sep = " "), 
+                             colnames_row_1)
+  }
 
-  # promote second row to colnames and simultaneously drop it from the data
+  # promote second row to colnames and drop it from the data
   survey_df <- export_raw %>% 
            dplyr::slice(2:dplyr::n())
           
@@ -75,9 +88,9 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
            dplyr::slice(1) %>% 
            unlist(., use.names=FALSE)
 
-  # combine
-  # answer format not important
+  # answer format is not important
   colnames_row_2[is.na(colnames_row_2) | colnames_row_2 == "Response" | colnames_row_2 == "Open-Ended Response"] <- ""
+  # combine
   colnames_combined <- paste(colnames_row_1, colnames_row_2, sep = " ")
   colnames(survey_df) <- colnames_combined
   
@@ -86,6 +99,7 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
     janitor::clean_names() %>% 
     clean_application_colnames(lang = lang)
   
+  # filter out specific project if specified 
   if (!is.null(project_id)) {
     proj_id <- project_id
     survey_df <- survey_df %>% 
@@ -111,14 +125,22 @@ anonymize_applications <- function(survey_df) {
 
 #' extract_motivation_questions
 #' @param survey_df tibble. Tibble with the applications. 
+#' @param lang character. Which language was used to collect the applications. Either "en" or "de". Defaults to "en".
 #' @importFrom rlang .data
 #' @export
-extract_motivation_questions <- function(survey_df) {
+extract_motivation_questions <- function(survey_df, lang = "en") {
+  if (!lang %in% c("en", "de")) {
+    usethis::ui_stop("lang must be either 'de' or 'en'.")
+  }
 
   motivation <- survey_df %>% 
     dplyr::select(.data$applicant_id, skills_text = .data$motivation_skills, 
            motivation_text = .data$motivation_why_involved)
-  md_text <- glue::glue("## Applicant {motivation$applicant_id} \n ### What skills qualify you? \n {motivation$skills_text} \n ### Why do you want to get involved? \n {motivation$motivation_text}")
+  if (lang == "en") {
+    md_text <- glue::glue("## Applicant {motivation$applicant_id} \n ### What skills qualify you? \n {motivation$skills_text} \n ### Why do you want to get involved? \n {motivation$motivation_text}")
+  } else {
+    md_text <- glue::glue("## Bewerber:in {motivation$applicant_id} \n ### Bitte beschreibe hier, welche Deiner Fähigkeiten Dich besonders für die Teilnahme an diesem Projekt qualifizieren \n {motivation$skills_text} \n ### Bitte beschreibe hier, warum Du Dich für dieses Projekt engagieren möchtest  \n {motivation$motivation_text}")
+  }
   md_text
 }
 
@@ -154,8 +176,9 @@ get_application_emails <- function(mapping_df, selected_ids, get_discarded = FAL
 #'@param project_id_path project id in path form, e.g. 2020-11-COR
 #'@param data_folder character. path to data folder starting at root of the project. defaults to ".", i.e. root
 #'@param export_csv_file character. file name of csv export file within the team_selection folder. Defaults to NULL, i.e. using the API to get the data. 
+#' @param lang character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.
 #'@export 
-use_team_selection_workflow <- function(project_id_path, data_folder = ".", export_csv_file = NULL) {
+use_team_selection_workflow <- function(project_id_path, data_folder = ".", export_csv_file = NULL, lang = "en") {
   
   
   # create subfolder for team selection if not already there
@@ -169,7 +192,7 @@ use_team_selection_workflow <- function(project_id_path, data_folder = ".", expo
   usethis::use_template(
     "01_prepare_team_selection.R",
     save_as = fs::path(team_selection_folder, "01_prepare_team_selection.R"),
-    data = list(project_id = project_id, export_csv_file = export_csv_file),
+    data = list(project_id = project_id, export_csv_file = export_csv_file, lang = lang),
     package = "projectutils",
     open = TRUE
   )
@@ -183,15 +206,25 @@ use_team_selection_workflow <- function(project_id_path, data_folder = ".", expo
   )
 }
 
-rename_techniques_en <- function(col_name) {
-  stringr::str_replace(col_name, ".+following_techniques_(.+?)$", "techniques_\\1")
+rename_techniques <- function(col_name, lang = "en") {
+  if (lang == "en") {
+    col_name_new <- stringr::str_replace(col_name, ".+following_techniques_(.+?)$", "techniques_\\1")
+  } else {
+    col_name_new <- stringr::str_replace(col_name, ".+folgenden_techniken_(.+?)$", "techniques_\\1")
+  }
+  col_name_new
 }
 
-rename_topics_en <- function(col_name) {
-  stringr::str_replace(col_name, ".+following_topics_(.+?)$", "topics_\\1")
+rename_topics <- function(col_name, lang = "en") {
+  if (lang == "en") {
+    col_name_new <- stringr::str_replace(col_name, ".+following_topics_(.+?)$", "topics_\\1")
+  } else {
+    col_name_new <- stringr::str_replace(col_name, ".+folgenden_themen_(.+?)$", "topics_\\1")
+  }
+  col_name_new
 }
 
-rename_programming_en <- function(col_name) {
+rename_programming <- function(col_name) {
   # this question has the explanation of the scale before the actual question
   # the explanation is in italic which appears as "em" in the variable name
   # after the last "em" there is the value of the row
@@ -226,9 +259,9 @@ clean_application_colnames <- function(survey_df, lang = "en") {
     
     # rename column names
     survey_df <- survey_df %>% 
-      dplyr::rename_with(rename_programming_en, dplyr::contains("experience_with_the_following_technologies")) %>% 
-      dplyr::rename_with(rename_techniques_en, dplyr::contains("experience_with_the_following_techniques")) %>% 
-      dplyr::rename_with(rename_topics_en, dplyr::contains("experience_with_the_following_topics")) %>% 
+      dplyr::rename_with(rename_programming, dplyr::contains("experience_with_the_following_technologies")) %>% 
+      dplyr::rename_with(rename_techniques, dplyr::contains("experience_with_the_following_techniques"), lang = lang) %>% 
+      dplyr::rename_with(rename_topics, dplyr::contains("experience_with_the_following_topics"), lang = lang) %>% 
       dplyr::rename_with(~ "consent_privacy_policy", dplyr::contains("consent_to_privacy_policy")) %>% 
       dplyr::rename_with(~ "motivation_why_involved", dplyr::contains("why_you_want_to_get_involved")) %>% 
       dplyr::rename_with(~ "motivation_skills", dplyr::contains("what_skills_you_would_bring")) %>% 
@@ -236,8 +269,27 @@ clean_application_colnames <- function(survey_df, lang = "en") {
       dplyr::rename_with(~ "first_name", dplyr::contains("first_name")) %>% 
       dplyr::rename_with(~ "email", dplyr::contains("which_email_address"))
   } else {
-    usethis::ui_stop("German is currently not supported.")
-    # TODO once we have collected some responses in german, fix the column name here.
+    survey_df <- survey_df %>% 
+      tidyr::separate(auf_welches_projekt_mochtest_du_dich_bewerben, c("project_id", "project_title"), sep = ":") %>% # extract project id
+      dplyr::mutate(gender = dplyr::coalesce(!!! dplyr::select(., dplyr::contains("was_ist_dein_geschlecht"))))
+    
+    # drop original gender variables
+    survey_df <- survey_df %>% 
+      dplyr::select(-contains("what_is_your_gender"))
+
+    # rename column names
+    survey_df <- survey_df %>% 
+      dplyr::rename_with(rename_programming, dplyr::contains("erfahrung_mit_den_folgenden_technologien_und_tools")) %>% 
+      dplyr::rename_with(rename_techniques, dplyr::contains("erfahrung_mit_den_folgenden_techniken"), lang = lang) %>% 
+      dplyr::rename_with(rename_topics, dplyr::contains("erfahrung_mit_den_folgenden_themen"), lang = lang) %>% 
+      dplyr::rename_with(~ "consent_privacy_policy", dplyr::contains("einwilligung_in_datenschutzerklarung")) %>% 
+      dplyr::rename_with(~ "motivation_why_involved", dplyr::contains("warum_du_dich_fur_dieses_projekt")) %>% 
+      dplyr::rename_with(~ "motivation_skills", dplyr::contains("welche_deiner_fahigkeiten_dich_besonders")) %>% 
+      dplyr::rename_with(~ "project_role", dplyr::contains("welche_rolle_mochtest_du_im_projekt_einnehmen")) %>% 
+      dplyr::rename_with(~ "first_name", dplyr::contains("wie_lautet_dein_vorname")) %>% 
+      dplyr::rename_with(~ "email", dplyr::contains("welcher_e_mail_adresse"))
+    
+    
   }
   
   # trim character variables

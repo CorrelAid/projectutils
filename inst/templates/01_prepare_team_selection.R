@@ -5,16 +5,17 @@ library(dplyr)
 # download applications
 PROJECT_ID <- "{{{project_id}}}"
 EXPORT_CSV_FILE <- "{{{export_csv_file}}}"
+LANG <- "{{{LANG}}}"
 project_id_lower <- tolower(PROJECT_ID)
 
 data_folder <- here::here() # change this if your data folder is somewhere else than in project root
 project_folder <- fs::path(data_folder, id_path(PROJECT_ID), "team_selection")
 
 if (EXPORT_CSV_FILE == "") { # use API
-  appl <- load_applications(PROJECT_ID)
+  appl <- load_applications(PROJECT_ID, lang = LANG)
 } else {
   path <- fs::path(project_folder, EXPORT_CSV_FILE)
-  appl <- load_applications_export(path, PROJECT_ID)
+  appl <- load_applications_export(path, PROJECT_ID, lang = LANG)
 }
 
 # mapping of ids to emails / names -> only for project coordinator / local
@@ -24,7 +25,7 @@ appl %>%
 
 # motivation questions for team selection committee
 appl %>% 
-  extract_motivation_questions() %>% 
+  extract_motivation_questions(lang = LANG) %>% 
   write_lines(glue("{project_folder}/{project_id_lower}_applications_motivation.md"))
 
 # anonymized version for team selection committee
