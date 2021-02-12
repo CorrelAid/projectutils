@@ -176,7 +176,7 @@ get_application_emails <- function(mapping_df, selected_ids, get_discarded = FAL
 #'@param project_id_path project id in path form, e.g. 2020-11-COR
 #'@param data_folder character. path to data folder starting at root of the project. defaults to ".", i.e. root
 #'@param export_csv_file character. file name of csv export file within the team_selection folder. Defaults to NULL, i.e. using the API to get the data. 
-#' @param lang character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.
+#'@param lang character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.
 #'@export 
 use_team_selection_workflow <- function(project_id_path, data_folder = ".", export_csv_file = NULL, lang = "en") {
   
