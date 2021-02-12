@@ -5,7 +5,7 @@ library(dplyr)
 # download applications
 PROJECT_ID <- "{{{project_id}}}"
 EXPORT_CSV_FILE <- "{{{export_csv_file}}}"
-LANG <- "{{{LANG}}}"
+LANG <- "{{{lang}}}"
 project_id_lower <- tolower(PROJECT_ID)
 
 data_folder <- here::here() # change this if your data folder is somewhere else than in project root
