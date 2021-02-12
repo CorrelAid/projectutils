@@ -275,7 +275,7 @@ clean_application_colnames <- function(survey_df, lang = "en") {
     
     # drop original gender variables
     survey_df <- survey_df %>% 
-      dplyr::select(-contains("what_is_your_gender"))
+      dplyr::select(-contains("was_ist_dein_geschlecht"))
 
     # rename column names
     survey_df <- survey_df %>% 
