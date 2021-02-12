@@ -139,7 +139,7 @@ extract_motivation_questions <- function(survey_df, lang = "en") {
   if (lang == "en") {
     md_text <- glue::glue("## Applicant {motivation$applicant_id} \n ### What skills qualify you? \n {motivation$skills_text} \n ### Why do you want to get involved? \n {motivation$motivation_text}")
   } else {
-    md_text <- glue::glue("## Bewerber:in {motivation$applicant_id} \n ### Bitte beschreibe hier, welche Deiner Fähigkeiten Dich besonders für die Teilnahme an diesem Projekt qualifizieren \n {motivation$skills_text} \n ### Bitte beschreibe hier, warum Du Dich für dieses Projekt engagieren möchtest  \n {motivation$motivation_text}")
+    md_text <- glue::glue("## Bewerber:in {motivation$applicant_id} \n ### Bitte beschreibe hier, welche Deiner Fähigkeiten Dich besonders für die Teilnahme an diesem Projekt qualifizieren \n {motivation$skills_text} \n ### Bitte beschreibe hier, warum Du Dich für dieses Projekt engagieren moechtest  \n {motivation$motivation_text}")
   }
   md_text
 }
@@ -270,7 +270,7 @@ clean_application_colnames <- function(survey_df, lang = "en") {
       dplyr::rename_with(~ "email", dplyr::contains("which_email_address"))
   } else {
     survey_df <- survey_df %>% 
-      tidyr::separate(auf_welches_projekt_mochtest_du_dich_bewerben, c("project_id", "project_title"), sep = ":") %>% # extract project id
+      tidyr::separate(.data$auf_welches_projekt_mochtest_du_dich_bewerben, c("project_id", "project_title"), sep = ":") %>% # extract project id
       dplyr::mutate(gender = dplyr::coalesce(!!! dplyr::select(., dplyr::contains("was_ist_dein_geschlecht"))))
     
     # drop original gender variables
