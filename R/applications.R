@@ -185,25 +185,43 @@ use_team_selection_workflow <- function(project_id_path, data_folder = ".", expo
   team_selection_folder <- fs::path(data_folder, project_id_path, "team_selection")
   if (!dir.exists(team_selection_folder)) {
     dir.create(team_selection_folder)
+    dir.create(fs::path(team_selection_folder, "data"))
   }
   
   # use templates
   project_id <- id_surveymonkey(project_id_path) # needed to download from surveymonkey
   usethis::use_template(
+    "02_get_application_emails.R",
+    save_as = fs::path(team_selection_folder, glue::glue("02_{project_id_path}_get_application_emails.R")),
+    data = list(project_id = project_id),
+    package = "projectutils",
+    open = FALSE
+  )
+
+  usethis::use_template(
     "01_prepare_team_selection.R",
-    save_as = fs::path(team_selection_folder, "01_prepare_team_selection.R"),
+    save_as = fs::path(team_selection_folder, glue::glue("01_{project_id_path}_prepare_team_selection.R")),
     data = list(project_id = project_id, export_csv_file = export_csv_file, lang = lang),
     package = "projectutils",
     open = TRUE
   )
   
+
   usethis::use_template(
-    "02_get_application_emails.R",
-    save_as = fs::path(team_selection_folder, "02_get_application_emails.R"),
-    data = list(project_id = project_id),
+    "template_application_single.Rmd",
+    save_as = fs::path(team_selection_folder, "zzz_template_application_single.Rmd"),
     package = "projectutils",
-    open = TRUE
+    open = FALSE
   )
+
+  usethis::use_template(
+    "template_application_report.Rmd",
+    save_as = fs::path(team_selection_folder, glue::glue("02_{project_id_path}_application_report.Rmd")),
+    package = "projectutils",
+    open = FALSE
+  )
+
+
 }
 
 rename_techniques <- function(col_name, lang = "en") {

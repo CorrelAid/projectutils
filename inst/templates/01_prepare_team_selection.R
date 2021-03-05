@@ -21,15 +21,17 @@ if (EXPORT_CSV_FILE == "") { # use API
 # mapping of ids to emails / names -> only for project coordinator / local
 appl %>% 
   select(applicant_id, email, first_name) %>% 
-  write_csv(glue::glue("{project_folder}/{project_id_lower}_mapping.csv"))
+  write_csv(glue::glue("{project_folder}/data/{project_id_lower}_mapping.csv"))
 
 # anonymized data set (for report)
+ANON_PATH <- glue::glue("{project_folder}/data/{project_id_lower}_applications_anonymized.csv")
 appl %>% 
   anonymize_applications() %>% 
-  write_csv(glue::glue("{project_folder}/{project_id_lower}_applications_anonymized.csv"))
+  write_csv(ANON_PATH)
 
 # knit report 
-knitr::render("")
+rmarkdown::render(glue::glue("{project_folder}/data/{project_id_lower}_applications_report.Rmd"), 
+                params = list(project_id = PROJECT_ID, anon_path = ANON_PATH))
 
 # quick analytics
 table(appl$gender)
