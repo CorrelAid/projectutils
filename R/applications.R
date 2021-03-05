@@ -202,15 +202,16 @@ use_team_selection_workflow <- function(project_id_path, data_folder = ".", expo
   )
   usethis::use_template(
     "template_application_single.Rmd",
-    save_as = fs::path(team_selection_folder, glue::glue("zzz_{prefix}_template_application_single.Rmd")),
+    save_as = fs::path(team_selection_folder, glue::glue("zzz_template_application_single.Rmd")),
     package = "projectutils",
     open = FALSE
   )
 
   project_id_path_lower <- tolower(project_id_path)
   usethis::use_template(
-    "template_application_report.Rmd",
-    save_as = fs::path(team_selection_folder, glue::glue("{project_id_path_lower}_application_report.Rmd")),
+    "template_applications_report.Rmd",
+    save_as = fs::path(team_selection_folder, glue::glue("{project_id_path_lower}_applications_report.Rmd")),
+    data = list(project_id = project_id, export_csv_file = export_csv_file, lang = lang),
     package = "projectutils",
     open = FALSE
   )

@@ -6,7 +6,7 @@ output:
   pdf_document:
     toc: true
     toc_depth: 2
-title: "`r toupper(params$project_id)`"
+title: "Applications for project `r toupper(params$project_id)`"
 ---
 <!-- THIS FILE IS NOT SUPPOSED TO BE KNITTED DIRECTLY
     INSTEAD IT IS KNIT FROM 01_preparte_team_selection.R
@@ -19,8 +19,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r include=FALSE, message=FALSE}
 library(tidyverse)
-PROJECT_ID <- "{{{project_id}}}"
-ANON_PATH <- "{{{anon_path}}}"
+PROJECT_ID <- params$project_id
+ANON_PATH <- params$anon_path
 appl <- readr::read_csv(ANON_PATH)
 ```
 
@@ -36,8 +36,8 @@ theme_set(theme_bw())
 ggplot(appl, aes(x = project_role, fill = gender))+
   geom_bar(position = "dodge")
 ```
-# Female applicants
 
+# Female applicants
 ```{r female, results='asis', echo=FALSE}
 female <- appl %>% 
   filter(gender == "Female") %>% 
