@@ -1,0 +1,66 @@
+---
+params:
+  applicant_id: 1
+  anon_path: ""
+output: pdf_document
+
+---
+
+<!-- THIS FILE IS NOT SUPPOSED TO BE KNITTED BY HAND
+    INSTEAD IT IS KNIT AUTOMATICALLY 
+    BY THE APPLICATIONS_REPORT.RMD FILE FOR EACH APPLICANT.
+    YOU CAN EDIT THIS FILE IF YOU WANT TO CHANGE THE INFORMATION DISPLAYED FOR EACH APPLICANT
+-->
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+
+library(tidyverse)
+lvls <- tibble(x = c(0, 1, 2, 3), level = c("Beginner", "User", "Advanced", "Expert"))
+theme_set(theme_bw())
+```
+
+```{r message=FALSE}
+appl <- readr::read_csv(params$anon_path, col_types = cols())
+a <- appl %>% 
+  filter(applicant_id == params$applicant_id)
+```
+
+
+## Applicant `r a$applicant_id` (`r a$project_role`) 
+**Gender**: `r a$gender`
+
+**Project role**: `r a$project_role`
+
+**What skills qualify you?**
+
+`r a$motivation_skills`
+
+**Why do you want to get involved?**
+
+`r a$motivation_why_involved`
+
+### Self-rated experience with skills, techniques and topics 
+
+```{r fig.height=6, fig.width=6}
+tmp <- a %>% 
+  select(starts_with(c("skills", "techniques", "topics"))) %>% 
+  pivot_longer(everything(), names_to = "value", values_to = "level") %>% 
+  mutate(type = stringr::str_extract(value, "skills|techniques|topics")) %>% 
+  mutate(value = stringr::str_replace(value, "skills_|techniques_|topics_", "")) %>% 
+  rownames_to_column() %>% 
+  left_join(lvls, by = "level")
+
+ggplot(tmp, aes(x=value, y=x, group=type)) +
+  geom_segment( aes(x=value, xend=value, y=0, yend=x))+
+    geom_point(size=3, color="#3863a2") +
+    coord_flip() +
+    theme(
+      panel.grid.minor.y = element_blank(),
+      panel.grid.major.y = element_blank(),
+      legend.position="none"
+    ) +
+  scale_y_continuous("level", limits = c(0, max(lvls$x)), breaks = seq(0, max(lvls$x), 1), labels = lvls$level)+
+  facet_wrap(~type, nrow = 3, scales = "free_y")+
+  xlab("")
+```

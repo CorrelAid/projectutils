@@ -1,0 +1,90 @@
+---
+params:
+  anon_path: ""
+  project_id: ""
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 2
+title: "Applications for project `r toupper(params$project_id)`"
+---
+<!-- THIS FILE IS NOT SUPPOSED TO BE KNITTED DIRECTLY
+    INSTEAD IT IS KNIT FROM 01_preparte_team_selection.R
+    IF YOU WANT TO KNIT THIS BY HAND, SET THE PARAMETERS ACCORDINGLY
+-->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=FALSE, message=FALSE}
+library(tidyverse)
+PROJECT_ID <- params$project_id
+ANON_PATH <- params$anon_path
+appl <- readr::read_csv(ANON_PATH)
+```
+
+# Helpful links for team selection committee
+- [Team selection criteria and best practices](https://docs.correlaid.org/project-manual/project-coordinators/ideation-finding-a-team#team-selection-call)
+- [Explanation of the experience scale](https://docs.correlaid.org/project-manual/data4good-projects#experience-scale) ("Beginner", "User", "Advanced", "Expert") 
+- [Explanation of the team roles](https://docs.correlaid.org/project-manual/data4good-projects#which-project-role)
+
+# Overview
+### Project roles by gender
+```{r}
+theme_set(theme_bw())
+ggplot(appl, aes(x = project_role, fill = gender))+
+  geom_bar(position = "dodge")
+```
+
+# Female applicants
+```{r female, results='asis', echo=FALSE}
+female <- appl %>% 
+  filter(gender == "Female") %>% 
+  arrange(project_role) %>% 
+  pull(applicant_id)
+
+res <- lapply(female, function(x) {
+  params <- list(applicant_id = x, anon_path = ANON_PATH)
+  knitr::knit_child(
+    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
+  )
+})
+
+cat(unlist(res), sep = '\n')
+```
+
+
+# Male applicants
+```{r male, results='asis'}
+male <- appl %>% 
+  filter(gender == "Male") %>% 
+  arrange(applicant_id) %>% 
+  pull(applicant_id)
+res <- lapply(male, function(x) {
+  params <- list(applicant_id = x, anon_path = ANON_PATH)
+  knitr::knit_child(
+    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
+  )
+})
+cat(unlist(res), sep = '\n')
+```
+
+# Applicants with nonbinary gender or self-identified
+```{r div-nonbinary, results='asis'}
+div_nonbinary <- appl %>% 
+  filter(!gender %in% c("Female", "Male")) %>% 
+  arrange(applicant_id) %>% 
+  pull(applicant_id)
+
+res <- lapply(div_nonbinary, function(x) {
+  params <- list(applicant_id = x, anon_path = ANON_PATH)
+  knitr::knit_child(
+    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
+  )
+})
+
+cat(unlist(res), sep = '\n')
+```
+
+

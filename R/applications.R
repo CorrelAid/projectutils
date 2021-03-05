@@ -185,22 +185,41 @@ use_team_selection_workflow <- function(project_id_path, data_folder = ".", expo
   team_selection_folder <- fs::path(data_folder, project_id_path, "team_selection")
   if (!dir.exists(team_selection_folder)) {
     dir.create(team_selection_folder)
+    dir.create(fs::path(team_selection_folder, "data"))
   }
   
   # use templates
   project_id <- id_surveymonkey(project_id_path) # needed to download from surveymonkey
+  # we add the three-letter prefix 
+  # to make file names distinguishable in RStudio when more then one project is managed at the same time
+  prefix <- tolower(stringr::str_sub(project_id, 1, 3)) 
   usethis::use_template(
-    "01_prepare_team_selection.R",
-    save_as = fs::path(team_selection_folder, "01_prepare_team_selection.R"),
+    "send_confirmation_emails.R",
+    save_as = fs::path(team_selection_folder, glue::glue("02_{prefix}_send_confirmation_emails.R")),
+    data = list(project_id = project_id),
+    package = "projectutils",
+    open = FALSE
+  )
+  usethis::use_template(
+    "template_application_single.Rmd",
+    save_as = fs::path(team_selection_folder, glue::glue("zzz_template_application_single.Rmd")),
+    package = "projectutils",
+    open = FALSE
+  )
+
+  project_id_path_lower <- tolower(project_id_path)
+  usethis::use_template(
+    "template_applications_report.Rmd",
+    save_as = fs::path(team_selection_folder, glue::glue("{project_id_path_lower}_applications_report.Rmd")),
     data = list(project_id = project_id, export_csv_file = export_csv_file, lang = lang),
     package = "projectutils",
-    open = TRUE
+    open = FALSE
   )
-  
+
   usethis::use_template(
-    "02_get_application_emails.R",
-    save_as = fs::path(team_selection_folder, "02_get_application_emails.R"),
-    data = list(project_id = project_id),
+    "prepare_team_selection.R",
+    save_as = fs::path(team_selection_folder, glue::glue("01_{prefix}_prepare_team_selection.R")),
+    data = list(project_id = project_id, export_csv_file = export_csv_file, lang = lang),
     package = "projectutils",
     open = TRUE
   )

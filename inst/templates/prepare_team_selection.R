@@ -7,9 +7,10 @@ PROJECT_ID <- "{{{project_id}}}"
 EXPORT_CSV_FILE <- "{{{export_csv_file}}}"
 LANG <- "{{{lang}}}"
 project_id_lower <- tolower(PROJECT_ID)
+project_id_path <- id_path(PROJECT_ID)
 
 data_folder <- here::here() # change this if your data folder is somewhere else than in project root
-project_folder <- fs::path(data_folder, id_path(PROJECT_ID), "team_selection")
+project_folder <- fs::path(data_folder, project_id_path, "team_selection")
 
 if (EXPORT_CSV_FILE == "") { # use API
   appl <- load_applications(PROJECT_ID, lang = LANG)
@@ -21,18 +22,18 @@ if (EXPORT_CSV_FILE == "") { # use API
 # mapping of ids to emails / names -> only for project coordinator / local
 appl %>% 
   select(applicant_id, email, first_name) %>% 
-  write_csv(glue::glue("{project_folder}/{project_id_lower}_mapping.csv"))
+  write_csv(glue::glue("{project_folder}/data/{project_id_lower}_mapping.csv"))
 
-# motivation questions for team selection committee
-appl %>% 
-  extract_motivation_questions(lang = LANG) %>% 
-  write_lines(glue("{project_folder}/{project_id_lower}_applications_motivation.md"))
-
-# anonymized version for team selection committee
+# anonymized data set (for report)
+ANON_PATH <- glue::glue("{project_folder}/data/{project_id_lower}_applications_anonymized.csv")
 appl %>% 
   anonymize_applications() %>% 
-  select(-starts_with("motivation_")) %>% # drop long-text variables bc they blow up the csv
-  write_csv(glue("{project_folder}/{project_id_lower}_applications_anonymized.csv"))
+  write_csv(ANON_PATH)
+
+# knit report 
+project_id_path_lower <- tolower(project_id_path)
+rmarkdown::render(glue::glue("{project_folder}/{project_id_path_lower}_applications_report.Rmd"), 
+                params = list(project_id = PROJECT_ID, anon_path = ANON_PATH))
 
 # quick analytics
 table(appl$gender)
