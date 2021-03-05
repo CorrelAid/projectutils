@@ -30,7 +30,7 @@ appl %>%
   write_csv(ANON_PATH)
 
 # knit report 
-rmarkdown::render(glue::glue("{project_folder}/data/{project_id_lower}_applications_report.Rmd"), 
+rmarkdown::render(glue::glue("{project_folder}/{project_id_lower}_applications_report.Rmd"), 
                 params = list(project_id = PROJECT_ID, anon_path = ANON_PATH))
 
 # quick analytics
