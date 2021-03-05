@@ -1,6 +1,6 @@
 ---
 params:
-  anon_path: ""
+  anon_path: "data/applications_anonymized.csv"
   project_id: ""
 output: 
   pdf_document:
