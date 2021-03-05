@@ -26,6 +26,7 @@ appl %>%
 
 # anonymized data set (for report)
 ANON_PATH <- glue::glue("{project_folder}/data/applications_anonymized.csv")
+
 appl %>% 
   anonymize_applications() %>% 
   write_csv(ANON_PATH)
