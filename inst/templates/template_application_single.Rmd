@@ -1,7 +1,7 @@
 ---
 params:
   applicant_id: 1
-  anon_path: ""
+  anon_path: "data/applications_anonymized.csv"
 output: pdf_document
 
 ---
