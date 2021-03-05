@@ -1,0 +1,88 @@
+---
+title: "2021-02-HAC"
+params:
+  applicant_id: 1
+  data_file: "appl_cleaned.csv"
+  project_id_path: ""
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 2
+title: "`r toupper(params$project_id_path)`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=FALSE, message=FALSE}
+library(tidyverse)
+PROJECT_ID <- "{{{project_id}}}"
+APPL_FILE <- "{{{data_file}}}"
+appl <- readr::read_csv(APPL_FILE)
+```
+
+```{r}
+theme_set(theme_bw())
+ggplot(appl, aes(x = project_role, fill = gender))+
+  geom_bar(position = "dodge")
+```
+```{r}
+knitr::kable(appl %>% select(applicant_id, gender, project_role))
+```
+# Female applicants
+
+```{r female, results='asis', echo=FALSE}
+female <- appl %>% 
+  filter(gender == "Female") %>% 
+  arrange(project_role) %>% 
+  pull(applicant_id)
+
+res <- lapply(female, function(x) {
+  params <- list(applicant_id = x, data_path = "appl_cleaned.csv")
+  knitr::knit_child(
+    'applicant_template.Rmd', envir = environment(), quiet = TRUE
+  )
+})
+
+cat(unlist(res), sep = '\n')
+# 
+# walk(female, function(id) {
+#   knitr::knit_child("applicant_template.Rmd", params = list(applicant_id = id, data_path = "export_cleaned.csv"))
+# })
+```
+
+
+# Male applicants
+```{r male, results='asis'}
+male <- appl %>% 
+  filter(gender == "Male") %>% 
+  arrange(applicant_id) %>% 
+  pull(applicant_id)
+res <- lapply(male, function(x) {
+  params <- list(applicant_id = x, data_path = "appl_cleaned.csv")
+  knitr::knit_child(
+    'applicant_template.Rmd', envir = environment(), quiet = TRUE
+  )
+})
+cat(unlist(res), sep = '\n')
+```
+
+# Applicants with nonbinary gender or self-identified
+```{r div-nonbinary, results='asis'}
+div_nonbinary <- appl %>% 
+  filter(!gender %in% c("Female", "Male")) %>% 
+  arrange(applicant_id) %>% 
+  pull(applicant_id)
+
+res <- lapply(div_nonbinary, function(x) {
+  params <- list(applicant_id = x, data_path = "appl_cleaned.csv")
+  knitr::knit_child(
+    'applicant_template.Rmd', envir = environment(), quiet = TRUE
+  )
+})
+
+cat(unlist(res), sep = '\n')
+```
+
+

@@ -23,16 +23,13 @@ appl %>%
   select(applicant_id, email, first_name) %>% 
   write_csv(glue::glue("{project_folder}/{project_id_lower}_mapping.csv"))
 
-# motivation questions for team selection committee
-appl %>% 
-  extract_motivation_questions(lang = LANG) %>% 
-  write_lines(glue("{project_folder}/{project_id_lower}_applications_motivation.md"))
-
-# anonymized version for team selection committee
+# anonymized data set (for report)
 appl %>% 
   anonymize_applications() %>% 
-  select(-starts_with("motivation_")) %>% # drop long-text variables bc they blow up the csv
-  write_csv(glue("{project_folder}/{project_id_lower}_applications_anonymized.csv"))
+  write_csv(glue::glue("{project_folder}/{project_id_lower}_applications_anonymized.csv"))
+
+# knit report 
+knitr::render("")
 
 # quick analytics
 table(appl$gender)
