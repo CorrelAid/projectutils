@@ -53,7 +53,7 @@ appl_export$`Wie lautet Dein Vorname?` <- fraud$name(n)
 base_prov <- BaseProvider$new()
 
 fake_gender <- function(x) base_prov$random_element(c("Weiblich", "Männlich", "Non-binary", "Das möchte ich nicht angeben"))
-appl_export$`Was ist dein Geschlecht?Hinweis: Da wir bei CorrelAid nach dem Grundprinzip von Geschlechtergleichberechtigung arbeiten, ist diese Frage für uns besonders wichtig.` <- purrr::map_chr(1:n, fake_role)
+appl_export$`Was ist dein Geschlecht?Hinweis: Da wir bei CorrelAid nach dem Grundprinzip von Geschlechtergleichberechtigung arbeiten, ist diese Frage für uns besonders wichtig.` <- purrr::map_chr(1:n, fake_gender)
 # add some more genders
 appl_export$`Was ist dein Geschlecht?Hinweis: Da wir bei CorrelAid nach dem Grundprinzip von Geschlechtergleichberechtigung arbeiten, ist diese Frage für uns besonders wichtig.`[16] <- NA
 appl_export$X14[16] <- "Genderqueer"

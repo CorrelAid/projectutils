@@ -51,7 +51,7 @@ appl_export$`What is your first name?` <- fraud$name(n)
 base_prov <- BaseProvider$new()
 
 fake_gender <- function(x) base_prov$random_element(c("Female", "Male", "Non-binary", "I do not want to disclose my gender"))
-appl_export$`What is your gender?Note: we work according to the principle of gender equality. This is why this question is particularly important to us.` <- purrr::map_chr(1:n, fake_role)
+appl_export$`What is your gender?Note: we work according to the principle of gender equality. This is why this question is particularly important to us.` <- purrr::map_chr(1:n, fake_gender)
 # add some more genders
 appl_export$`What is your gender?Note: we work according to the principle of gender equality. This is why this question is particularly important to us.`[16] <- NA
 appl_export$X14[16] <- "Genderqueer"
