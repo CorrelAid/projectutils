@@ -1,14 +1,12 @@
 ---
-title: "2021-02-HAC"
 params:
-  applicant_id: 1
-  data_file: "appl_cleaned.csv"
-  project_id_path: ""
+  anon_path: "appl_cleaned.csv"
+  project_id: ""
 output: 
   pdf_document:
     toc: true
     toc_depth: 2
-title: "`r toupper(params$project_id_path)`"
+title: "`r toupper(params$project_id)`"
 ---
 
 ```{r setup, include=FALSE}
@@ -18,17 +16,21 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r include=FALSE, message=FALSE}
 library(tidyverse)
 PROJECT_ID <- "{{{project_id}}}"
-APPL_FILE <- "{{{data_file}}}"
-appl <- readr::read_csv(APPL_FILE)
+ANON_PATH <- "{{{anon_path}}}"
+appl <- readr::read_csv(ANON_PATH)
 ```
 
+# Helpful links for team selection committee
+- [Team selection criteria and best practices](https://docs.correlaid.org/project-manual/project-coordinators/ideation-finding-a-team#team-selection-call)
+- [Explanation of the experience scale](https://docs.correlaid.org/project-manual/data4good-projects#experience-scale) ("Beginner", "User", "Advanced", "Expert") 
+- [Explanation of the team roles](https://docs.correlaid.org/project-manual/data4good-projects#which-project-role)
+
+# Overview
+### Project roles by gender
 ```{r}
 theme_set(theme_bw())
 ggplot(appl, aes(x = project_role, fill = gender))+
   geom_bar(position = "dodge")
-```
-```{r}
-knitr::kable(appl %>% select(applicant_id, gender, project_role))
 ```
 # Female applicants
 
@@ -39,17 +41,13 @@ female <- appl %>%
   pull(applicant_id)
 
 res <- lapply(female, function(x) {
-  params <- list(applicant_id = x, data_path = "appl_cleaned.csv")
+  params <- list(applicant_id = x, anon_path = ANON_PATH)
   knitr::knit_child(
-    'applicant_template.Rmd', envir = environment(), quiet = TRUE
+    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
   )
 })
 
 cat(unlist(res), sep = '\n')
-# 
-# walk(female, function(id) {
-#   knitr::knit_child("applicant_template.Rmd", params = list(applicant_id = id, data_path = "export_cleaned.csv"))
-# })
 ```
 
 
@@ -60,9 +58,9 @@ male <- appl %>%
   arrange(applicant_id) %>% 
   pull(applicant_id)
 res <- lapply(male, function(x) {
-  params <- list(applicant_id = x, data_path = "appl_cleaned.csv")
+  params <- list(applicant_id = x, anon_path = ANON_PATH)
   knitr::knit_child(
-    'applicant_template.Rmd', envir = environment(), quiet = TRUE
+    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
   )
 })
 cat(unlist(res), sep = '\n')
@@ -76,9 +74,9 @@ div_nonbinary <- appl %>%
   pull(applicant_id)
 
 res <- lapply(div_nonbinary, function(x) {
-  params <- list(applicant_id = x, data_path = "appl_cleaned.csv")
+  params <- list(applicant_id = x, anon_path = ANON_PATH)
   knitr::knit_child(
-    'applicant_template.Rmd', envir = environment(), quiet = TRUE
+    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
   )
 })
 

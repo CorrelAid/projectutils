@@ -1,11 +1,16 @@
 ---
 params:
   applicant_id: 1
-  data_path: "appl_cleaned.csv"
+  anon_path: "appl_cleaned.csv"
 output: pdf_document
 
 ---
 
+<!-- THIS FILE IS NOT SUPPOSED TO BE KNITTED BY HAND
+    INSTEAD IT IS KNIT AUTOMATICALLY 
+    BY THE APPLICATIONS_REPORT.RMD FILE FOR EACH APPLICANT.
+    YOU CAN EDIT THIS FILE IF YOU WANT TO CHANGE THE INFORMATION DISPLAYED FOR EACH APPLICANT
+-->
 ```{r include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
@@ -16,7 +21,7 @@ theme_set(theme_bw())
 ```
 
 ```{r message=FALSE}
-appl <- readr::read_csv(params$data_path, col_types = cols())
+appl <- readr::read_csv(params$anon_path, col_types = cols())
 a <- appl %>% 
   filter(applicant_id == params$applicant_id)
 ```
@@ -34,6 +39,9 @@ a <- appl %>%
 **Why do you want to get involved?**
 
 `r a$motivation_why_involved`
+
+### Self-rated experience with skills, techniques and topics 
+
 ```{r fig.height=6, fig.width=6}
 tmp <- a %>% 
   select(starts_with(c("skills", "techniques", "topics"))) %>% 
