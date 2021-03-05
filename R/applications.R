@@ -190,38 +190,38 @@ use_team_selection_workflow <- function(project_id_path, data_folder = ".", expo
   
   # use templates
   project_id <- id_surveymonkey(project_id_path) # needed to download from surveymonkey
+  # we add the three-letter prefix 
+  # to make file names distinguishable in RStudio when more then one project is managed at the same time
+  prefix <- tolower(stringr::str_sub(project_id, 1, 3)) 
   usethis::use_template(
-    "02_get_application_emails.R",
-    save_as = fs::path(team_selection_folder, glue::glue("02_{project_id_path}_get_application_emails.R")),
+    "send_confirmation_emails.R",
+    save_as = fs::path(team_selection_folder, glue::glue("02_{prefix}_send_confirmation_emails.R")),
     data = list(project_id = project_id),
     package = "projectutils",
     open = FALSE
   )
+  usethis::use_template(
+    "template_application_single.Rmd",
+    save_as = fs::path(team_selection_folder, glue::glue("zzz_{prefix}_template_application_single.Rmd")),
+    package = "projectutils",
+    open = FALSE
+  )
+
+  project_id_path_lower <- tolower(project_id_path)
+  usethis::use_template(
+    "template_application_report.Rmd",
+    save_as = fs::path(team_selection_folder, glue::glue("{project_id_path_lower}_application_report.Rmd")),
+    package = "projectutils",
+    open = FALSE
+  )
 
   usethis::use_template(
-    "01_prepare_team_selection.R",
-    save_as = fs::path(team_selection_folder, glue::glue("01_{project_id_path}_prepare_team_selection.R")),
+    "prepare_team_selection.R",
+    save_as = fs::path(team_selection_folder, glue::glue("01_{prefix}_prepare_team_selection.R")),
     data = list(project_id = project_id, export_csv_file = export_csv_file, lang = lang),
     package = "projectutils",
     open = TRUE
   )
-  
-
-  usethis::use_template(
-    "template_application_single.Rmd",
-    save_as = fs::path(team_selection_folder, "zzz_template_application_single.Rmd"),
-    package = "projectutils",
-    open = FALSE
-  )
-
-  usethis::use_template(
-    "template_application_report.Rmd",
-    save_as = fs::path(team_selection_folder, glue::glue("02_{project_id_path}_application_report.Rmd")),
-    package = "projectutils",
-    open = FALSE
-  )
-
-
 }
 
 rename_techniques <- function(col_name, lang = "en") {
