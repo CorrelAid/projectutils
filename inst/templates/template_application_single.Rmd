@@ -87,3 +87,67 @@ ggplot(tmp_applicant, aes(x = category, y = level_num, group = question)) +
   facet_wrap( ~ question, nrow = 3, scales = "free_y") +
   xlab("")
 ```
+
+```{r fig.width=6, fig.height=8}
+tmp_all_highlight <- tmp_all %>%
+  semi_join(tmp_applicant, by = c("category", "level")) %>%
+  mutate(this_applicant = TRUE) %>%
+  bind_rows(tmp_all %>%
+    anti_join(tmp_applicant, by = c("category", "level")) %>%
+    mutate(this_applicant = FALSE)) %>%
+  mutate(
+    category = fct_inorder(category),
+    highlight = if_else(this_applicant,
+      question,
+      NA_character_
+    )
+  )
+
+ggplot(tmp_all_highlight, aes(
+  x = fct_reorder(level, level_num),
+  fill = highlight
+)) +
+  geom_bar(width = 1) +
+  scale_x_discrete(labels = lvls$level) +
+  scale_y_continuous(breaks = c(0, 20)) +
+  scale_fill_discrete(
+    name = NULL,
+    na.value = "#d9d9d9",
+    breaks = unique(tmp_all$question)
+  ) +
+  facet_wrap(~category, ncol = 1, strip.position = "left") +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    panel.spacing = unit(0, "pt"),
+    panel.grid = element_blank(),
+    panel.grid.major.y = element_line("grey92"),
+    strip.text.y.left = element_text(angle = 0, hjust = 1),
+    legend.position = "bottom"
+  ) +
+  labs(x = NULL, y = NULL)
+```
+
+```{r fig.height=6, fig.width=6, warning=FALSE}
+ggplot(tmp_all_highlight, aes(
+  x = fct_reorder(level, level_num),
+  alpha = this_applicant,
+  fill = question
+)) +
+  geom_bar(width = 1) +
+  scale_x_discrete(labels = c("B", "U", "A", "E")) +
+  scale_alpha_discrete(range = c(.25, 1), guide = "none") +
+  facet_wrap(~category, ncol = 4) +
+  theme_grey() +
+  theme(
+    panel.grid = element_blank(),
+    panel.grid.major.y = element_line("grey92"),
+    axis.text.x = element_text(size = rel(1.25)),
+    axis.ticks.y = element_blank(),
+    axis.text.y = element_blank(),
+    legend.position = "bottom"
+  ) +
+  labs(x = NULL, y = NULL, caption = "B: Beginner, U: User, A: Advanced, E: Expert")
+```
+
