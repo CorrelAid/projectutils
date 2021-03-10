@@ -4,17 +4,18 @@ library(glue)
 library(dplyr)
 # download applications
 PROJECT_ID <- "{{{project_id}}}"
-EXPORT_CSV_FILE <- "{{{export_csv_file}}}"
-LANG <- "{{{lang}}}"
+EXPORT_CSV_FILE <- "{{{export_csv_file}}}" # backwards compatability with surveymonkey, will be deprecated soon
+LANG <- "{{{lang}}}" # backwards compatability with surveymonkey, will be deprecated soon
 project_id_lower <- tolower(PROJECT_ID)
 project_id_path <- id_path(PROJECT_ID)
-
 data_folder <- here::here() # change this if your data folder is somewhere else than in project root
 project_folder <- fs::path(data_folder, project_id_path, "team_selection")
 
-if (EXPORT_CSV_FILE == "") { # use API
+if (EXPORT_CSV_FILE == "") { # use Kobo API
   appl <- load_applications(Sys.getenv("KOBO_PROJECT_ASSET_URL"), PROJECT_ID)
 } else {
+  # export for backwards compatability with surveymonkey exports
+  # will be deprecated soon
   path <- fs::path(project_folder, EXPORT_CSV_FILE)
   appl <- load_applications_export(path, PROJECT_ID, lang = LANG)
 }
