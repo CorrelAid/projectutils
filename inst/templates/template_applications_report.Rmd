@@ -40,7 +40,7 @@ ggplot(appl, aes(x = project_role, fill = gender))+
 # Female applicants
 ```{r female, results='asis', echo=FALSE}
 female <- appl %>% 
-  filter(gender == "Female") %>% 
+  filter(gender == "female") %>% 
   arrange(project_role) %>% 
   pull(applicant_id)
 
@@ -58,7 +58,7 @@ cat(unlist(res), sep = '\n')
 # Male applicants
 ```{r male, results='asis'}
 male <- appl %>% 
-  filter(gender == "Male") %>% 
+  filter(gender == "male") %>% 
   arrange(applicant_id) %>% 
   pull(applicant_id)
 res <- lapply(male, function(x) {
@@ -73,7 +73,7 @@ cat(unlist(res), sep = '\n')
 # Applicants with nonbinary gender or self-identified
 ```{r div-nonbinary, results='asis'}
 div_nonbinary <- appl %>% 
-  filter(!gender %in% c("Female", "Male")) %>% 
+  filter(!gender %in% c("female", "male")) %>% 
   arrange(applicant_id) %>% 
   pull(applicant_id)
 

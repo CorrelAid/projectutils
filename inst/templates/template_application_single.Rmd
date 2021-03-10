@@ -22,7 +22,7 @@ library(readr)
 library(stringr)
 library(forcats)
 
-lvls <- tibble(level_num = c(0, 1, 2, 3), level = c("Beginner", "User", "Advanced", "Expert"))
+lvls <- tibble(level_num = c(0, 1, 2, 3), level = c("beginner", "user", "advanced", "expert"))
 theme_set(theme_bw())
 ```
 
