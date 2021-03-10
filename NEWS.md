@@ -1,3 +1,6 @@
+# projectutils 0.6.0
+- replace surveymonkey with kobotoolbox in load_applications()
+
 # projectutils 0.5.1
 - fix gender column in test data (contained fake roles)
 

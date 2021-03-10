@@ -7,9 +7,9 @@ int_prov <- InternetProvider
 
 
 survey_id <- 287163371
-appl_en <- survey_id %>% 
-  surveymonkey::fetch_survey_obj() %>%
-  surveymonkey::parse_survey() 
+# appl_en <- survey_id %>% 
+#  surveymonkey::fetch_survey_obj() %>%
+#  surveymonkey::parse_survey() 
 
 # only c("COR-11-2020", "CIT-10-2020")
 appl_en <- appl_en %>% 

@@ -6,8 +6,6 @@ set.seed(123)
 fraud <- fraudster()
 int_prov <- InternetProvider
 
-t <- readr::read_csv("tests/testthat/test_data/surveymonkey/Bewerbungsformular für Projektteams dt..csv")
-
 # column names
 cnames_row_1 <- c("respondent_id", "collector_id", "date_created", "date_modified", 
                   "ip_address", "email_address", "first_name", "last_name", "custom_1", 
