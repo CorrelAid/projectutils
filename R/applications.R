@@ -1,40 +1,84 @@
 utils::globalVariables("where") # https://github.com/r-lib/tidyselect/issues/201
 utils::globalVariables(".")
 
-#' load project applications 
+#' load project applications from Kobo
 #' @description loads the applications for a given project
+#' @param asset_url character. URL of the Kobo asset corresponding to the survey.
 #' @param project_id character. ID of the project, e.g. ERL-03-2020. Defaults to NULL which means not to filter by project
-#' @param lang character. Which language was used to collect the applications. Defaults to "en" for the "application for correlaid projects (en)" form. "de" corresponds to "Bewerbungsformular für Projektteams (de)" form.
 #' @return data frame containing the responses to the questions
 #' @export
-#' @importFrom surveymonkey fetch_survey_obj parse_survey 
 #' @importFrom dplyr filter
 #' @importFrom rlang .data
-load_applications <- function(project_id = NULL, lang = "en") {
-  if (!lang %in% c("en", "de")) {
-    usethis::ui_stop("lang must be either 'de' or 'en'.")
-  }
-  
-  if (lang == "en") {
-    survey_id <- 287163371 # application for correlaid projects (en)
-  } else {
-    survey_id <- 284359289 # Bewerbungsformular für Projektteams
-  }
-  survey_df <- survey_id %>% 
-    get_surveymonkey() %>% 
-    clean_application_colnames(lang = lang)
-  
+load_applications <- function(asset_url, project_id = NULL) {
+
+  survey_list <- get_kobo(asset_url)
+
+  survey_df <- survey_list %>%
+    purrr::map_dfr(function(sub) purrr::compact(sub) %>%  tibble::as_tibble()) %>% 
+    janitor::clean_names() %>% 
+    dplyr::rename(applicant_id = .data$id,
+                  motivation_why_involved = .data$motivation_why)
+
+    # create self-id column if it does not exist (because nobody used it)
+    if (!"gender_self_identification" %in% colnames(survey_df)) {
+      survey_df$gender_self_identification <- NA
+    }
+
+  # DATA CLEANING - this could probably be done more efficiently
+  # tibble with project ids the person applied to (1 row per person-project)
+  project_ids_df <- survey_df %>% 
+    dplyr::select(.data$applicant_id, .data$project_id) %>% 
+    tidyr::separate_rows(.data$project_id, sep = " ") %>% 
+    dplyr::distinct()
+
+  # tibble with project roles (1 person-project row)
+  project_roles_df <- survey_df %>% 
+    dplyr::select(.data$applicant_id, dplyr::starts_with("project_role")) %>% 
+    tidyr::pivot_longer(dplyr::starts_with("project_role"), names_to = "project_id", values_to = "project_role")%>% 
+    dplyr::mutate(project_id = .data$project_id %>% 
+              stringr::str_extract("\\w{3}_\\d{2}_\\d{4}") %>% 
+              stringr::str_replace_all("_", "-") %>% 
+              stringr::str_to_upper() %>% stringr::str_trim()) %>% 
+    dplyr::filter(.data$project_role != "DNA") %>% # TODO: proper checking that applicants did not mess up here. 
+    dplyr::distinct()
+
+  # 1 person row
+  personal_info_df <- survey_df %>% 
+    dplyr::select(.data$applicant_id, dplyr::starts_with("gender"), .data$first_name, .data$last_name, email = .data$email_address,
+                  .data$german_skills, dplyr::starts_with("rating"), dplyr::starts_with("motivation"),
+                  .data$consent_privacy_policy) %>% 
+    dplyr::distinct() %>% 
+    janitor::clean_names() %>% 
+    dplyr::rename_with(~stringr::str_replace_all(.x, "rating_technologies_tools", "skills"), dplyr::starts_with("rating_technologies_tools")) %>% 
+    dplyr::rename_with(~stringr::str_replace_all(.x, "rating_", ""), dplyr::starts_with("rating"))
+
+  # coalesce gender columns into one
+  personal_info_df <- personal_info_df %>% 
+    dplyr::mutate(gender = dplyr::if_else(.data$gender == "self_identification", NA_character_, .data$gender))
+  personal_info_df$gender <- dplyr::coalesce(personal_info_df$gender,
+                                              personal_info_df$gender_self_identification)
+
+  # join 
+  cleaned_df <- project_ids_df %>% 
+    dplyr::left_join(project_roles_df, by = c("applicant_id", "project_id")) %>% 
+    dplyr::left_join(personal_info_df, by = "applicant_id") %>% 
+    dplyr::mutate(applicant_id = 1:dplyr::n())  # give participant integer id from 1:n 
+
+
+
   if (!is.null(project_id)) {
     proj_id <- project_id
-    survey_df <- survey_df %>% 
+    cleaned_df <- cleaned_df %>% 
       dplyr::filter(.data$project_id == proj_id)
   }
   
-  survey_df <- survey_df %>% 
-    dplyr::mutate(applicant_id = 1:dplyr::n()) %>%  # give participant integer id
+  if (nrow(cleaned_df) == 0) {
+    usethis::ui_stop(glue::glue("No applicants present after filtering for {project_id}. Did you specify the ID in the correct format?"))
+  }
+  cleaned_df <- cleaned_df %>% 
     dplyr::select(.data$applicant_id, .data$gender, dplyr::everything())
 
-  return(survey_df)
+  return(cleaned_df)
 }
 
 #' load project applications from export
@@ -274,7 +318,7 @@ clean_application_colnames <- function(survey_df, lang = "en") {
     
     # drop original gender variables
     survey_df <- survey_df %>% 
-      dplyr::select(-contains("what_is_your_gender"))
+      dplyr::select(-dplyr::contains("what_is_your_gender"))
     
     # rename column names
     survey_df <- survey_df %>% 

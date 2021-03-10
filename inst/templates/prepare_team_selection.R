@@ -13,7 +13,7 @@ data_folder <- here::here() # change this if your data folder is somewhere else 
 project_folder <- fs::path(data_folder, project_id_path, "team_selection")
 
 if (EXPORT_CSV_FILE == "") { # use API
-  appl <- load_applications(PROJECT_ID, lang = LANG)
+  appl <- load_applications(Sys.getenv("KOBO_PROJECT_ASSET_URL"), PROJECT_ID)
 } else {
   path <- fs::path(project_folder, EXPORT_CSV_FILE)
   appl <- load_applications_export(path, PROJECT_ID, lang = LANG)

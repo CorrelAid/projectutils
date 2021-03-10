@@ -23,12 +23,12 @@ id_surveymonkey <- function(project_id_path) {
   paste(prefix, month, year, sep = "-")
 }
 
-
-#' get_surveymonkey
-#' @param id character. internal surveymonkey id for the survey
-#' @return tibble with answers to the survey
-get_surveymonkey <- function(id) {
-  id %>% 
-    surveymonkey::fetch_survey_obj() %>%
-    surveymonkey::parse_survey()
+#' get_kobo
+#' @param url character. URL to download. 
+#' @param token character. API token. defaults to Sys.getenv("KOBO_CORRELAID_TOKEN")
+#' @description load an asset by its url
+get_kobo <- function(url, token = Sys.getenv("KOBO_CORRELAID_TOKEN")) {
+  req <- httr::GET(url, httr::add_headers(Authorization = glue::glue("Token {token}")))
+  httr::stop_for_status(req)
+  httr::content(req)$results
 }
