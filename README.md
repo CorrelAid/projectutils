@@ -4,7 +4,7 @@ projectutils
 <!-- badges: start -->
 
 [![Codecov test
-coverage](https://codecov.io/gh/CorrelAid/projectutils/branch/main/graph/badge.svg)](https://codecov.io/gh/CorrelAid/projectutils?branch=main)
+coverage](https://codecov.io/gh/CorrelAid/projectutils/branch/master/graph/badge.svg)](https://codecov.io/gh/CorrelAid/projectutils?branch=main)
 [![R build
 status](https://github.com/CorrelAid/projectutils/workflows/R-CMD-check/badge.svg)](https://github.com/CorrelAid/projectutils/actions)
 [![Lifecycle:
@@ -53,26 +53,33 @@ Those templates can be installed / created in a (newly created)
 use_team_selection_workflow("2020-12-TES")
 ```
 
-#### 01\_prepare\_team\_selection.R
+#### 01\_{prefix}\_prepare\_team\_selection.R
 
--   download applications from surveymonkey and do data cleaning
-    (`load_applications()`)
--   create and store an anonymized version of the applications
-    (`anonymize_applications()`)
--   store the mapping of applicant\_ids to emails and names
--   extract open-ended questions into a markdown file for easier reading
-    (`extract_motivation_questions()`)
+  - download applications from [kobotoolbox](https://kobo.correlaid.org)
+    and do data cleaning (`load_applications()`)
+  - anonymize applications (`anonymize_applications()`)
+  - store the mapping of applicant\_ids to emails and names
+  - knit a PDF report that includes helpful visualizations of the
+    self-rating questions as well as the answers to the open-ended
+    questions
 
-#### 02\_get\_application\_emails.R
+#### 02\_{prefix}\_send\_confirmation\_emails.R
 
--   based on the `applicant_id`s of the selected team members, extract
+  - based on the `applicant_id`s of the selected team members, extract
     the email addresses of the selected / declined applicants and write
     a “;” - separated string to the clipboard for convenient
     copy-pasting into Outlook.
+
+#### Report templates
+
+Executing `use_team_selection_workflow()` will also create two RMarkdown
+templates in the folder. Those are supposed to be knitted by
+`01_{prefix}_prepare_team_selection.R` and not directly. You can adapt
+them if needed.
 
 ## Reporting on projects
 
 Yet to be implemented:
 
--   reports on the feedback on the project from NPOs
--   reports on the feedback on the project from volunteers
+  - reports on the feedback on the project from NPOs
+  - reports on the feedback on the project from volunteers
