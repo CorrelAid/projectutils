@@ -1,3 +1,7 @@
+# projectutils 0.6.1
+- fixes bug in `prepare_team_selection.R` where it was still using function arguments for surveymonkey
+- adapts RMarkdown report templates for Kobo data (lowercase values for rating scale and gender values)
+
 # projectutils 0.6.0
 - replace surveymonkey with kobotoolbox in load_applications()
 
