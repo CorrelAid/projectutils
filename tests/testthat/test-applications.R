@@ -17,7 +17,15 @@ test_that("filtering works", {
   expect_equal(nrow(load_applications("https://kobo.correlaid.org/fake_asset.json", "CAR-04-2021")), 45)
   expect_equal(nrow(load_applications("https://kobo.correlaid.org/fake_asset.json", "SOS-04-2021")), 26)
   expect_equal(nrow(load_applications("https://kobo.correlaid.org/fake_asset.json")), 26 + 45 + 32)
+})
 
+test_that("applicant_id is correctly assigned if results are not filtered and people applied for multiple projects", {
+  test_data <- jsonlite::read_json("test_data/kobo/kobo_export_short.json")
+  mockery::stub(load_applications, 'get_kobo', test_data)
+  appl <- load_applications("https://kobo.correlaid.org/fake_asset.json")
+  expect_equal(nrow(appl), 6)
+  expect_equal(appl$applicant_id, c(1, 2, 2, 5, 5, 5))
+  expect_equal(appl$applicant_id %>% unique(), c(1, 2, 5))
 })
 
 test_that("renaming skill variables works", {
@@ -146,4 +154,12 @@ test_that("cleaning data exported via UI works for German data", {
   expect_equal(length(colnames(applications)[stringr::str_detect(colnames(applications), "^techniques_.+?")]), 13)
   expect_equal(length(colnames(applications)[stringr::str_detect(colnames(applications), "^skills.+?")]), 5)
   expect_equal(length(colnames(applications)[stringr::str_detect(colnames(applications), "^topics.+?")]), 8)
+})
+test_that("anonymization works for kobo data", {
+  applications <- load_applications_export("test_data/surveymonkey/applications_fake_export.csv", "CIT-10-2020") %>% 
+      anonymize_applications()
+  expect_false("email" %in% colnames(applications))
+  expect_false("first_name" %in% colnames(applications))
+  expect_false("last_name" %in% colnames(applications))
+  expect_false("ip_address" %in% colnames(applications))
 })

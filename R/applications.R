@@ -61,11 +61,9 @@ load_applications <- function(asset_url, project_id = NULL) {
   # join 
   cleaned_df <- project_ids_df %>% 
     dplyr::left_join(project_roles_df, by = c("applicant_id", "project_id")) %>% 
-    dplyr::left_join(personal_info_df, by = "applicant_id") %>% 
-    dplyr::mutate(applicant_id = 1:dplyr::n())  # give participant integer id from 1:n 
+    dplyr::left_join(personal_info_df, by = "applicant_id")
 
-
-
+  # filter if the user wants to filter 
   if (!is.null(project_id)) {
     proj_id <- project_id
     cleaned_df <- cleaned_df %>% 
