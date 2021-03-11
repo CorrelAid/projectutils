@@ -33,6 +33,13 @@ or with the `{remotes}` :package:
 remotes::install_github("CorrelAid/projectutils")
 ```
 
+install the development version from the `dev` branch (experimental, for
+development):
+
+``` r
+remotes::install_github("CorrelAid/projectutils", ref = "dev")
+```
+
 ## Manage project data
 
 This package can help you to create and update entries for the
