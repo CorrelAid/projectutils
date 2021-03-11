@@ -3,6 +3,7 @@ PROJECT_ID <- "{{{project_id}}}"
 
 proj <- load_project(PROJECT_ID)
 proj$year <- 2020
+proj$team_size <- 0
 
 proj$title$de <- ""
 proj$title$en <- ""
@@ -27,6 +28,6 @@ proj$team <- list(
   list(first_name = "foo2", last_name = "bar2", twitter = "foobar2", github = "foobar2", linkedin = "https://www.linkedin.com/in/foobar2", website = "https://mywebsite.org", xing = "completxingurl")
 )
 
-proj$published <- TRUE # set to true always before making a PR.
+proj$published <- FALSE # set to true always before making a PR.
 
 write_project(proj)
