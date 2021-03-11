@@ -1,4 +1,4 @@
-context("applications")
+context("kobo applications")
 
 # find out who is testing - devtools or cmd check
 tb <- rlang::trace_back(1)
@@ -17,6 +17,13 @@ test_that("filtering works", {
   expect_equal(nrow(load_applications("https://kobo.correlaid.org/fake_asset.json", "CAR-04-2021")), 45)
   expect_equal(nrow(load_applications("https://kobo.correlaid.org/fake_asset.json", "SOS-04-2021")), 26)
   expect_equal(nrow(load_applications("https://kobo.correlaid.org/fake_asset.json")), 26 + 45 + 32)
+})
+
+test_that("filtering for non-existent ID throws warning", {
+  test_data <- jsonlite::read_json("test_data/kobo/kobo_export_short.json")
+  mockery::stub(load_applications, 'get_kobo', test_data)
+  expect_warning(load_applications("https://kobo.correlaid.org/fake_asset.json", "FAKE-ID"),
+                  regexp = "No applicants present after filtering for FAKE-ID")
 })
 
 test_that("applicant_id is correctly assigned if results are not filtered and people applied for multiple projects", {
@@ -95,7 +102,7 @@ test_that("coalescing gender works", {
 })
 
 # SURVEYMONKEY
-context("surveymonkey exported data")
+context("surveymonkey applications")
 
 test_that("cleaning colnames works", {
   test_data <- readr::read_csv("test_data/surveymonkey/applications_fake_en.csv")
