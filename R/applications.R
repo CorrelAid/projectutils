@@ -162,7 +162,18 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
 #' @export
 anonymize_applications <- function(survey_df) {
   survey_df <- survey_df %>% 
-    dplyr::select(-.data$email, -.data$first_name, -.data$ip_address)
+    dplyr::select(-.data$email, -.data$first_name)
+  
+  # backwards compatability for surveymonkey 
+  # last_name is only in Kobo data -> we can only remove it if it's there
+  # otherwise select will throw an error 
+  if ("last_name" %in% colnames(survey_df)) {
+    survey_df$last_name <- NULL
+  }
+
+  if ("ip_address" %in% colnames(survey_df)) {
+    survey_df$ip_address <- NULL
+  }
   return(survey_df)
 }
 
