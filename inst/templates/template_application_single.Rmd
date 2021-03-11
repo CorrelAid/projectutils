@@ -47,6 +47,7 @@ tmp_applicant <- tmp_all %>%
   filter(applicant_id == params$applicant_id)
 ```
 
+
 ## Applicant `r a$applicant_id` (`r a$project_role`) {#applicant-`r a$applicant_id`}
 **Gender**: `r a$gender`
 

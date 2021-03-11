@@ -61,11 +61,9 @@ load_applications <- function(asset_url, project_id = NULL) {
   # join 
   cleaned_df <- project_ids_df %>% 
     dplyr::left_join(project_roles_df, by = c("applicant_id", "project_id")) %>% 
-    dplyr::left_join(personal_info_df, by = "applicant_id") %>% 
-    dplyr::mutate(applicant_id = 1:dplyr::n())  # give participant integer id from 1:n 
+    dplyr::left_join(personal_info_df, by = "applicant_id")
 
-
-
+  # filter if the user wants to filter 
   if (!is.null(project_id)) {
     proj_id <- project_id
     cleaned_df <- cleaned_df %>% 
@@ -73,8 +71,9 @@ load_applications <- function(asset_url, project_id = NULL) {
   }
   
   if (nrow(cleaned_df) == 0) {
-    usethis::ui_stop(glue::glue("No applicants present after filtering for {project_id}. Did you specify the ID in the correct format?"))
+    usethis::ui_warn(glue::glue("No applicants present after filtering for {project_id}. Did you specify the ID in the correct format?"))
   }
+
   cleaned_df <- cleaned_df %>% 
     dplyr::select(.data$applicant_id, .data$gender, dplyr::everything())
 
@@ -163,7 +162,18 @@ load_applications_export <- function(export_csv_path, project_id = NULL, lang = 
 #' @export
 anonymize_applications <- function(survey_df) {
   survey_df <- survey_df %>% 
-    dplyr::select(-.data$email, -.data$first_name, -.data$ip_address)
+    dplyr::select(-.data$email, -.data$first_name)
+  
+  # backwards compatability for surveymonkey 
+  # last_name is only in Kobo data -> we can only remove it if it's there
+  # otherwise select will throw an error 
+  if ("last_name" %in% colnames(survey_df)) {
+    survey_df$last_name <- NULL
+  }
+
+  if ("ip_address" %in% colnames(survey_df)) {
+    survey_df$ip_address <- NULL
+  }
   return(survey_df)
 }
 

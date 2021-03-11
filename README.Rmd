@@ -23,9 +23,16 @@ with `{devtools}` :package:
 devtools::install_github("CorrelAid/projectutils")
 ```
 
+
 or with the `{remotes}` :package: 
 ```{r eval=FALSE}
 remotes::install_github("CorrelAid/projectutils")
+```
+
+install the development version from the `dev` branch (experimental, for development): 
+
+```{r eval=FALSE}
+remotes::install_github("CorrelAid/projectutils", ref = "dev")
 ```
 
 
