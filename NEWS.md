@@ -1,3 +1,9 @@
+# projectutils 0.6.2
+- bug fix: use Kobo id to have correct `applicant_id`s for applicants who apply for multiple projects
+- bug fix: make `anonymize_applications()` work for Kobo and Surveymonkey data 
+- improvement: add `team_size` to template for meta.json and `fill_project.R`
+- improvement: use warning instead of error when no applications are found for a certain project ID
+- housekeeping: add instructions for installing from `dev` branch and add `dev` branch to GitHub Action
 # projectutils 0.6.1
 - fixes bug in `prepare_team_selection.R` where it was still using function arguments for surveymonkey
 - adapts RMarkdown report templates for Kobo data (lowercase values for rating scale and gender values)
