@@ -88,3 +88,22 @@ cat(unlist(res), sep = '\n')
 ```
 
 
+
+# Applicants who did not disclose their gender
+```{r not-disclosed, results='asis'}
+not_disclosed <- appl %>% 
+  filter(gender == "not_disclosed") %>% 
+  arrange(applicant_id) %>% 
+  pull(applicant_id)
+
+res <- lapply(not_disclosed, function(x) {
+  params <- list(applicant_id = x, anon_path = ANON_PATH)
+  knitr::knit_child(
+    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
+  )
+})
+
+cat(unlist(res), sep = '\n')
+```
+
+
