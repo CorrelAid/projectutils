@@ -28,8 +28,10 @@ load_applications <- function(asset_url, project_id = NULL) {
   # tibble with project ids the person applied to (1 row per person-project)
   project_ids_df <- survey_df %>% 
     dplyr::select(.data$applicant_id, .data$project_id) %>% 
+    dplyr::mutate(applied_to = .data$project_id) %>% # store this before separating the rows
     tidyr::separate_rows(.data$project_id, sep = " ") %>% 
-    dplyr::distinct()
+    dplyr::distinct() %>% 
+    dplyr::group_by(.data$applicant_id)
 
   # tibble with project roles (1 person-project row)
   project_roles_df <- survey_df %>% 
