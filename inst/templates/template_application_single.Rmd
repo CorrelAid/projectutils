@@ -48,6 +48,8 @@ tmp_applicant <- tmp_all %>%
 ```
 
 ## Applicant `r a$applicant_id` (`r a$project_role`) {#applicant-`r a$applicant_id`}
+**Applied to project(s)**: `r a$applied_to`
+
 **Gender**: `r a$gender`
 
 **Project role**: `r a$project_role`
