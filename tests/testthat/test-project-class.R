@@ -62,7 +62,6 @@ test_that("setting status works", {
 
 
 test_that("adding local chapters works as expected", {
-
   proj <- Project$new(start_ym = "2020-01", abbreviation = "FOO", name = "an awesome project")
   # can't add more than one chapter at a time
   expect_error(
@@ -74,9 +73,23 @@ test_that("adding local chapters works as expected", {
   )
 
   proj$add_local_chapter("berlin")
-  proj$add_local_chapter("berlin")
+  expect_warning(proj$add_local_chapter("berlin"), regexp = "berlin is already added")
   proj$add_local_chapter("rhein-main")
   proj$add_local_chapter("paris")
 
   expect_equal(nrow(proj$local_chapters), 3)
+  expect_equal(proj$get_sql_tables()$projectlocalchapters$lc_id, c(1, 13, 12))
+})
+
+
+test_that("data frame representation works", {
+  proj <- Project$new(start_ym = "2020-01", abbreviation = "FOO", name = "an awesome project")
+  proj_df <- proj$to_tibble()
+  
+  expect_equal(nrow(proj_df), 1)
+  expect_equal(proj_df$project_id, "2020-01-FOO")
+  expect_equal(proj_df$start_ym, "2020-01")
+  expect_equal(nrow(proj_df$tags[[1]]), 0)
+  expect_equal(nrow(proj_df$local_chapters[[1]]), 0)
+  expect_true(is.na(proj$status_id))
 })
