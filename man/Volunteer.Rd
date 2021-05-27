@@ -41,8 +41,9 @@ create a volunteer}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Volunteer$new()}}
-\item \href{#method-as_tibble}{\code{Volunteer$as_tibble()}}
-\item \href{#method-sql_tables}{\code{Volunteer$sql_tables()}}
+\item \href{#method-to_tibble}{\code{Volunteer$to_tibble()}}
+\item \href{#method-set_local_chapter}{\code{Volunteer$set_local_chapter()}}
+\item \href{#method-get_sql_tables}{\code{Volunteer$get_sql_tables()}}
 \item \href{#method-clone}{\code{Volunteer$clone()}}
 }
 }
@@ -62,29 +63,47 @@ create a volunteer}
 \item{\code{last_name}}{character. last name of the volunteer}
 
 \item{\code{email}}{character. email of the volunteers
-as_tibble}
+to_tibble}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-as_tibble"></a>}}
-\if{latex}{\out{\hypertarget{method-as_tibble}{}}}
-\subsection{Method \code{as_tibble()}}{
+\if{html}{\out{<a id="method-to_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-to_tibble}{}}}
+\subsection{Method \code{to_tibble()}}{
 returns a one row tibble representation of the Volunteer object.
-sql_tables
+set_local_chapter
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Volunteer$as_tibble()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Volunteer$to_tibble()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sql_tables"></a>}}
-\if{latex}{\out{\hypertarget{method-sql_tables}{}}}
-\subsection{Method \code{sql_tables()}}{
+\if{html}{\out{<a id="method-set_local_chapter"></a>}}
+\if{latex}{\out{\hypertarget{method-set_local_chapter}{}}}
+\subsection{Method \code{set_local_chapter()}}{
+sets the local chapter of the volunteer
+get_sql_tables
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Volunteer$set_local_chapter(lc_name)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{lc_name}}{name of the local chapter. see projectutils::local_chapters for options.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_sql_tables"></a>}}
+\if{latex}{\out{\hypertarget{method-get_sql_tables}{}}}
+\subsection{Method \code{get_sql_tables()}}{
 a list function that returns tibble for each table
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Volunteer$sql_tables()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Volunteer$get_sql_tables()}\if{html}{\out{</div>}}
 }
 
 }
