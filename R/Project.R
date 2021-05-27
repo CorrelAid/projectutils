@@ -5,6 +5,7 @@ Project <- R6::R6Class("Project",
   private = list(
     .tags = list(),
     .local_chapters = list(),
+    .project_members = list(),
     .project_id = "",
     .name = "",
     .slug = NA_character_,
@@ -22,12 +23,6 @@ Project <- R6::R6Class("Project",
     .organization_id = NA_integer_,
     assert_name = function(value) {
       checkmate::assert_character(value, min.len = 1, max.len = 1)
-    },
-    assert_project_id = function(value) {
-      if (!stringr::str_detect(value, "^\\d{4}\\-\\d{2}\\-[:upper:]{3,3}$")) usethis::ui_stop("Invalid project id. It needs to be conform to the following format: YYYY-mm-{ABB} where {ABB} is uppercase")
-    },
-    check_ym = function(value) {
-      checkmate::test_character(value, pattern = "^\\d{4}\\-\\d{2}$")
     }
   ),
   active = list(
@@ -56,7 +51,7 @@ Project <- R6::R6Class("Project",
     local_chapters = function(value) {
       if (missing(value)) {
         if (length(private$.local_chapters) == 0) {
-          return(tibble::tibble(lc_id = character(), lc_name = character(), lc_name_full = character()))
+          return(tibble::tibble(lc_id = numeric(), lc_name = character(), lc_name_full = character()))
         }
         local_chapters_df <- private$.local_chapters %>%
           purrr::map_dfr(function(lc) {
@@ -68,14 +63,32 @@ Project <- R6::R6Class("Project",
       }
       invisible(self)
     },
-
+    
+    #' @field project_members
+    #' tibble. Returns the project_members of the project as a tibble. Read-only.
+    project_members = function(value) {
+      if (missing(value)) {
+        if (length(private$.project_members) == 0) {
+          return(tibble::tibble())
+        }
+        project_members_df <- private$.project_members %>%
+          purrr::map_dfr(function(pm) {
+            pm$to_tibble()
+        })
+        return(project_members_df)
+      } else {
+        usethis::ui_stop("Can't set project_members. Please use the add_project_member function to add a project member to the project.")
+      }
+      invisible(self)
+    },
+    
     #' @field project_id
     #' character. id of the project, in the form YYYY-mm-ABB where ABB is any three-character, uppercase abbreviation
     project_id = function(value) {
       if (missing(value)) {
         return(private$.project_id)
       } else {
-        private$assert_project_id(value)
+        assert_project_id(value)
         private$.project_id <- value
       }
       invisible(self)
@@ -148,7 +161,7 @@ Project <- R6::R6Class("Project",
         if (checkmate::test_scalar_na(value)) {
           usethis::ui_stop("You can't set start_ym to NA")
         }
-        if (!private$check_ym(value)) {
+        if (!check_ym(value)) {
           usethis::ui_stop(usethis::ui_stop(glue::glue("Invalid format: start_ym needs to be set to a character in the format YYYY-mm")))
         }
 
@@ -172,7 +185,7 @@ Project <- R6::R6Class("Project",
 
         # character
         checkmate::assert_character(value)
-        if (!private$check_ym(value)) {
+        if (!check_ym(value)) {
           usethis::ui_stop(usethis::ui_stop(glue::glue("Invalid format: end_ym needs to be set to a character in the format YYYY-mm")))
         }
         private$.end_ym <- value
@@ -194,7 +207,7 @@ Project <- R6::R6Class("Project",
 
         # character
         checkmate::assert_character(value)
-        if (!private$check_ym(value)) {
+        if (!check_ym(value)) {
           usethis::ui_stop(usethis::ui_stop(glue::glue("Invalid format: end_ym_predicted needs to be set to a character in the format YYYY-mm")))
         }
         private$.end_ym_predicted <- value
@@ -276,27 +289,20 @@ Project <- R6::R6Class("Project",
   ),
   public = list(
     #' create a project
-    #' @param start_ym character. year and month of the predicted start of the project (~kickoff), in the form YYYY-mm
-    #' @param abbreviation character. Three character, uppercase abbreviation, usually corresponding to the organization, e.g. COR for CorrelAid.
+    #' @param project_id character. id of the project, in the form YYYY-mm-ABB where ABB is any three-character, uppercase abbreviation
     #' @param name character. Short title of the project.
-    initialize = function(start_ym, abbreviation, name) {
-      # check validity of inputs
-      # check start_ym
-      checkmate::assert_character(start_ym)
-      if (!private$check_ym(start_ym)) {
-        usethis::ui_stop(usethis::ui_stop(glue::glue("Invalid format: start_ym needs to be set to a character in the format YYYY-mm")))
-      }
+    initialize = function(project_id, name) {
+      # check validity of project_id
+      assert_project_id(project_id)
+      private$.project_id <- project_id
 
-      # check validity of abbreviation
-      checkmate::assert_character(start_ym)
-      if (!stringr::str_detect(abbreviation, "^[:upper:]{3,3}$")) usethis::ui_stop("Invalid abbreviation. It needs to be 3 alphabetic characters long and it must be uppercase.")
-
+      # start_ym can be derived from project id
+      private$.start_ym <- stringr::str_extract(project_id, "\\d{4}\\-\\d{2}")
+      
       # name needs to be character
       checkmate::assert_character(name, min.len = 1, max.len = 1)
-
-      private$.start_ym <- start_ym
-      private$.project_id <- glue::glue("{start_ym}-{abbreviation}")
       private$.name <- name
+
       invisible(self)
     },
 
@@ -322,6 +328,15 @@ Project <- R6::R6Class("Project",
       invisible(self)
     },
 
+    #' add a local chapter to the project
+    #' @param volunteer_id integer. id of the volunteer.
+    #' @param role character. role of the volunteer. see projectutils::roles for available options.
+    add_project_member = function(volunteer_id, role) {
+      pm <- ProjectMember$new(self$project_id, volunteer_id, role)
+      private$.project_members <- c(private$.project_members, pm)
+      invisible(self)
+    },
+
     #' set status of the project
     #' @param status character. the status. See projectutils::status for options.
     set_status = function(status) {
@@ -336,6 +351,7 @@ Project <- R6::R6Class("Project",
       private$.status <- status
       invisible(self)
     },
+
     #' to_tibble
     #' @description returns a one row tibble representation of the Project object.
     to_tibble = function() {
@@ -354,6 +370,7 @@ Project <- R6::R6Class("Project",
         organization_id = private$.organization_id,
         tags = list(self$tags),
         local_chapters = list(self$local_chapters),
+        project_members = list(self$project_members),
         status_id = private$.status_id,
         status = private$.status
       )
@@ -368,10 +385,11 @@ Project <- R6::R6Class("Project",
           tag_id = self$tags$tag_id
         ), 
         tag = projectutils::tags,
-        projectlocalchapters = tibble::tibble(
+        projectlocalchapter = tibble::tibble(
           project_id = private$.project_id,
           lc_id = self$local_chapters$lc_id
-        )
+        ),
+        projectmember = self$project_members
       )
     }
   )

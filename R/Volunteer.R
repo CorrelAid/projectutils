@@ -161,7 +161,7 @@ Volunteer <- R6::R6Class("Volunteer",
     if (missing(value)) {
         return(private$.lc_id)
       } else {
-        usethis::ui_stop("Can't set lc_id. Please use the set_local_chapter function to change the status of the project.")
+        usethis::ui_stop("Can't set lc_id. Please use the set_local_chapter function to set the local chapter of the volunteer.")
       }
     }
   ),
@@ -186,9 +186,9 @@ Volunteer <- R6::R6Class("Volunteer",
     },
 
     
-    #' as_tibble
+    #' to_tibble
     #' @description returns a one row tibble representation of the Volunteer object.
-    as_tibble = function() {
+    to_tibble = function() {
       tibble::tibble(
         volunteer_id = private$.project_id,
         first_name = private$.first_name,
@@ -225,9 +225,9 @@ Volunteer <- R6::R6Class("Volunteer",
       private$.lc_id <- lc_id
       invisible(self)
     },
-    #' sql_tables
+    #' get_sql_tables
     #' @description a list function that returns tibble for each table
-    sql_tables = function() {
+    get_sql_tables = function() {
       list(
         volunteer = self$as_tibble() %>% 
             dplyr::select(-projects)

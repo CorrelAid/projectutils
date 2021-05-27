@@ -18,6 +18,8 @@ class representing the basic properties of a CorrelAid Project
 
 \item{\code{local_chapters}}{tibble. Returns the local_chapters of the project as a tibble. Read-only.}
 
+\item{\code{project_members}}{tibble. Returns the project_members of the project as a tibble. Read-only.}
+
 \item{\code{project_id}}{character. id of the project, in the form YYYY-mm-ABB where ABB is any three-character, uppercase abbreviation}
 
 \item{\code{name}}{character. title of the project.}
@@ -56,9 +58,10 @@ create a project}
 \item \href{#method-new}{\code{Project$new()}}
 \item \href{#method-add_tag}{\code{Project$add_tag()}}
 \item \href{#method-add_local_chapter}{\code{Project$add_local_chapter()}}
+\item \href{#method-add_project_member}{\code{Project$add_project_member()}}
 \item \href{#method-set_status}{\code{Project$set_status()}}
-\item \href{#method-as_tibble}{\code{Project$as_tibble()}}
-\item \href{#method-sql_tables}{\code{Project$sql_tables()}}
+\item \href{#method-to_tibble}{\code{Project$to_tibble()}}
+\item \href{#method-get_sql_tables}{\code{Project$get_sql_tables()}}
 \item \href{#method-clone}{\code{Project$clone()}}
 }
 }
@@ -67,15 +70,13 @@ create a project}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Project$new(start_ym, abbreviation, name)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Project$new(project_id, name)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{start_ym}}{character. year and month of the predicted start of the project (~kickoff), in the form YYYY-mm}
-
-\item{\code{abbreviation}}{character. Three character, uppercase abbreviation, usually corresponding to the organization, e.g. COR for CorrelAid.}
+\item{\code{project_id}}{character. id of the project, in the form YYYY-mm-ABB where ABB is any three-character, uppercase abbreviation}
 
 \item{\code{name}}{character. Short title of the project.
 add a new tag to the project}
@@ -114,6 +115,25 @@ add a local chapter to the project}
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{lc_name}}{character. local chapter name. see projectutils::local_chapters for available options.
+add a local chapter to the project}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_project_member"></a>}}
+\if{latex}{\out{\hypertarget{method-add_project_member}{}}}
+\subsection{Method \code{add_project_member()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Project$add_project_member(volunteer_id, role)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{volunteer_id}}{integer. id of the volunteer.}
+
+\item{\code{role}}{character. role of the volunteer. see projectutils::roles for available options.
 set status of the project}
 }
 \if{html}{\out{</div>}}
@@ -131,29 +151,29 @@ set status of the project}
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{status}}{character. the status. See projectutils::status for options.
-as_tibble}
+to_tibble}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-as_tibble"></a>}}
-\if{latex}{\out{\hypertarget{method-as_tibble}{}}}
-\subsection{Method \code{as_tibble()}}{
+\if{html}{\out{<a id="method-to_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-to_tibble}{}}}
+\subsection{Method \code{to_tibble()}}{
 returns a one row tibble representation of the Project object.
-sql_tables
+get_sql_tables
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Project$as_tibble()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Project$to_tibble()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sql_tables"></a>}}
-\if{latex}{\out{\hypertarget{method-sql_tables}{}}}
-\subsection{Method \code{sql_tables()}}{
-a list function that returns tibble for each table
+\if{html}{\out{<a id="method-get_sql_tables"></a>}}
+\if{latex}{\out{\hypertarget{method-get_sql_tables}{}}}
+\subsection{Method \code{get_sql_tables()}}{
+function that returns a tibble for each table
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Project$sql_tables()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Project$get_sql_tables()}\if{html}{\out{</div>}}
 }
 
 }
