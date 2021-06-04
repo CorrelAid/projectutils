@@ -10,14 +10,7 @@ Description <- R6::R6Class("Description",
     .approach = list(en = "", de = ""),
     .impact = list(en = "", de = ""),
     .title = list(en = "", de = ""),
-    .further_links = list(en = "", de = ""),  
-    assert_lang_list = function(lang_list, max_len_each = 1) {
-      checkmate::assert_list(lang_list, types = c("character"))
-      checkmate::assert_set_equal(names(lang_list), c("en", "de"))
-
-      checkmate::assert_character(lang_list$en, len = max_len_each)
-      checkmate::assert_character(lang_list$de, len = max_len_each)
-    }
+    .further_links = list(en = "", de = "")
   ),
   active = list(
     #' @field summary

@@ -10,6 +10,8 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(include = FALSE)
+library(magrittr)
+library(projectutils)
 PROJECT_ID <- "{{{project_id}}}"
 ```
 

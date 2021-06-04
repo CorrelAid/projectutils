@@ -10,6 +10,8 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(include = FALSE)
+library(magrittr)
+library(projectutils)
 PROJECT_ID <- "{{{project_id}}}"
 ```
 
@@ -19,7 +21,7 @@ title: "Public project data `r PROJECT_ID`"
 
 ```{r}
 #read from rds file
-proj %>% readr::read_rds(glue::glue("{PROJECT_ID}.rds"))
+proj <- readr::read_rds(glue::glue("{PROJECT_ID}.rds"))
 ```
 
 ```{r}
@@ -38,7 +40,7 @@ proj$end_ym_predicted <- "1970-01"
 proj$is_internal <- FALSE
 proj$slack_channel <- "foochannel"
 # urls
-proj$url_gh_issue <- 10000
+proj$num_gh_issue <- 10000
 proj$url_git_repo <- "https://github.com/CorrelAid/foobar"
 proj$url_ideation_pad <- "https://pad.correlaid.org/aaaaaaaaaaaaaaaaa"
 
@@ -79,7 +81,10 @@ get_description_section <- function(section) {
 }
 
 desc <- Description$new(PROJECT_ID)
-desc$title <- get_description_section("title")
+desc$title <- list(
+     de = list(),
+     en = list()
+)
 desc$summary <- get_description_section("summary")
 desc$problem <- get_description_section("problem")
 desc$data <- get_description_section("data")
