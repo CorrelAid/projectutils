@@ -4,8 +4,8 @@
 #'
 #' @format A data frame with 56 rows and 3 variables:
 #' \describe{
-#'   \item{category}{category of the tag}
-#'   \item{value}{value of the tag}
+#'   \item{tag_category}{category of the tag}
+#'   \item{tag_value}{value of the tag}
 #'   \item{tag_id}{numeric id}
 #' }
 #' @source derived from the category:value labels of the GitHub projects repo \url{https://github.com/CorrelAid/projects/labels}
