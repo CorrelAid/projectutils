@@ -1,7 +1,7 @@
 ---
 params:
-  anon_path: "data/applications.csv"
- output: 
+  anon_path: "data/applications.csv" 
+output: 
   html_document:
     toc: true
     toc_depth: 2
