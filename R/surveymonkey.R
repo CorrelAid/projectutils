@@ -1,3 +1,6 @@
+utils::globalVariables("where") # https://github.com/r-lib/tidyselect/issues/201
+utils::globalVariables(".")
+
 #' load project applications from export
 #' @description loads the applications for a given project from the csv export
 #' @param export_csv_path character. path to csv export from surveymonkey containing the applications 
@@ -69,8 +72,8 @@ load_applications_export <- function(export_csv_path, project_id_surveymonkey = 
   
   survey_df <- survey_df %>% 
     dplyr::mutate(applicant_id = 1:dplyr::n()) %>%  # give participant integer id
-    dplyr::mutate(project_id_surveymonkey = project_id) %>% 
-    dplyr::mutate(project_id = id_path(project_id)) %>% 
+    dplyr::mutate(project_id_surveymonkey = project_id_surveymonkey) %>% 
+    dplyr::mutate(project_id = id_path(project_id_surveymonkey)) %>% 
     dplyr::select(.data$applicant_id, .data$gender, dplyr::everything())
   
   return(survey_df)
