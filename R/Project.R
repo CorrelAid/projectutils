@@ -456,7 +456,7 @@ Project <- R6::R6Class("Project",
     get_sql_tables = function() {
       list( 
         project = self$to_tibble() %>% 
-            dplyr::select(-tags, -local_chapters, -project_members, -status),
+            dplyr::select(-tags, -local_chapters, -project_members, -status, -description),
         projecttag = tibble::tibble(
           project_id = private$.project_id,
           tag_id = self$tags$tag_id
