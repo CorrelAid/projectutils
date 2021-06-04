@@ -64,11 +64,11 @@ connect_to_mariadb <- function(host = Sys.getenv("DBHOST"),
                                dbname = Sys.getenv("DBNAME"),
                                user = Sys.getenv("DBUSER"),
                                password = Sys.getenv("DBPW")) {
-  DBI::dbConnect(RMariaDB::MariaDB(
+  DBI::dbConnect(RMariaDB::MariaDB(),
     host = host,
     dbname = dbname,
     user = user,
     password = password
-  ))
+  )
 
 }
