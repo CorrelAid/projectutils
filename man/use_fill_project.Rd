@@ -2,15 +2,15 @@
 % Please edit documentation in R/new_project.R
 \name{use_fill_project}
 \alias{use_fill_project}
-\title{Use download applications script template}
+\title{Use fill project script template}
 \usage{
-use_fill_project(project_id_path, data_folder = "")
+use_fill_project(project_id, data_folder = "")
 }
 \arguments{
-\item{project_id_path}{project id in path form, e.g. 2020-11-COR}
+\item{project_id}{project id in path form, e.g. 2020-11-COR}
 
 \item{data_folder}{character. path to data folder starting at root of the project. defaults to "", i.e. root}
 }
 \description{
-Use download applications script template
+Use fill project script template
 }

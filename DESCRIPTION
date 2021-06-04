@@ -26,7 +26,8 @@ Imports:
     jsonlite,
     rlang,
     purrr,
-    stringr
+    stringr, 
+    checkmate
 Suggests: 
     mockery,
     here,
