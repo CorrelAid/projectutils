@@ -1,9 +1,23 @@
+---
+params:
+  anon_path: "data/applications.csv"
+ output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+title: "Project report `r toupper(params$project_id)`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(include = FALSE)
+```
 
 ```{r}
-library(projectutils)
+PROJECT_ID <- "{{{project_id}}}"
+params$project_id  <- PROJECT_ID
 
-PROJECT_ID <- "2021-02-HAC"
-proj <- Project$new("2021-02", "HAC", "Hacklab Foundation")
+proj <- Project$new(PROJECT_ID, "")
 
 # properties set through the constructor -----
 # only uncomment if you want to change something
@@ -22,13 +36,11 @@ proj$slack_channel <- "foochannel"
 # urls
 proj$url_gh_issue <- 10000
 proj$url_git_repo <- "https://github.com/CorrelAid/foobar"
-proj$url_pad <- "https://pad.correlaid.org/aaaaaaaaaaaaaaaaa"
+proj$url_ideation_pad <- "https://pad.correlaid.org/aaaaaaaaaaaaaaaaa"
 
 # publish to website
 proj$is_public <- FALSE
 proj$slug <- "a-slug-for-the-website"
-
-
 
 # RELATED TABLES ----------------
 # set status
@@ -50,18 +62,29 @@ proj$add_tag("data", "administrative")
 proj$add_tag("lc", "berlin")
 proj$add_tag("internal")
 proj$tags
-
-# tibble representation of a project
-proj$to_tibble()$tags
-proj$to_tibble()$url_pad
 ```
 
 ```{r}
 # Project team members
-proj$set_team_members()
+members <- tibble::tribble(
+    ~volunteer_id, ~role,
+    2, "team_trainee",
+    43, "team_member", 
+    92, "team_member", 
+    42, "team_lead"
+)
+members$end_active_ym <- "2021-02"
+members %>% 
+    purrr::pmap(proj$add_project_member)
+
+proj$project_members
 ```
+
 # Description of the project 
 
+
 ```{r}
-desc <- Description()
+# tibble representation of a project
+proj$to_tibble()$tags
+proj$to_tibble()$url_ideation_pad
 ```

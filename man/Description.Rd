@@ -33,9 +33,6 @@ create a description of a project}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Description$new()}}
-\item \href{#method-add_tag}{\code{Description$add_tag()}}
-\item \href{#method-add_local_chapter}{\code{Description$add_local_chapter()}}
-\item \href{#method-set_status}{\code{Description$set_status()}}
 \item \href{#method-to_tibble}{\code{Description$to_tibble()}}
 \item \href{#method-get_sql_tables}{\code{Description$get_sql_tables()}}
 \item \href{#method-clone}{\code{Description$clone()}}
@@ -53,59 +50,6 @@ create a description of a project}
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{project_id}}{character. id of the project
-add a new tag to the project}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_tag"></a>}}
-\if{latex}{\out{\hypertarget{method-add_tag}{}}}
-\subsection{Method \code{add_tag()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Description$add_tag(category, value = NA)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{category}}{character. the tag category. see projectutils::tags for available values.}
-
-\item{\code{value}}{character. the tag value. see projectutils::tags for available values and combinations. Defaults to NA.
-add a local chapter to the project}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_local_chapter"></a>}}
-\if{latex}{\out{\hypertarget{method-add_local_chapter}{}}}
-\subsection{Method \code{add_local_chapter()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Description$add_local_chapter(lc_name)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{lc_name}}{character. local chapter name. see projectutils::local_chapters for available options.
-set status of the project}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_status"></a>}}
-\if{latex}{\out{\hypertarget{method-set_status}{}}}
-\subsection{Method \code{set_status()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Description$set_status(status)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{status}}{character. the status. See projectutils::status for options.
 to_tibble}
 }
 \if{html}{\out{</div>}}
@@ -115,7 +59,7 @@ to_tibble}
 \if{html}{\out{<a id="method-to_tibble"></a>}}
 \if{latex}{\out{\hypertarget{method-to_tibble}{}}}
 \subsection{Method \code{to_tibble()}}{
-returns a one row tibble representation of the Project object.
+returns a one row tibble representation of the Description object.
 get_sql_tables
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Description$to_tibble()}\if{html}{\out{</div>}}

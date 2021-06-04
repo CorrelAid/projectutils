@@ -78,3 +78,19 @@ get_meta_template <- function() {
   j <- jsonlite::read_json(path)
   return(j)
 }
+
+
+#'Use R6 templates
+#'@param project_id_path project id in path form, e.g. 2020-11-COR
+#'@param data_folder character. path to data folder starting at root of the project. defaults to "", i.e. root
+#'@export 
+use_r6_template <- function(project_id_path, data_folder = "") {
+  
+  usethis::use_template(
+    "r6/basic.Rmd",
+    save_as = fs::path(data_folder, project_id_path, glue::glue("{project_id_path}_basic.Rmd")),
+    data = list(project_id = project_id_path),
+    package = "projectutils",
+    open = TRUE
+  )
+}

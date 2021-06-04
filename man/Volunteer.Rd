@@ -52,7 +52,18 @@ create a volunteer}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Volunteer$new(first_name, last_name, email)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Volunteer$new(
+  first_name,
+  last_name,
+  email,
+  user_gh = NA_character_,
+  user_gl = NA_character_,
+  user_twitter = NA_character_,
+  url_website = NA_character_,
+  url_linkedin = NA_character_,
+  url_xing = NA_character_,
+  lc_name = NA_character_
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -62,7 +73,21 @@ create a volunteer}
 
 \item{\code{last_name}}{character. last name of the volunteer}
 
-\item{\code{email}}{character. email of the volunteers
+\item{\code{email}}{character. email of the volunteer}
+
+\item{\code{user_gh}}{character. GitHub username of the volunteer. defaults to NA}
+
+\item{\code{user_gl}}{character. GitLab username of the volunteer. defaults to NA}
+
+\item{\code{user_twitter}}{character. Twitter username of the volunteer. defaults to NA}
+
+\item{\code{url_website}}{character. Personal website of the volunteer. defaults to NA}
+
+\item{\code{url_linkedin}}{character. URL to Linkedin profile of the volunteer. defaults to NA}
+
+\item{\code{url_xing}}{character. URL to Xing profile of the volunteer. defaults to NA}
+
+\item{\code{lc_name}}{character. Name of the local chapter of the volunteer. defaults to NA
 to_tibble}
 }
 \if{html}{\out{</div>}}

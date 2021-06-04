@@ -16,7 +16,10 @@ Project <- R6::R6Class("Project",
     .is_internal = FALSE,
     .url_git_repo = NA_character_,
     .url_gh_issue = NA_character_,
-    .url_pad = NA_character_,
+    .num_gh_issue = NA_integer_,
+    .url_ideation_pad = NA_character_,
+    .url_call_pad = NA_character_,
+
     .slack_channel = NA_character_,
     .status_id = NA_integer_,
     .status = NA_character_,
@@ -116,6 +119,18 @@ Project <- R6::R6Class("Project",
         usethis::ui_stop("Can't set status_id. Please use the set_status function to change the status of the project.")
       }
     },
+
+    #' @field status
+    #' integer. Returns the status of the project. Check out
+    #' projectutils::status to see the available status and the corresponding ids.
+    status = function(value) {
+      if (missing(value)) {
+        return(private$.status)
+      } else {
+        usethis::ui_stop("Can't set status. Please use the set_status function to change the status of the project.")
+      }
+    },
+
 
 
     #' @field slug
@@ -238,27 +253,49 @@ Project <- R6::R6Class("Project",
       }
     },
     #' @field url_gh_issue
-    #' character. Returns the full URL to the GitHub issue in the projects repository. To set, pass the issue number as an integer.
+    #' character. Returns the full URL to the GitHub issue in the projects repository. read-only. to set use num_gh_issue.
     url_gh_issue = function(value) {
+      if (missing(value)) {
+        return(private$.url_gh_issue)
+      } else {
+        usethis::ui_stop("url_gh_issue is read-only. You can set it via the num_gh_issue field.")
+      }
+      invisible(self)
+    },
+
+    #' @field num_gh_issue
+    #' integer. Returns the number of the issue in the projects repository. read-only (use u)
+    num_gh_issue = function(value) {
       if (missing(value)) {
         return(private$.url_gh_issue)
       } else {
         value <- as.integer(value)
         checkmate::assert_integer(value, lower = 1)
+        private$.num_gh_issue <- value
         issue_url <- glue::glue("https://github.com/CorrelAid/projects/issues/{value}")
         private$.url_gh_issue <- issue_url
-        usethis::ui_done(glue::glue("Set url_gh_issue to {issue_url}"))
       }
       invisible(self)
     },
-    #' @field url_pad
-    #' character. Returns or sets the full URL to the CodiMD Pad for the project.
-    url_pad = function(value) {
+    #' @field url_ideation_pad
+    #' character. Returns or sets the full URL to the CodiMD Pad for the ideation phase of the project.
+    url_ideation_pad = function(value) {
       if (missing(value)) {
-        return(private$.url_pad)
+        return(private$.url_ideation_pad)
       } else {
         checkmate::assert_character(value, pattern = "^https://pad.correlaid.org/.+?$")
-        private$.url_pad <- value
+        private$.url_ideation_pad <- value
+      }
+      invisible(self)
+    },
+    #' @field url_call_pad
+    #' character. Returns or sets the full URL to the CodiMD Pad for the call for applications for the project.
+    url_call_pad = function(value) {
+      if (missing(value)) {
+        return(private$.url_call_pad)
+      } else {
+        checkmate::assert_character(value, pattern = "^https://pad.correlaid.org/.+?$")
+        private$.url_call_pad <- value
       }
       invisible(self)
     },
@@ -306,6 +343,15 @@ Project <- R6::R6Class("Project",
       invisible(self)
     },
 
+    #' print 
+    #' @description print the project
+    print = function() {
+      cat(glue::glue("
+      Project {self$project_id}
+      Status: {self$status}
+      \n"))
+      invisible(self)
+    },
     #' add a new tag to the project
     #' @param category character. the tag category. see projectutils::tags for available values.
     #' @param value character. the tag value. see projectutils::tags for available values and combinations. Defaults to NA.
@@ -331,12 +377,24 @@ Project <- R6::R6Class("Project",
     #' add a local chapter to the project
     #' @param volunteer_id integer. id of the volunteer.
     #' @param role character. role of the volunteer. see projectutils::roles for available options.
-    add_project_member = function(volunteer_id, role) {
-      pm <- ProjectMember$new(self$project_id, volunteer_id, role)
+    #' @param ... optional arguments for ProjectMember constructor
+    add_project_member = function(volunteer_id, role, ...) {
+      pm <- ProjectMember$new(self$project_id, volunteer_id, role, ...)
       private$.project_members <- c(private$.project_members, pm)
       invisible(self)
     },
 
+    #' get team member by volunteer id
+    #' @param volunteer_id integer. numeric id of the volunteer.
+    get_team_member = function(volunteer_id) { 
+
+      tm <- private$.project_members %>% 
+            purrr::keep(function(pm) pm$volunteer_id == volunteer_id) 
+       if (length(tm) == 0) {
+         usethis::ui_stop(glue::glue("Volunteer {volunteer_id} is not part of the project."))
+       }
+       tm[[1]]
+    },
     #' set status of the project
     #' @param status character. the status. See projectutils::status for options.
     set_status = function(status) {
@@ -357,29 +415,32 @@ Project <- R6::R6Class("Project",
     to_tibble = function() {
       tibble::tibble(
         project_id = private$.project_id,
-        name = private$.name,
-        start_ym = private$.start_ym,
-        end_ym_predicted = private$.end_ym_predicted,
-        end_ym = private$.end_ym,
-        is_public = private$.is_public,
-        is_internal = private$.is_internal,
-        url_git_repo = private$.url_git_repo,
-        url_gh_issue = private$url_gh_issue,
-        url_pad = private$.url_pad,
-        slack_channel = private$.slack_channel,
-        organization_id = private$.organization_id,
+        name = self$name,
+        start_ym = self$start_ym,
+        end_ym_predicted = self$end_ym_predicted,
+        end_ym = self$end_ym,
+        is_public = self$is_public,
+        is_internal = self$is_internal,
+        url_git_repo = self$url_git_repo,
+        url_gh_issue = self$url_gh_issue,
+        url_ideation_pad = self$url_ideation_pad, 
+        url_call_pad = self$url_call_pad,
+        slack_channel = self$slack_channel,
+        organization_id = self$organization_id,
         tags = list(self$tags),
         local_chapters = list(self$local_chapters),
         project_members = list(self$project_members),
-        status_id = private$.status_id,
-        status = private$.status
+        status_id = self$status_id,
+        status = self$status
       )
     },
 
     #' get_sql_tables
     #' @description function that returns a tibble for each table
     get_sql_tables = function() {
-      list(
+      list( 
+        project = self$to_tibble() %>% 
+            dplyr::select(-tags, -local_chapters, -project_members, -status),
         projecttag = tibble::tibble(
           project_id = private$.project_id,
           tag_id = self$tags$tag_id

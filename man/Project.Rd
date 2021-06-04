@@ -27,6 +27,9 @@ class representing the basic properties of a CorrelAid Project
 \item{\code{status_id}}{integer. Returns integer corresponding to the status of the project. Check out
 projectutils::status to see the available status and the corresponding ids.}
 
+\item{\code{status}}{integer. Returns the status of the project. Check out
+projectutils::status to see the available status and the corresponding ids.}
+
 \item{\code{slug}}{character. Returns or sets the slug (the part of the URL after correlaid.org/projects) for the website. Must not contain spaces and only - as special characters.}
 
 \item{\code{is_public}}{boolean. Returns or sets whether the project is made public on the CorrelAid website. Use with caution!}
@@ -41,9 +44,13 @@ projectutils::status to see the available status and the corresponding ids.}
 
 \item{\code{url_git_repo}}{character. Return or set the full URL of the git repository, either GitHub or Gitlab.}
 
-\item{\code{url_gh_issue}}{character. Returns the full URL to the GitHub issue in the projects repository. To set, pass the issue number as an integer.}
+\item{\code{url_gh_issue}}{character. Returns the full URL to the GitHub issue in the projects repository. read-only. to set use num_gh_issue.}
 
-\item{\code{url_pad}}{character. Returns or sets the full URL to the CodiMD Pad for the project.}
+\item{\code{num_gh_issue}}{integer. Returns the number of the issue in the projects repository. read-only (use u)}
+
+\item{\code{url_ideation_pad}}{character. Returns or sets the full URL to the CodiMD Pad for the ideation phase of the project.}
+
+\item{\code{url_call_pad}}{character. Returns or sets the full URL to the CodiMD Pad for the call for applications for the project.}
 
 \item{\code{slack_channel}}{character. Returns or sets the name of the Slack channel for the project.}
 
@@ -56,9 +63,11 @@ create a project}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Project$new()}}
+\item \href{#method-print}{\code{Project$print()}}
 \item \href{#method-add_tag}{\code{Project$add_tag()}}
 \item \href{#method-add_local_chapter}{\code{Project$add_local_chapter()}}
 \item \href{#method-add_project_member}{\code{Project$add_project_member()}}
+\item \href{#method-get_team_member}{\code{Project$get_team_member()}}
 \item \href{#method-set_status}{\code{Project$set_status()}}
 \item \href{#method-to_tibble}{\code{Project$to_tibble()}}
 \item \href{#method-get_sql_tables}{\code{Project$get_sql_tables()}}
@@ -79,10 +88,21 @@ create a project}
 \item{\code{project_id}}{character. id of the project, in the form YYYY-mm-ABB where ABB is any three-character, uppercase abbreviation}
 
 \item{\code{name}}{character. Short title of the project.
-add a new tag to the project}
+print}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
+\subsection{Method \code{print()}}{
+print the project
+add a new tag to the project
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Project$print()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_tag"></a>}}
@@ -125,7 +145,7 @@ add a local chapter to the project}
 \if{latex}{\out{\hypertarget{method-add_project_member}{}}}
 \subsection{Method \code{add_project_member()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Project$add_project_member(volunteer_id, role)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Project$add_project_member(volunteer_id, role, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -133,7 +153,26 @@ add a local chapter to the project}
 \describe{
 \item{\code{volunteer_id}}{integer. id of the volunteer.}
 
-\item{\code{role}}{character. role of the volunteer. see projectutils::roles for available options.
+\item{\code{role}}{character. role of the volunteer. see projectutils::roles for available options.}
+
+\item{\code{...}}{optional arguments for ProjectMember constructor
+get team member by volunteer id}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_team_member"></a>}}
+\if{latex}{\out{\hypertarget{method-get_team_member}{}}}
+\subsection{Method \code{get_team_member()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Project$get_team_member(volunteer_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{volunteer_id}}{integer. numeric id of the volunteer.
 set status of the project}
 }
 \if{html}{\out{</div>}}
