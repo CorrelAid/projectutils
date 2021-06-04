@@ -14,9 +14,16 @@ class representing the basic properties of a CorrelAid Project
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
+\item{\code{tags}}{tibble. Returns the tags of the project as a tibble. Read-only.}
+
+\item{\code{local_chapters}}{tibble. Returns the local_chapters of the project as a tibble. Read-only.}
+
 \item{\code{project_id}}{character. id of the project, in the form YYYY-mm-ABB where ABB is any three-character, uppercase abbreviation}
 
 \item{\code{name}}{character. title of the project.}
+
+\item{\code{status_id}}{integer. Returns integer corresponding to the status of the project. Check out
+projectutils::status to see the available status and the corresponding ids.}
 
 \item{\code{slug}}{character. Returns or sets the slug (the part of the URL after correlaid.org/projects) for the website. Must not contain spaces and only - as special characters.}
 
@@ -38,9 +45,7 @@ class representing the basic properties of a CorrelAid Project
 
 \item{\code{slack_channel}}{character. Returns or sets the name of the Slack channel for the project.}
 
-\item{\code{status_id}}{integer. Returns or sets the integer corresponding to the status of the project.}
-
-\item{\code{organisation_id}}{integer. Returns or sets the integer corresponding to the partner organization of the project.
+\item{\code{organization_id}}{integer. Returns or sets the integer corresponding to the partner organization of the project.
 create a project}
 }
 \if{html}{\out{</div>}}
@@ -49,6 +54,11 @@ create a project}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Project$new()}}
+\item \href{#method-add_tag}{\code{Project$add_tag()}}
+\item \href{#method-add_local_chapter}{\code{Project$add_local_chapter()}}
+\item \href{#method-set_status}{\code{Project$set_status()}}
+\item \href{#method-as_tibble}{\code{Project$as_tibble()}}
+\item \href{#method-sql_tables}{\code{Project$sql_tables()}}
 \item \href{#method-clone}{\code{Project$clone()}}
 }
 }
@@ -67,10 +77,85 @@ create a project}
 
 \item{\code{abbreviation}}{character. Three character, uppercase abbreviation, usually corresponding to the organization, e.g. COR for CorrelAid.}
 
-\item{\code{name}}{character. Short title of the project.}
+\item{\code{name}}{character. Short title of the project.
+add a new tag to the project}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_tag"></a>}}
+\if{latex}{\out{\hypertarget{method-add_tag}{}}}
+\subsection{Method \code{add_tag()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Project$add_tag(category, value = NA)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{category}}{character. the tag category. see projectutils::tags for available values.}
+
+\item{\code{value}}{character. the tag value. see projectutils::tags for available values and combinations. Defaults to NA.
+add a local chapter to the project}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_local_chapter"></a>}}
+\if{latex}{\out{\hypertarget{method-add_local_chapter}{}}}
+\subsection{Method \code{add_local_chapter()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Project$add_local_chapter(lc_name)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{lc_name}}{character. local chapter name. see projectutils::local_chapters for available options.
+set status of the project}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_status"></a>}}
+\if{latex}{\out{\hypertarget{method-set_status}{}}}
+\subsection{Method \code{set_status()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Project$set_status(status)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{status}}{character. the status. See projectutils::status for options.
+as_tibble}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-as_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-as_tibble}{}}}
+\subsection{Method \code{as_tibble()}}{
+returns a one row tibble representation of the Project object.
+sql_tables
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Project$as_tibble()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-sql_tables"></a>}}
+\if{latex}{\out{\hypertarget{method-sql_tables}{}}}
+\subsection{Method \code{sql_tables()}}{
+a list function that returns tibble for each table
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Project$sql_tables()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
