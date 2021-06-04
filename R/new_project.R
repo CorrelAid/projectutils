@@ -1,41 +1,26 @@
 #'creates folder for a new project and adds templates for all the necessary files.
-#'@param prefix character. 3 character, alphabetic uppercase prefix to be used for the project. Usually the first three letters of the organization name.
-#'@param year numeric. year the project was started in, e.g. 2019.
-#'@param month numeric. month the project was started in 
+#'@param project_id character. ID of the project, e.g. 2021-03-COR. see description for details.
 #'@param data_folder character. path to data folder starting at root of the project. defaults to here::here()
+#'@details the project id is composed by the year-month of when the project was started (~when the kickoff took place) and a three-letter, uppercase
+#' abbreviation for the organization. If there are two projects with the same organization starting in the same month, 
+#' two letters of the abbreviation should be used for the organization, and one for the content of the project. e.g. 2021-03-COV for a visualization project
+#' with CorrelAid and 2021-03-COA for an automation project with CorrelAid.
 #'@export  
-new_project <- function(prefix, year, month, data_folder = here::here()) {
-  usethis::ui_info(glue::glue("processing {prefix} {year} {month}"))
-  # check validity of inputs
-  if (!is.numeric(year) | nchar(as.character(year)) != 4) {
-    usethis::ui_stop("Invalid year.")
-  }
-  if (!is.numeric(month) || month > 12 || month < 1) {
-    usethis::ui_stop("Invalid month argument. It must be an integer between 1 and 12.")
-  }
-
-  # check validity of prefix 
-  if (!stringr::str_detect(prefix, "^[:upper:]{3,3}$")) usethis::ui_stop("Invalid prefix. It be 3 alphabetic characters long and it must be uppercase.")
-
-  # add leading zero 
-  if (month < 10) {
-    month <- paste0("0", month)
-  }
+new_project <- function(project_id, data_folder = here::here()) {
+  assert_project_id(project_id)
+  usethis::ui_info(glue::glue("processing {project_id}"))
   
-  # project id path 
-  project_id_path <- glue::glue("{year}-{month}-{prefix}")
-  dir.create(fs::path(data_folder, project_id_path), showWarnings = FALSE)
+  dir.create(fs::path(data_folder, project_id), showWarnings = FALSE)
   
   # meta data file (meta.json)
   template_meta <- get_meta_template()
   
   # populate with data 
-  template_meta$project_id_path <- project_id_path
-  template_meta$project_id <- glue::glue("{prefix}-{month}-{year}")
-  template_meta$year <- year
-  template_meta$start <- glue::glue("{year}-{month}")
+  template_meta$project_id <- project_id
+  template_meta$year <- stringr::str_sub(project_id, 1, 4)
+  template_meta$start <- stringr::str_sub(project_id, 1, 7)
   
-  meta_path <- fs::path(data_folder, project_id_path, "meta.json")
+  meta_path <- fs::path(data_folder, project_id, "meta.json")
 
   answer <- TRUE
   if (file.exists(meta_path)) {
@@ -51,10 +36,10 @@ new_project <- function(prefix, year, month, data_folder = here::here()) {
   # markdown files
   markdown_files <- c("00_about.md", "00_summary.md", "01_problem.md", "02_data.md", "03_approach.md", "04_impact.md")
   for (lang in c("de", "en")) {
-    dir.create(fs::path(data_folder, project_id_path, lang), showWarnings = FALSE)
+    dir.create(fs::path(data_folder, project_id, lang), showWarnings = FALSE)
 
     purrr::walk(markdown_files, function(x) {
-        file_path <- fs::path(data_folder, project_id_path, lang, x)
+        file_path <- fs::path(data_folder, project_id, lang, x)
         
         answer <- TRUE
         if (file.exists(file_path)) {
@@ -69,16 +54,16 @@ new_project <- function(prefix, year, month, data_folder = here::here()) {
 }
 
 
-#'Use download applications script template
-#'@param project_id_path project id in path form, e.g. 2020-11-COR
+#'Use fill project script template
+#'@param project_id project id in path form, e.g. 2020-11-COR
 #'@param data_folder character. path to data folder starting at root of the project. defaults to "", i.e. root
 #'@export 
-use_fill_project <- function(project_id_path, data_folder = "") {
+use_fill_project <- function(project_id, data_folder = "") {
   
   usethis::use_template(
     "fill_project.R",
-    save_as = fs::path(data_folder, project_id_path, "fill_project.R"),
-    data = list(project_id = project_id_path),
+    save_as = fs::path(data_folder, project_id, "fill_project.R"),
+    data = list(project_id = project_id),
     package = "projectutils",
     open = TRUE
   )

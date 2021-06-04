@@ -4,17 +4,19 @@
 \alias{new_project}
 \title{creates folder for a new project and adds templates for all the necessary files.}
 \usage{
-new_project(prefix, year, month, data_folder = here::here())
+new_project(project_id, data_folder = here::here())
 }
 \arguments{
-\item{prefix}{character. 3 character, alphabetic uppercase prefix to be used for the project. Usually the first three letters of the organization name.}
-
-\item{year}{numeric. year the project was started in, e.g. 2019.}
-
-\item{month}{numeric. month the project was started in}
+\item{project_id}{character. ID of the project, e.g. 2021-03-COR. see description for details.}
 
 \item{data_folder}{character. path to data folder starting at root of the project. defaults to here::here()}
 }
 \description{
 creates folder for a new project and adds templates for all the necessary files.
+}
+\details{
+the project id is composed by the year-month of when the project was started (~when the kickoff took place) and a three-letter, uppercase
+abbreviation for the organization. If there are two projects with the same organization starting in the same month, 
+two letters of the abbreviation should be used for the organization, and one for the content of the project. e.g. 2021-03-COV for a visualization project
+with CorrelAid and 2021-03-COA for an automation project with CorrelAid.
 }

@@ -27,7 +27,8 @@ Imports:
     checkmate,
     rlang,
     purrr,
-    stringr
+    stringr, 
+    checkmate
 Suggests: 
     mockery,
     here,
