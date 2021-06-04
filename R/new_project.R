@@ -7,7 +7,7 @@
 #' two letters of the abbreviation should be used for the organization, and one for the content of the project. e.g. 2021-03-COV for a visualization project
 #' with CorrelAid and 2021-03-COA for an automation project with CorrelAid.
 #'@export  
-new_project <- function(project_id, name = "", data_folder = ".") {
+ new_project <- function(project_id, name = "", data_folder = ".") {
   assert_project_id(project_id)
   usethis::ui_info(glue::glue("processing {project_id}"))
 
