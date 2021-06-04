@@ -14,15 +14,17 @@ class representing the Description of a CorrelAid project
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{summary}}{tibble. Returns the summary list of the project. read-only.}
+\item{\code{summary}}{tibble. Returns the summary list of the project.}
 
-\item{\code{problem}}{tibble. Returns the problem list of the project. read-only.}
+\item{\code{title}}{tibble. Returns the summary title of the project.}
 
-\item{\code{data}}{tibble. Returns the data list of the project. read-only.}
+\item{\code{problem}}{tibble. Returns the problem list of the project.}
 
-\item{\code{approach}}{tibble. Returns the approach list of the project. read-only.}
+\item{\code{data}}{tibble. Returns the data list of the project.}
 
-\item{\code{impact}}{tibble. Returns the impact list of the project. read-only.}
+\item{\code{approach}}{tibble. Returns the approach list of the project.}
+
+\item{\code{impact}}{tibble. Returns the impact list of the project.}
 
 \item{\code{further_links}}{tibble. Returns or sets the further links list of the project.
 create a description of a project}
