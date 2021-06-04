@@ -39,8 +39,8 @@ test_that("adding and retrieving tags works", {
 
   tags <- proj$tags
   expect_equal(nrow(tags), 3)
-  expect_equal(tags$category, c("internal", "data", "lc"))
-  expect_equal(tags$value, c(NA, "process", "berlin"))
+  expect_equal(tags$tag_category, c("internal", "data", "lc"))
+  expect_equal(tags$tag_value, c(NA, "process", "berlin"))
 })
 
 test_that("setting status throws error when invalid", {
@@ -51,8 +51,17 @@ test_that("setting status throws error when invalid", {
 
 test_that("setting status works", {
   proj <- Project$new(project_id = "2020-01-FOO", name = "an awesome project")
+  # empty 
+  expect_true(is.na(proj$status))
+  expect_true(is.na(proj$status_id))
+
+  # tibble column 
+  expect_true(is.na(proj$to_tibble()$status))
+  expect_true(is.na(proj$to_tibble()$status_id))
+
   proj$set_status("Ideation")
-  expect_equal(proj$status_id, 2)  
+  expect_equal(proj$status_id, 2)
+  expect_equal(proj$status, "Ideation")
 })
 
 
@@ -100,8 +109,28 @@ test_that("adding project members works as expected", {
   expect_equal(nrow(proj$project_members), 3)
   expect_equal(ncol(proj$project_members), 11)
   expect_equal(proj$get_sql_tables()$projectmember$volunteer_id, c(1, 2, 3))
+  # get a team member 
+  expect_equal(proj$get_team_member(1)$volunteer_id , 1)
 })
 
+
+test_that("adding project members via a data frame works as expected", {
+  proj <- Project$new(project_id = "2020-01-FOO", name = "an awesome project")
+  members <- tibble::tribble(
+      ~volunteer_id, ~role,
+      2, "team_trainee",
+      43, "team_member", 
+      92, "team_member", 
+      42, "team_lead"
+  )
+  members$end_active_ym <- "2021-02"
+  members %>% 
+    purrr::pmap(proj$add_project_member)
+
+  expect_equal(nrow(proj$project_members), 4)
+  expect_equal(ncol(proj$project_members), 11)
+  expect_equal(proj$project_members$end_active_ym %>% unique(), "2021-02")
+})
 
 test_that("data frame representation works", {
   proj <- Project$new(project_id = "2020-01-FOO", name = "an awesome project")

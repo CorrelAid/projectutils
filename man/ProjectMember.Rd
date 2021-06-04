@@ -53,7 +53,16 @@ create a volunteer}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ProjectMember$new(project_id, volunteer_id, role)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ProjectMember$new(
+  project_id,
+  volunteer_id,
+  role,
+  start_active_ym = NA_character_,
+  end_active_ym = NA_character_,
+  behaviour_flag = FALSE,
+  behaviour_description = NA_character_,
+  is_public = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -63,7 +72,17 @@ create a volunteer}
 
 \item{\code{volunteer_id}}{integer. ID of the volunteer}
 
-\item{\code{role}}{character. name of the project role the volunteer assumes. Check projectutils::roles for available options.
+\item{\code{role}}{character. name of the project role the team member assumes. Check projectutils::roles for available options.}
+
+\item{\code{start_active_ym}}{character. YYYY-mm when the team member became active in the team. defaults to NA}
+
+\item{\code{end_active_ym}}{character. YYYY-mm when the team member stopped being active in the team. defaults to NA}
+
+\item{\code{behaviour_flag}}{boolean. whether the team member exhibited any noteworthy behaviour. defaults to FALSE}
+
+\item{\code{behaviour_description}}{character. description of the behaviour. defaults to NA}
+
+\item{\code{is_public}}{boolean. whether or not the team member should be included on the public profile of the project on the CorrelAid website. defaults to FALSE.
 to_tibble}
 }
 \if{html}{\out{</div>}}

@@ -15,7 +15,8 @@ columns <- gh::gh(columns_url, .send_headers = c(Accept = projects_custom_accept
 status <- tibble::tibble(
   status = columns %>% 
     purrr::map_chr("name")
-) %>% 
+) %>%  
+  dplyr::mutate(status = stringr::str_trim(status)) %>% 
   dplyr::mutate(status_id = dplyr::row_number(),
                 status_description = "") 
 

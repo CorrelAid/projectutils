@@ -132,15 +132,31 @@ ProjectMember <- R6::R6Class("ProjectMember",
     #' create a volunteer
     #' @param project_id character. ID of the project.
     #' @param volunteer_id integer. ID of the volunteer
-    #' @param role character. name of the project role the volunteer assumes. Check projectutils::roles for available options.
-    initialize = function(project_id, volunteer_id, role) {
+    #' @param role character. name of the project role the team member assumes. Check projectutils::roles for available options.
+    #' @param start_active_ym character. YYYY-mm when the team member became active in the team. defaults to NA
+    #' @param end_active_ym character. YYYY-mm when the team member stopped being active in the team. defaults to NA
+    #' @param behaviour_flag boolean. whether the team member exhibited any noteworthy behaviour. defaults to FALSE
+    #' @param behaviour_description character. description of the behaviour. defaults to NA
+    #' @param is_public boolean. whether or not the team member should be included on the public profile of the project on the CorrelAid website. defaults to FALSE.
+    initialize = function(project_id, volunteer_id, role,
+                          start_active_ym = NA_character_,
+                          end_active_ym = NA_character_, behaviour_flag = FALSE, 
+                          behaviour_description = NA_character_, is_public = FALSE
+    ) {
       # TODO: Check against existing projects
       # TODO: check against existing volunteers
 
       checkmate::assert_number(volunteer_id)
       private$.volunteer_id <- volunteer_id
       assert_project_id(project_id)
-      private$.project_id <- project_id
+      private$.project_id <- project_id 
+
+      # set optional arguments
+      self$start_active_ym <- start_active_ym
+      self$end_active_ym <- end_active_ym
+      self$set_behaviour(behaviour_flag, behaviour_description)
+      self$is_public <- is_public
+      
       # set role using method
       self$set_role(role)
       self
