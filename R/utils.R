@@ -39,7 +39,6 @@ assert_project_id = function(value) {
     usethis::ui_stop("project_id needs to be a character vector of length 1.")
   }
   if (!stringr::str_detect(value, "^\\d{4}\\-\\d{2}\\-[:upper:]{3,3}$")) usethis::ui_stop("Invalid project id. It needs to be conform to the following format: YYYY-mm-ABB where ABB is a three-letter abbreviation of the partner organization.")
-
   year  <- as.numeric(stringr::str_sub(value, 1, 4))
   month  <- stringr::str_sub(value, 6,7)
 
