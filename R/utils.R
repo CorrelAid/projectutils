@@ -32,3 +32,11 @@ get_kobo <- function(url, token = Sys.getenv("KOBO_CORRELAID_TOKEN")) {
   httr::stop_for_status(req)
   httr::content(req)$results
 }
+
+
+assert_project_id = function(value) {
+  if (!checkmate::test_character(value, len = 1)) {
+    usethis::ui_stop("project_id needs to be a character vector of length 1.")
+  }
+  if (!stringr::str_detect(value, "^\\d{4}\\-\\d{2}\\-[:upper:]{3,3}$")) usethis::ui_stop("Invalid project id. It needs to be conform to the following format: YYYY-mm-ABB where ABB is a three-letter abbreviation of the partner organization.")
+}
