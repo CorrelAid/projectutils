@@ -33,8 +33,7 @@ get_kobo <- function(url, token = Sys.getenv("KOBO_CORRELAID_TOKEN")) {
   httr::content(req)$results
 }
 
-
-assert_project_id <- function(value) {
+assert_project_id = function(value) {
   if (!checkmate::test_character(value, len = 1)) {
     usethis::ui_stop("project_id needs to be a character vector of length 1.")
   }
@@ -71,4 +70,5 @@ connect_to_mariadb <- function(host = Sys.getenv("DBHOST"),
     user = user,
     password = password
   ))
+
 }
