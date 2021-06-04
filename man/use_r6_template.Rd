@@ -4,12 +4,12 @@
 \alias{use_r6_template}
 \title{Use R6 templates}
 \usage{
-use_r6_template(project_id_path, data_folder = "")
+use_r6_template(project_id, data_folder = ".")
 }
 \arguments{
-\item{project_id_path}{project id in path form, e.g. 2020-11-COR}
+\item{project_id}{project id in path form, e.g. 2020-11-COR}
 
-\item{data_folder}{character. path to data folder starting at root of the project. defaults to "", i.e. root}
+\item{data_folder}{character. path to data folder starting at root of the project. defaults to ".", i.e. root}
 }
 \description{
 Use R6 templates

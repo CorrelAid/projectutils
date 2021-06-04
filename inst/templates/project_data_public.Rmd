@@ -5,20 +5,24 @@ params:
   html_document:
     toc: true
     toc_depth: 2
-title: "Project report `r toupper(params$project_id)`"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(include = FALSE)
+PROJECT_ID <- "{{{project_id}}}"
+```
+
+---
+title: "Public project data `r PROJECT_ID`"
+---
+
+```{r}
+#read from rds file
+proj %>% readr::read_rds(glue::glue("{PROJECT_ID}.rds"))
 ```
 
 ```{r}
-PROJECT_ID <- "{{{project_id}}}"
-params$project_id  <- PROJECT_ID
-
-proj <- Project$new(PROJECT_ID, "")
-
 # properties set through the constructor -----
 # only uncomment if you want to change something
 # you can also create the object again with correct parameters
@@ -64,27 +68,44 @@ proj$add_tag("internal")
 proj$tags
 ```
 
-```{r}
-# Project team members
-members <- tibble::tribble(
-    ~volunteer_id, ~role,
-    2, "team_trainee",
-    43, "team_member", 
-    92, "team_member", 
-    42, "team_lead"
-)
-members$end_active_ym <- "2021-02"
-members %>% 
-    purrr::pmap(proj$add_project_member)
-
-proj$project_members
-```
 
 # Description of the project 
 
+```{r proj-description}
+get_description_section <- function(section) {
+    de <- read_lines(glue::glue("de/{section}.md"))
+    en <- read_lines(glue::glue("de/{section}.md"))
+    list(en = en, de = de)
+}
+
+desc <- Description$new(PROJECT_ID)
+desc$title <- get_description_section("title")
+desc$summary <- get_description_section("summary")
+desc$problem <- get_description_section("problem")
+desc$data <- get_description_section("data")
+desc$approach <- get_description_section("approach")
+desc$impact <- get_description_section("impact")
+desc$further_links <- list(
+     de = list(),
+     en = list()
+)
+proj$description <- desc
+
+```
 
 ```{r}
 # tibble representation of a project
 proj$to_tibble()$tags
 proj$to_tibble()$url_ideation_pad
+```
+
+```{r}
+# tables
+proj$get_sql_tables()
+```
+
+
+```{r}
+# write to rds file
+proj %>% readr::write_rds(glue::glue("{PROJECT_ID}.rds"))
 ```
