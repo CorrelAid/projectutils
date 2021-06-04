@@ -24,7 +24,6 @@ Imports:
     fs,
     clipr,
     jsonlite,
-    checkmate,
     rlang,
     purrr,
     stringr, 

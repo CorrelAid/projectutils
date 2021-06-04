@@ -7,8 +7,8 @@
 \format{
 A data frame with 56 rows and 3 variables:
 \describe{
-  \item{category}{category of the tag}
-  \item{value}{value of the tag}
+  \item{tag_category}{category of the tag}
+  \item{tag_value}{value of the tag}
   \item{tag_id}{numeric id}
 }
 }
