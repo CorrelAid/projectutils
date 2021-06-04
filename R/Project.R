@@ -6,6 +6,7 @@ Project <- R6::R6Class("Project",
     .tags = list(),
     .local_chapters = list(),
     .project_members = list(),
+    .description = NULL,
     .project_id = "",
     .name = "",
     .slug = NA_character_,
@@ -19,7 +20,6 @@ Project <- R6::R6Class("Project",
     .num_gh_issue = NA_integer_,
     .url_ideation_pad = NA_character_,
     .url_call_pad = NA_character_,
-
     .slack_channel = NA_character_,
     .status_id = NA_integer_,
     .status = NA_character_,
@@ -67,6 +67,19 @@ Project <- R6::R6Class("Project",
       invisible(self)
     },
     
+    #' @field description
+    #' tibble. Returns the description of the project as a Description object.
+    description = function(value) {
+      if (missing(value)) {
+        return(private$.description)
+      } else {
+        description <- value
+        checkmate::assert_class(description, c("Description", "R6"))
+        private$.description <- description
+      }
+      invisible(self)
+    },
+
     #' @field project_members
     #' tibble. Returns the project_members of the project as a tibble. Read-only.
     project_members = function(value) {
@@ -333,6 +346,8 @@ Project <- R6::R6Class("Project",
       assert_project_id(project_id)
       private$.project_id <- project_id
 
+      # initialize description
+      private$.description <- Description$new(project_id)
       # start_ym can be derived from project id
       private$.start_ym <- stringr::str_extract(project_id, "\\d{4}\\-\\d{2}")
       
@@ -431,7 +446,8 @@ Project <- R6::R6Class("Project",
         local_chapters = list(self$local_chapters),
         project_members = list(self$project_members),
         status_id = self$status_id,
-        status = self$status
+        status = self$status,
+        description = list(self$description$to_tibble())
       )
     },
 
@@ -450,7 +466,8 @@ Project <- R6::R6Class("Project",
           project_id = private$.project_id,
           lc_id = self$local_chapters$lc_id
         ),
-        projectmember = self$project_members
+        projectmember = self$project_members,
+        description = self$description$to_tibble()
       )
     }
   )

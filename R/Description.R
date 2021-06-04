@@ -10,8 +10,7 @@ Description <- R6::R6Class("Description",
     .approach = list(en = "", de = ""),
     .impact = list(en = "", de = ""),
     .title = list(en = "", de = ""),
-    .further_links = list(en = "", de = ""),
-    
+    .further_links = list(en = "", de = ""),  
     assert_lang_list = function(lang_list, max_len_each = 1) {
       checkmate::assert_list(lang_list, types = c("character"))
       checkmate::assert_set_equal(names(lang_list), c("en", "de"))
@@ -22,7 +21,7 @@ Description <- R6::R6Class("Description",
   ),
   active = list(
     #' @field summary
-    #' tibble. Returns the summary list of the project. read-only.
+    #' tibble. Returns the summary list of the project. 
     summary = function(value) {
       if (missing(value)) {
         return(private$.summary)
@@ -32,8 +31,19 @@ Description <- R6::R6Class("Description",
       }
       invisible(self)
     },
+    #' @field title
+    #' tibble. Returns the summary title of the project. 
+    title = function(value) {
+      if (missing(value)) {
+        return(private$.summary)
+      } else {
+        assert_lang_list(value)
+        private$.title <- value
+      }
+      invisible(self)
+    },
     #' @field problem
-    #' tibble. Returns the problem list of the project. read-only.
+    #' tibble. Returns the problem list of the project. 
     problem = function(value) {
       if (missing(value)) {
         return(private$.problem)
@@ -44,7 +54,7 @@ Description <- R6::R6Class("Description",
       invisible(self)
     },
     #' @field data
-    #' tibble. Returns the data list of the project. read-only.
+    #' tibble. Returns the data list of the project. 
     data = function(value) {
       if (missing(value)) {
         return(private$.data)
@@ -55,7 +65,7 @@ Description <- R6::R6Class("Description",
       invisible(self)
     },
     #' @field approach
-    #' tibble. Returns the approach list of the project. read-only.
+    #' tibble. Returns the approach list of the project. 
     approach = function(value) {
       if (missing(value)) {
         return(private$.approach)
@@ -66,7 +76,7 @@ Description <- R6::R6Class("Description",
       invisible(self)
     },
     #' @field impact
-    #' tibble. Returns the impact list of the project. read-only.
+    #' tibble. Returns the impact list of the project. 
     impact = function(value) {
       if (missing(value)) {
         return(private$.impact)

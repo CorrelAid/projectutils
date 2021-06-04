@@ -34,7 +34,7 @@ get_kobo <- function(url, token = Sys.getenv("KOBO_CORRELAID_TOKEN")) {
 }
 
 
-assert_project_id = function(value) {
+assert_project_id <- function(value) {
   if (!checkmate::test_character(value, len = 1)) {
     usethis::ui_stop("project_id needs to be a character vector of length 1.")
   }
@@ -51,6 +51,6 @@ assert_project_id = function(value) {
   }
 }
 
-check_ym = function(value) {
+check_ym <- function(value) {
   checkmate::test_character(value, pattern = "^\\d{4}\\-\\d{2}$")
 }

@@ -18,6 +18,8 @@ class representing the basic properties of a CorrelAid Project
 
 \item{\code{local_chapters}}{tibble. Returns the local_chapters of the project as a tibble. Read-only.}
 
+\item{\code{description}}{tibble. Returns the description of the project as a Description object.}
+
 \item{\code{project_members}}{tibble. Returns the project_members of the project as a tibble. Read-only.}
 
 \item{\code{project_id}}{character. id of the project, in the form YYYY-mm-ABB where ABB is any three-character, uppercase abbreviation}
