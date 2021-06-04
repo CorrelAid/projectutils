@@ -59,8 +59,8 @@ assert_lang_list = function(lang_list, max_len_each = 1) {
   checkmate::assert_list(lang_list, types = c("character"))
   checkmate::assert_set_equal(names(lang_list), c("en", "de"))
 
-  checkmate::assert_character(lang_list$en, len = max_len_each)
-  checkmate::assert_character(lang_list$de, len = max_len_each)
+  checkmate::assert_character(lang_list$en, max.len = max_len_each)
+  checkmate::assert_character(lang_list$de, max.len = max_len_each)
 }
 
 #' connect to MariaDB using environment variables

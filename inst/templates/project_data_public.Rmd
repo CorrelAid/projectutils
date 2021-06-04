@@ -71,28 +71,29 @@ proj$tags
 ```
 
 
+
 # Description of the project 
 
 ```{r proj-description}
 get_description_section <- function(section) {
-    de <- read_lines(glue::glue("de/{section}.md"))
-    en <- read_lines(glue::glue("de/{section}.md"))
+    de <- readr::read_lines(glue::glue("de/{section}.md")) %>% paste(collapse = "\n")
+    en <- readr::read_lines(glue::glue("en/{section}.md")) %>% paste(collapse = "\n")
     list(en = en, de = de)
 }
 
 desc <- Description$new(PROJECT_ID)
 desc$title <- list(
-     de = list(),
-     en = list()
+     de = "",
+     en = ""
 )
-desc$summary <- get_description_section("summary")
-desc$problem <- get_description_section("problem")
-desc$data <- get_description_section("data")
-desc$approach <- get_description_section("approach")
-desc$impact <- get_description_section("impact")
+desc$summary <- get_description_section("00_summary")
+desc$problem <- get_description_section("01_problem")
+desc$data <- get_description_section("02_data")
+desc$approach <- get_description_section("03_approach")
+desc$impact <- get_description_section("04_impact")
 desc$further_links <- list(
-     de = list(),
-     en = list()
+     de = "",
+     en = ""
 )
 proj$description <- desc
 
