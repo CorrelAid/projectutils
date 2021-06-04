@@ -37,7 +37,7 @@ Project <- R6::R6Class("Project",
       if (missing(value)) {
         if (length(private$.tags) == 0) {
           # return empty tibble if no tags have been assigned
-          return(tibble::tibble(tag_id = c(), category = c(), value = c()))
+          return(tibble::tibble(tag_id = character(), category = character(), value = character()))
         }
         tags_df <- private$.tags %>%
           purrr::map_dfr(function(tag) {
@@ -55,6 +55,9 @@ Project <- R6::R6Class("Project",
     #' tibble. Returns the local_chapters of the project as a tibble. Read-only.
     local_chapters = function(value) {
       if (missing(value)) {
+        if (length(private$.local_chapters) == 0) {
+          return(tibble::tibble(lc_id = character(), lc_name = character(), lc_name_full = character()))
+        }
         local_chapters_df <- private$.local_chapters %>%
           purrr::map_dfr(function(lc) {
             lc$to_tibble()
@@ -349,20 +352,25 @@ Project <- R6::R6Class("Project",
         url_pad = private$.url_pad,
         slack_channel = private$.slack_channel,
         organization_id = private$.organization_id,
-        tags = self$tags,
-        local_chapters = self$local_chapters,
+        tags = list(self$tags),
+        local_chapters = list(self$local_chapters),
         status_id = private$.status_id,
         status = private$.status
       )
     },
 
-    #' sql_tables
-    #' @description a list function that returns tibble for each table
-    sql_tables = function() {
+    #' get_sql_tables
+    #' @description function that returns a tibble for each table
+    get_sql_tables = function() {
       list(
         projecttag = tibble::tibble(
           project_id = private$.project_id,
-          tag_id = self$tags$id
+          tag_id = self$tags$tag_id
+        ), 
+        tag = projectutils::tags,
+        projectlocalchapters = tibble::tibble(
+          project_id = private$.project_id,
+          lc_id = self$local_chapters$lc_id
         )
       )
     }
