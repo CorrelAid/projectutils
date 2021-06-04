@@ -27,7 +27,8 @@ Imports:
     rlang,
     purrr,
     stringr, 
-    checkmate
+    checkmate, 
+    RMariaDB
 Suggests: 
     mockery,
     here,

@@ -24,7 +24,7 @@ id_surveymonkey <- function(project_id_path) {
 }
 
 #' get_kobo
-#' @param url character. URL to download. 
+#' @param url character. URL to download.
 #' @param token character. API token. defaults to Sys.getenv("KOBO_CORRELAID_TOKEN")
 #' @description load an asset by its url
 get_kobo <- function(url, token = Sys.getenv("KOBO_CORRELAID_TOKEN")) {
@@ -33,21 +33,42 @@ get_kobo <- function(url, token = Sys.getenv("KOBO_CORRELAID_TOKEN")) {
   httr::content(req)$results
 }
 
-
 assert_project_id = function(value) {
   if (!checkmate::test_character(value, len = 1)) {
     usethis::ui_stop("project_id needs to be a character vector of length 1.")
   }
   if (!stringr::str_detect(value, "^\\d{4}\\-\\d{2}\\-[:upper:]{3,3}$")) usethis::ui_stop("Invalid project id. It needs to be conform to the following format: YYYY-mm-ABB where ABB is a three-letter abbreviation of the partner organization.")
+  year <- as.numeric(stringr::str_sub(value, 1, 4))
+  month <- stringr::str_sub(value, 6, 7)
 
-  year  <- as.numeric(stringr::str_sub(value, 1, 4))
-  month  <- stringr::str_sub(value, 6,7)
-
-  if(year < 2015 | year > 2030) {
+  if (year < 2015 | year > 2030) {
     usethis::ui_stop("Invalid year in project id. Only years between 2015 and 2030 are valid.")
   }
-  months  <- c(paste0('0', c(0:9)), 10, 11, 12)
+  months <- c(paste0("0", c(0:9)), 10, 11, 12)
   if (!month %in% months) {
     usethis::ui_stop("Invalid month in project id.")
   }
+}
+
+check_ym <- function(value) {
+  checkmate::test_character(value, pattern = "^\\d{4}\\-\\d{2}$")
+}
+
+#' connect to MariaDB using environment variables
+#' @param host character. Defaults to Sys.getenv("DBHOST")
+#' @param dbname character. Defaults to Sys.getenv("DBNAME")
+#' @param user character. Defaults to Sys.getenv("DBUSER")
+#' @param password character. Defaults to Sys.getenv("DBPW")
+#' @export
+connect_to_mariadb <- function(host = Sys.getenv("DBHOST"),
+                               dbname = Sys.getenv("DBNAME"),
+                               user = Sys.getenv("DBUSER"),
+                               password = Sys.getenv("DBPW")) {
+  dbConnect(RMariaDB::MariaDB(
+    host = host,
+    dbname = dbname,
+    user = user,
+    password = password
+  ))
+
 }
