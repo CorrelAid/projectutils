@@ -9,7 +9,7 @@ load_applications(asset_url, project_id = NULL)
 \arguments{
 \item{asset_url}{character. URL of the Kobo asset corresponding to the survey.}
 
-\item{project_id}{character. ID of the project, e.g. ERL-03-2020. Defaults to NULL which means not to filter by project}
+\item{project_id}{character. ID of the project, e.g. 2020-04-ERL. Defaults to NULL which means not to filter by project}
 }
 \value{
 data frame containing the responses to the questions
