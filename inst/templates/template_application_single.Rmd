@@ -30,22 +30,13 @@ theme_set(theme_bw())
 ```{r message=FALSE}
 appl <- readr::read_csv(params$anon_path, col_types = cols())
 a <- appl %>% 
-  filter(applicant_id == params$applicant_id)
-```
-
-```{r}
-# data set with all applicants
-tmp_all <- appl %>% 
+  filter(applicant_id == params$applicant_id) %>% 
   select(applicant_id, starts_with(c("skills", "techniques", "topics"))) %>% 
   pivot_longer(starts_with(c("skills", "techniques", "topics")), names_to = "category", values_to = "level") %>% 
   mutate(question = stringr::str_extract(category, "skills|techniques|topics")) %>% 
   mutate(category = stringr::str_replace(category, "skills_|techniques_|topics_", "")) %>% 
-  left_join(lvls, by = "level")  %>% 
-  mutate(is_applicant_val = applicant_id == params$applicant_id) %>% 
-  arrange(applicant_id, question, category)
-
-tmp_applicant <- tmp_all %>% 
-  filter(applicant_id == params$applicant_id)
+  rownames_to_column() %>% 
+  left_join(lvls, by = "level")
 ```
 
 ## Applicant `r a$applicant_id` (`r a$project_role`) {#applicant-`r a$applicant_id`}
@@ -68,7 +59,7 @@ tmp_applicant <- tmp_all %>%
 ```{r fig.height=6, fig.width=6}
 theme_set(theme_bw())
 
-ggplot(tmp_applicant, aes(x = fct_rev(category), y = level_num, group = question)) +
+ggplot(a, aes(x = fct_rev(category), y = level_num, group = question)) +
   geom_segment(aes(
     x = fct_rev(category),
     xend = fct_rev(category),
