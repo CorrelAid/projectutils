@@ -1,6 +1,6 @@
 Package: projectutils
 Title: "Small Utility Functions Managing CorrelAid Projects"
-Version: 0.2.0
+Version: 0.6.3
 Authors@R: 
     person(given = "Frie",
            family = "Preu",
@@ -32,7 +32,8 @@ Suggests:
     mockery,
     here,
     testthat,
-    covr
+    covr,
+    vcr (>= 0.6.0)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

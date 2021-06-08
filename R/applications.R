@@ -4,7 +4,7 @@ utils::globalVariables(".")
 #' load project applications from Kobo
 #' @description loads the applications for a given project
 #' @param asset_url character. URL of the Kobo asset corresponding to the survey.
-#' @param project_id character. ID of the project, e.g. 2020-03-ERL. Defaults to NULL which means not to filter by project
+#' @param project_id character. ID of the project, e.g. 2020-04-ERL. Defaults to NULL which means not to filter by project
 #' @return data frame containing the responses to the questions
 #' @export
 #' @importFrom dplyr filter
@@ -23,24 +23,20 @@ load_applications <- function(asset_url, project_id = NULL) {
     if (!"gender_self_identification" %in% colnames(survey_df)) {
       survey_df$gender_self_identification <- NA
     }
-
   # DATA CLEANING - this could probably be done more efficiently
   # tibble with project ids the person applied to (1 row per person-project)
   project_ids_df <- survey_df %>% 
     dplyr::select(.data$applicant_id, .data$project_id) %>% 
     dplyr::mutate(applied_to = .data$project_id) %>% # store this before separating the rows
     tidyr::separate_rows(.data$project_id, sep = " ") %>% 
-    dplyr::distinct() %>% 
-    dplyr::group_by(.data$applicant_id)
+    dplyr::mutate(project_id = unify_project_id_formats(.data$project_id)) %>% 
+    dplyr::distinct()
 
   # tibble with project roles (1 person-project row)
   project_roles_df <- survey_df %>% 
     dplyr::select(.data$applicant_id, dplyr::starts_with("project_role")) %>% 
     tidyr::pivot_longer(dplyr::starts_with("project_role"), names_to = "project_id", values_to = "project_role")%>% 
-    dplyr::mutate(project_id = .data$project_id %>% 
-              stringr::str_extract("\\w{3}_\\d{2}_\\d{4}") %>% 
-              stringr::str_replace_all("_", "-") %>% 
-              stringr::str_to_upper() %>% stringr::str_trim()) %>% 
+    dplyr::mutate(project_id = extract_ids_from_kobo_columnnames(.data$project_id)) %>% 
     dplyr::filter(.data$project_role != "DNA") %>% # TODO: proper checking that applicants did not mess up here. 
     dplyr::distinct()
 
