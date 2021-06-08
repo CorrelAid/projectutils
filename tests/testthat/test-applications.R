@@ -10,16 +10,17 @@ if (call_fn_name == "devtools::test") {
 } 
 
 
-test_that("filtering works", {
+test_that("filtering works and project id is correctly unified", {
   vcr::use_cassette('test-applications-no-filtering', {
     applications <- load_applications(Sys.getenv('KOBO_TEST_DATA'))
   })
   expect_equal(nrow(applications), 8)
-
+  expect_true(all(stringr::str_detect(applications$project_id, '^\\d{4}-\\d{2}\\-\\w{3}$')))
   vcr::use_cassette('test-applications-filtering', {
     applications <- load_applications(Sys.getenv('KOBO_TEST_DATA'), "2021-04-SOG")
   })
   expect_equal(nrow(applications), 1)
+  
 })
 
 test_that("filtering for non-existent ID throws warning", {
