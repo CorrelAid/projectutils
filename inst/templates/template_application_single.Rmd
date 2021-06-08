@@ -13,6 +13,7 @@ output: pdf_document
 ```{r include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 
 library(dplyr)
 library(tidyr)
@@ -29,26 +30,18 @@ theme_set(theme_bw())
 ```{r message=FALSE}
 appl <- readr::read_csv(params$anon_path, col_types = cols())
 a <- appl %>% 
-  filter(applicant_id == params$applicant_id)
-```
-
-```{r}
-# data set with all applicants
-tmp_all <- appl %>% 
+  filter(applicant_id == params$applicant_id) %>% 
   select(applicant_id, starts_with(c("skills", "techniques", "topics"))) %>% 
   pivot_longer(starts_with(c("skills", "techniques", "topics")), names_to = "category", values_to = "level") %>% 
   mutate(question = stringr::str_extract(category, "skills|techniques|topics")) %>% 
   mutate(category = stringr::str_replace(category, "skills_|techniques_|topics_", "")) %>% 
   rownames_to_column() %>% 
-  left_join(lvls, by = "level") %>% 
-  mutate(is_applicant_val = applicant_id == params$applicant_id)
-
-tmp_applicant <- tmp_all %>% 
-  filter(applicant_id == params$applicant_id)
+  left_join(lvls, by = "level")
 ```
 
-
 ## Applicant `r a$applicant_id` (`r a$project_role`) {#applicant-`r a$applicant_id`}
+**Applied to project(s)**: `r a$applied_to`
+
 **Gender**: `r a$gender`
 
 **Project role**: `r a$project_role`
@@ -62,14 +55,14 @@ tmp_applicant <- tmp_all %>%
 `r a$motivation_why_involved`
 
 ### Self-rated experience with skills, techniques and topics 
-**Note for reviewers**: We are currently evaluating the different plots (this is why there are so many). Please let Frie know which one(s) you found most useful in making a decision. 
 
 ```{r fig.height=6, fig.width=6}
 theme_set(theme_bw())
-ggplot(tmp_applicant, aes(x = category, y = level_num, group = question)) +
+
+ggplot(a, aes(x = fct_rev(category), y = level_num, group = question)) +
   geom_segment(aes(
-    x = category,
-    xend = category,
+    x = fct_rev(category),
+    xend = fct_rev(category),
     y = 0,
     yend = level_num
   )) +
@@ -86,72 +79,7 @@ ggplot(tmp_applicant, aes(x = category, y = level_num, group = question)) +
     breaks = seq(0, max(lvls$level_num), 1),
     labels = lvls$level
   ) +
-  facet_wrap( ~ question, nrow = 3, scales = "free_y") +
+  facet_wrap(~question, nrow = 3, scales = "free_y") +
   xlab("")
 ```
 
-### In comparison to other applicants
-Note: the highlighted bar is the chosen category of the applicant. The height of the bars shows how many applicants chose this category.
-
-```{r fig.width=6, fig.height=8}
-tmp_all_highlight <- tmp_all %>%
-  semi_join(tmp_applicant, by = c("category", "level")) %>%
-  mutate(this_applicant = TRUE) %>%
-  bind_rows(tmp_all %>%
-    anti_join(tmp_applicant, by = c("category", "level")) %>%
-    mutate(this_applicant = FALSE)) %>%
-  mutate(
-    category = fct_inorder(category),
-    highlight = if_else(this_applicant,
-      question,
-      NA_character_
-    )
-  )
-
-ggplot(tmp_all_highlight, aes(
-  x = fct_reorder(level, level_num),
-  fill = highlight
-)) +
-  geom_bar(width = 1) +
-  scale_x_discrete(labels = lvls$level) +
-  scale_y_continuous(breaks = c(0, 20)) +
-  scale_fill_discrete(
-    name = NULL,
-    na.value = "#d9d9d9",
-    breaks = unique(tmp_all$question)
-  ) +
-  facet_wrap(~category, ncol = 1, strip.position = "left") +
-  theme_minimal(base_size = 14) +
-  theme(
-    axis.text.y = element_blank(),
-    axis.ticks = element_blank(),
-    panel.spacing = unit(0, "pt"),
-    panel.grid = element_blank(),
-    panel.grid.major.y = element_line("grey92"),
-    strip.text.y.left = element_text(angle = 0, hjust = 1),
-    legend.position = "top"
-  ) +
-  labs(x = NULL, y = NULL)
-```
-
-```{r fig.height=6, fig.width=6, warning=FALSE}
-ggplot(tmp_all_highlight, aes(
-  x = fct_reorder(level, level_num),
-  alpha = this_applicant,
-  fill = question
-)) +
-  geom_bar(width = 1) +
-  scale_x_discrete(labels = c("B", "U", "A", "E")) +
-  scale_alpha_discrete(range = c(.25, 1), guide = "none") +
-  facet_wrap(~category, ncol = 4) +
-  theme_grey() +
-  theme(
-    panel.grid = element_blank(),
-    panel.grid.major.y = element_line("grey92"),
-    axis.text.x = element_text(size = rel(1.25)),
-    axis.ticks.y = element_blank(),
-    axis.text.y = element_blank(),
-    legend.position = "top"
-  ) +
-  labs(x = NULL, y = NULL, caption = "B: Beginner, U: User, A: Advanced, E: Expert")
-```

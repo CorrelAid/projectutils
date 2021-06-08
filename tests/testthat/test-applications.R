@@ -37,6 +37,8 @@ test_that("applicant_id is correctly assigned if results are not filtered and pe
   expect_equal(nrow(appl), 6)
   expect_equal(appl$applicant_id, c(1, 2, 2, 5, 5, 5))
   expect_equal(appl$applicant_id %>% unique(), c(1, 2, 5))
+  expect_equal(appl$applied_to[1], "CAR-04-2021")
+  expect_equal(appl$applied_to[2], "CAR-04-2021 SOG-04-2021")
 })
 
 test_that("anonymization works for kobo data", {

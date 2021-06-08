@@ -1,40 +1,28 @@
 context("creating projects")
-test_that("invalid year throws error", {
-  expect_error(new_project("ERL", 293, 12), regexp = "Invalid year", class = "usethis_error")
+test_that("invalid project id throws error", {
+  expect_error(new_project("ERL-239-23"), regexp = "Invalid project id", class = "usethis_error")
+}) 
+
+test_that("invalid project id throws error", {
+  expect_error(new_project("2020-03-low"), regexp = "Invalid project id", class = "usethis_error")
 })
 
 test_that("invalid year throws error", {
-  expect_error(new_project("ERL", "2019", 12), regexp = "Invalid year", class = "usethis_error")
-})
-
-test_that("invalid year throws error", {
-  expect_error(new_project("ERL", -2019, 12), regexp = "Invalid year", class = "usethis_error")
-})
-
-test_that("invalid year throws error", {
-  expect_error(new_project("ERL", 0000, 12), regexp = "Invalid year", class = "usethis_error")
+  expect_error(new_project("1000-02-ERL"), regexp = "Invalid year", class = "usethis_error")
 })
 
 test_that("invalid month throws error", {
-  expect_error(new_project("ERL", 2018, -1), regexp = "Invalid month", class = "usethis_error")
-})
-
-test_that("invalid month throws error", {
-  expect_error(new_project("ERL", 2018, "5"), regexp = "Invalid month", class = "usethis_error")
-})
-
-test_that("invalid month throws error", {
-  expect_error(new_project("ERL", 2018, 53), regexp = "Invalid month", class = "usethis_error")
+  expect_error(new_project("2019-23-ERL"), regexp = "Invalid month in project id", class = "usethis_error")
 })
 
 test_that("invalid prefix throws an error", {
-  expect_error(new_project("ERJLA", 2018, 2), regexp = "Invalid prefix", class = "usethis_error")
+  expect_error(new_project("2020-02-ERJLE"), regexp = "Invalid project id", class = "usethis_error")
 })
 
 test_that("project creation works as expected", {
   # create files
   fs::path_file(".")
-  new_project("FOO", 2020, 10)
+  new_project("2020-10-FOO")
   expect_true(dir.exists(here::here("2020-10-FOO/")))
   expect_true(dir.exists(here::here("2020-10-FOO/en")))
   expect_true(dir.exists(here::here("2020-10-FOO/de")))
