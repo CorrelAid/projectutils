@@ -1,3 +1,6 @@
+# projectutils 0.7.0
+- soft-deprecation of surveymonkey features, retractment of old id format (#25)
+
 # projectutils 0.6.3
 - bug fix: fixes a bug in `load_applications` where the extracted project role was NA when the Kobo label in the matrix question was given in the YYYY-mm-ABB format (#24)
 - improvement: `load_applications` now takes a project id in the new format (YYYY-mm-ABB) for filtering (#25)

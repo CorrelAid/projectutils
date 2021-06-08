@@ -1,6 +1,6 @@
 Package: projectutils
 Title: "Small Utility Functions Managing CorrelAid Projects"
-Version: 0.6.3
+Version: 0.7.0
 Authors@R: 
     person(given = "Frie",
            family = "Preu",
