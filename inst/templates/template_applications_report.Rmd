@@ -70,7 +70,7 @@ cat(unlist(res), sep = '\n')
 
 ```{r div-nonbinary, results='asis'}
 div_nonbinary <- appl %>% 
-  filter(!gender %in% c("female", "male")) %>% 
+  filter(gender == 'non_binary') %>% 
   arrange(applicant_id) %>% 
   pull(applicant_id)
 
@@ -83,3 +83,20 @@ res <- lapply(div_nonbinary, function(x) {
 
 cat(unlist(res), sep = '\n')
 ```
+
+```{r div-notdisclosed, results='asis'}
+not_disclosed <- appl %>% 
+  filter(gender == 'not_disclosed') %>% 
+  arrange(applicant_id) %>% 
+  pull(applicant_id)
+
+res <- lapply(not_disclosed, function(x) {
+  params <- list(applicant_id = x, anon_path = ANON_PATH)
+  knitr::knit_child(
+    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
+  )
+})
+
+cat(unlist(res), sep = '\n')
+```
+
