@@ -21,6 +21,11 @@ ANON_PATH <- params$anon_path
 appl <- readr::read_csv(ANON_PATH)
 ```
 
+**Report metadata**:
+
+- time generated: `r format(Sys.time(), '%Y-%m-%d, %H:%m:%S UTC%z')`
+- applications included: `r nrow(appl)`
+
 # Introduction
 ### Helpful links for team selection committee
 - [Team selection criteria and best practices](https://docs.correlaid.org/project-manual/project-coordinators/ideation-finding-a-team#team-selection-call)
@@ -29,12 +34,45 @@ appl <- readr::read_csv(ANON_PATH)
 
 ### Project roles by gender
 ```{r}
-theme_set(correltools::theme_correlaid())
-ggplot(appl, aes(x = project_role, fill = gender))+
+gender_labels <- c(female = 'female', male = 'male', non_binary = 'nonbinary', not_disclosed = 'not disclosed')
+roles_labels <- c(team_lead = 'Team lead', team_member = 'Team member', team_trainee = 'Team trainee')
+
+theme_set(correltools::theme_correlaid(base_size = 9))
+
+#determine y axis limit for all plots
+lim_y <- max(appl %>% count(project_role) %>% pull(n) %>% max(),
+             appl %>% count(gender) %>% pull(n) %>% max())
+
+gender <- ggplot(appl, aes(x = gender, fill = gender))+
+  geom_bar()+
+  correltools::scale_fill_correlaid_d(labels = gender_labels)+
+  scale_x_discrete(labels = gender_labels)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())+
+  scale_y_continuous(limits = c(0, lim_y), breaks = seq(0, lim_y, 2))+
+  labs(fill = 'Gender')
+
+roles <- ggplot(appl, aes(x = project_role))+
+  geom_bar()+
+  scale_x_discrete(labels = roles_labels)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())+
+  scale_y_continuous(limits = c(0, lim_y), breaks = seq(0, lim_y, 2))
+
+roles_by_gender <- ggplot(appl, aes(x = project_role, fill = gender))+
   geom_bar(position = position_dodge2(preserve = "single", padding = 0))+
-  correltools::scale_fill_correlaid_d()+
-  theme(axis.title.x = element_blank())+
-  labs(y = 'n')
+  correltools::scale_fill_correlaid_d(labels = gender_labels)+
+  scale_x_discrete(labels = roles_labels)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())+
+  scale_y_continuous(limits = c(0, lim_y), breaks = seq(0, lim_y, 2))+
+  labs(fill = 'Gender')
+
+
+( (gender + roles) / roles_by_gender) +
+  plot_layout(guides = 'collect') +
+  plot_annotation(title = 'Number of applications',
+                  subtitle = 'By gender, by role, and by gender and role')
 ```
 
 ```{r female, results='asis', echo=FALSE}
