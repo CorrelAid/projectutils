@@ -40,7 +40,7 @@ appl <- readr::read_csv(ANON_PATH)
 gender_labels <- c(female = 'female', male = 'male', non_binary = 'nonbinary', not_disclosed = 'not disclosed')
 roles_labels <- c(team_lead = 'Team lead', team_member = 'Team member', team_trainee = 'Team trainee')
 
-theme_set(correltools::theme_correlaid(base_size = 9))
+theme_set(correltools::theme_correlaid(base_size = 12))
 
 #determine y axis limit for all plots
 lim_y <- max(appl %>% count(project_role) %>% pull(n) %>% max(),
