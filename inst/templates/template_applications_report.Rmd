@@ -16,6 +16,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r include=FALSE, message=FALSE}
 library(tidyverse)
+library(tidyverse)
+library(patchwork)
+library(correltools)
 PROJECT_ID <- params$project_id
 ANON_PATH <- params$anon_path
 appl <- readr::read_csv(ANON_PATH)
