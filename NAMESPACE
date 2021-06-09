@@ -2,6 +2,7 @@
 
 export("%>%")
 export(anonymize_applications)
+export(clean_kobo)
 export(extract_motivation_questions)
 export(get_application_emails)
 export(id_path)
