@@ -1,11 +1,8 @@
 ---
 params:
   anon_path: "data/applications_anonymized.csv"
-  project_id: ""
-output: 
-  pdf_document:
-    toc: true
-    toc_depth: 2
+  project_id: "{{{project_id}}}"
+output: rmdformats::robobook
 title: "Applications for project `r toupper(params$project_id)`"
 ---
 <!-- THIS FILE IS NOT SUPPOSED TO BE KNITTED DIRECTLY
@@ -24,20 +21,22 @@ ANON_PATH <- params$anon_path
 appl <- readr::read_csv(ANON_PATH)
 ```
 
-# Helpful links for team selection committee
+# Introduction
+### Helpful links for team selection committee
 - [Team selection criteria and best practices](https://docs.correlaid.org/project-manual/project-coordinators/ideation-finding-a-team#team-selection-call)
 - [Explanation of the experience scale](https://docs.correlaid.org/project-manual/data4good-projects#experience-scale) ("Beginner", "User", "Advanced", "Expert") 
 - [Explanation of the team roles](https://docs.correlaid.org/project-manual/data4good-projects#which-project-role)
 
-# Overview
 ### Project roles by gender
 ```{r}
-theme_set(theme_bw())
+theme_set(correltools::theme_correlaid())
 ggplot(appl, aes(x = project_role, fill = gender))+
-  geom_bar(position = "dodge")
+  geom_bar(position = position_dodge2(preserve = "single", padding = 0))+
+  correltools::scale_fill_correlaid_d()+
+  theme(axis.title.x = element_blank())+
+  labs(y = 'n')
 ```
 
-# Female applicants
 ```{r female, results='asis', echo=FALSE}
 female <- appl %>% 
   filter(gender == "female") %>% 
@@ -55,7 +54,6 @@ cat(unlist(res), sep = '\n')
 ```
 
 
-# Male applicants
 ```{r male, results='asis'}
 male <- appl %>% 
   filter(gender == "male") %>% 
@@ -70,7 +68,6 @@ res <- lapply(male, function(x) {
 cat(unlist(res), sep = '\n')
 ```
 
-# Applicants with nonbinary gender or self-identified
 ```{r div-nonbinary, results='asis'}
 div_nonbinary <- appl %>% 
   filter(!gender %in% c("female", "male")) %>% 
@@ -86,24 +83,3 @@ res <- lapply(div_nonbinary, function(x) {
 
 cat(unlist(res), sep = '\n')
 ```
-
-
-
-# Applicants who did not disclose their gender
-```{r not-disclosed, results='asis'}
-not_disclosed <- appl %>% 
-  filter(gender == "not_disclosed") %>% 
-  arrange(applicant_id) %>% 
-  pull(applicant_id)
-
-res <- lapply(not_disclosed, function(x) {
-  params <- list(applicant_id = x, anon_path = ANON_PATH)
-  knitr::knit_child(
-    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
-  )
-})
-
-cat(unlist(res), sep = '\n')
-```
-
-

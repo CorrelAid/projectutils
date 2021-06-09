@@ -2,8 +2,7 @@
 params:
   applicant_id: 1
   anon_path: "data/applications_anonymized.csv"
-output: pdf_document
-
+output: rmdformats::robobook
 ---
 <!-- THIS FILE IS NOT SUPPOSED TO BE KNITTED BY HAND
     INSTEAD IT IS KNIT AUTOMATICALLY 
@@ -13,7 +12,6 @@ output: pdf_document
 ```{r include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
-knitr::opts_chunk$set(warning = FALSE)
 
 library(dplyr)
 library(tidyr)
@@ -21,16 +19,20 @@ library(tibble)
 library(ggplot2)
 library(readr)
 library(stringr)
-library(forcats)
 
 lvls <- tibble(level_num = c(0, 1, 2, 3), level = c("beginner", "user", "advanced", "expert"))
-theme_set(theme_bw())
+# theme and palette
+theme_set(correltools::theme_correlaid())
+correlpal <- correltools::correlaid_pal()
 ```
 
 ```{r message=FALSE}
 appl <- readr::read_csv(params$anon_path, col_types = cols())
 a <- appl %>% 
-  filter(applicant_id == params$applicant_id) %>% 
+  filter(applicant_id == params$applicant_id) 
+
+
+a_skills <- a %>% 
   select(applicant_id, starts_with(c("skills", "techniques", "topics"))) %>% 
   pivot_longer(starts_with(c("skills", "techniques", "topics")), names_to = "category", values_to = "level") %>% 
   mutate(question = stringr::str_extract(category, "skills|techniques|topics")) %>% 
@@ -39,9 +41,7 @@ a <- appl %>%
   left_join(lvls, by = "level")
 ```
 
-## Applicant `r a$applicant_id` (`r a$project_role`) {#applicant-`r a$applicant_id`}
-**Applied to project(s)**: `r a$applied_to`
-
+# `r a$applicant_id` - `r a$gender` - `r a$project_role` {#applicant-`r a$applicant_id`}
 **Gender**: `r a$gender`
 
 **Project role**: `r a$project_role`
@@ -56,17 +56,15 @@ a <- appl %>%
 
 ### Self-rated experience with skills, techniques and topics 
 
-```{r fig.height=6, fig.width=6}
-theme_set(theme_bw())
-
-ggplot(a, aes(x = fct_rev(category), y = level_num, group = question)) +
+```{r fig.height=8, fig.width=6}
+ggplot(a_skills, aes(x = category, y = level_num, group = question)) +
   geom_segment(aes(
-    x = fct_rev(category),
-    xend = fct_rev(category),
+    x = category,
+    xend = category,
     y = 0,
     yend = level_num
   )) +
-  geom_point(size = 3, color = "#3863a2") +
+  geom_point(size = 3, color = correlpal(1)) +
   coord_flip() +
   theme(
     panel.grid.minor.y = element_blank(),
@@ -79,7 +77,6 @@ ggplot(a, aes(x = fct_rev(category), y = level_num, group = question)) +
     breaks = seq(0, max(lvls$level_num), 1),
     labels = lvls$level
   ) +
-  facet_wrap(~question, nrow = 3, scales = "free_y") +
+  facet_wrap( ~ question, nrow = 3, scales = "free_y") +
   xlab("")
 ```
-

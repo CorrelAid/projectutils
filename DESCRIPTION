@@ -33,7 +33,10 @@ Suggests:
     here,
     testthat,
     covr,
-    vcr (>= 0.6.0)
+    vcr (>= 0.6.0), 
+    rmdformats, 
+    correltools
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
+Remotes: correlaid/correltools

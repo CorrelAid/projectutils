@@ -178,7 +178,7 @@ use_team_selection_workflow <- function(project_id, data_folder = ".") {
   prefix <- tolower(stringr::str_extract(project_id, '[:alpha:]+')) 
   usethis::use_template(
     "send_confirmation_emails.R",
-    save_as = fs::path(team_selection_folder, glue::glue("02_{prefix}_send_confirmation_emails.R")),
+    save_as = fs::path(team_selection_folder, glue::glue("{project_id}_02_send_confirmation_emails.R")),
     data = list(project_id = project_id),
     package = "projectutils",
     open = FALSE
@@ -200,7 +200,7 @@ use_team_selection_workflow <- function(project_id, data_folder = ".") {
 
   usethis::use_template(
     "prepare_team_selection.R",
-    save_as = fs::path(team_selection_folder, glue::glue("01_{prefix}_prepare_team_selection.R")),
+    save_as = fs::path(team_selection_folder, glue::glue("{project_id}_01_prepare_team_selection.R")),
     data = list(project_id = project_id),
     package = "projectutils",
     open = TRUE
