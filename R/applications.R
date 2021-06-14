@@ -55,7 +55,7 @@ clean_kobo <- function(survey_list, project_id) {
   personal_info_df <- survey_df %>% 
     dplyr::select(.data$applicant_id, dplyr::starts_with("gender"), .data$first_name, .data$last_name, email = .data$email_address,
                   .data$german_skills, dplyr::starts_with("rating"), dplyr::starts_with("motivation"),
-                  .data$consent_privacy_policy) %>% 
+                  .data$consent_privacy_policy, dplyr::starts_with("past_")) %>% 
     dplyr::distinct() %>% 
     janitor::clean_names() %>% 
     dplyr::rename_with(~stringr::str_replace_all(.x, "rating_technologies_tools", "skills"), dplyr::starts_with("rating_technologies_tools")) %>% 
@@ -84,7 +84,10 @@ clean_kobo <- function(survey_list, project_id) {
   }
   
   cleaned_df <- cleaned_df %>% 
-    dplyr::select(.data$applicant_id, .data$gender, dplyr::everything())
+    dplyr::select(.data$applicant_id, .data$gender, .data$email, dplyr::ends_with('name'),
+                  dplyr::starts_with('project'), .data$applied_to, dplyr::starts_with('past'),
+                  dplyr::starts_with('skills'), dplyr::starts_with('techniques'), dplyr::starts_with('topics'), 
+                  dplyr::everything())
   
   return(cleaned_df)
 }
