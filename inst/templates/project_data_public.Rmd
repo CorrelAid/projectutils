@@ -1,6 +1,4 @@
 ---
-params:
-  anon_path: "data/applications.csv" 
 output: 
   html_document:
     toc: true

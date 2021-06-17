@@ -280,7 +280,7 @@ Project <- R6::R6Class("Project",
     #' integer. Returns the number of the issue in the projects repository. read-only (use u)
     num_gh_issue = function(value) {
       if (missing(value)) {
-        return(private$.url_gh_issue)
+        return(private$.num_gh_issue)
       } else {
         value <- as.integer(value)
         checkmate::assert_integer(value, lower = 1)
