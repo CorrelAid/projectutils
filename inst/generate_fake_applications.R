@@ -60,4 +60,3 @@ fake_role <- function(x) base_prov$random_element(c("Team trainee", "Team member
 appl_en$`What role do you want to assume in the project?` <- purrr::map_chr(1:n, fake_role)
 
 appl_en %>% readr::write_csv("tests/testthat/test_data/surveymonkey/applications_fake_en.csv")
-

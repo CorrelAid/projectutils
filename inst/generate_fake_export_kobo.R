@@ -5,7 +5,7 @@ library(tidyverse)
 set.seed(123)
 fraud <- fraudster()
 int_prov <- InternetProvider
-names(data_list[[1]]) %>% dput()
+#names(data_list[[1]]) %>% dput()
 # column names
 list_names <-
   c(
@@ -29,6 +29,8 @@ list_names <-
     "gender",
     "german_skills",
     "last_name",
+    "past_applications",
+    "past_applications_details",
     "meta/instanceID",
     "motivation_skills",
     "motivation_why",
@@ -70,7 +72,7 @@ list_names <-
     "start"
   )
 
-NROW = 60
+NROW = 25
 li <- vector("list", length(list_names)) %>% setNames(list_names)
 ll <- vector("list", NROW)
 
@@ -154,6 +156,9 @@ dt_prov <- DateTimeProvider$new()
 fake_german <-
   function(x)
     base_prov$random_element(c("A1", "A2", "B1", "B2", "C1", "C2", "native"))
+fake_past_appl <- function(x)
+  base_prov$random_element(c("not_successful", "successful", "first_application", NA))
+
 appl_ll <- appl_ll %>%
   map(function(appl_l) {
     appl_l$start <-
@@ -170,9 +175,12 @@ appl_ll <- appl_ll %>%
     appl_l$motivation_skills <- text_prov$text()
     appl_l$motivation_why <- text_prov$text()
     appl_l$german_skills <- fake_german()
+    appl_l$past_applications <- fake_past_appl()
+    appl_l$past_applications_details <- ifelse(appl_l$past_applications == 'not_successful', text_prov$text(), NA)
     appl_l$consent_privacy_policy <- "Yes"
     appl_l
   })
+
 
 # add some self-identified genders
 appl_ll[[12]]$gender_self_identification <- "agender"
@@ -185,3 +193,7 @@ appl_ll[[14]]$gender <- "not_disclosed"
 appl_ll %>%
   jsonlite::toJSON(auto_unbox = TRUE, pretty = TRUE) %>%
   readr::write_lines("tests/testthat/test_data/kobo/kobo_export.json")
+
+
+fake_kobo_applications <- appl_ll 
+fake_kobo_applications %>% usethis::use_data(internal = FALSE, overwrite = TRUE)
