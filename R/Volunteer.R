@@ -28,18 +28,6 @@ Volunteer <- R6::R6Class("Volunteer",
       if (!checkmate::test_character(email, pattern = regex)) {
         usethis::ui_stop("Invalid email address.")
       }
-    },
-    assert_url = function(value, arg_name, domain = NA) {
-      # see https://cran.r-project.org/web/packages/rex/vignettes/url_parsing.html
-      if (!checkmate::test_character(value, pattern = "^(?:(?:http(?:s)?|ftp)://)(?:\\S+(?::(?:\\S)*)?@)?(?:(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)(?:\\.(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)*(?:\\.(?:[a-z0-9\u00a1-\uffff]){2,})(?::(?:\\d){2,5})?(?:/(?:\\S)*)?$")) {
-        usethis::ui_stop(glue::glue("Invalid URL for {arg_name}"))
-      }
-
-      if (!is.na(domain)) {
-        if (!checkmate::test_character(value, pattern = domain)) {
-          usethis::ui_stop(glue::glue("URL for {arg_name} must include domain {domain}."))
-        }
-      }
     }
   ),
   active = list(
@@ -136,7 +124,7 @@ Volunteer <- R6::R6Class("Volunteer",
         return(private$.url_website)
       } else {
         if (!is.na(value)) {
-          private$assert_url(value, "url_website")
+          assert_url(value, "url_website")
         }
         private$.url_website <- value
         invisible(self)
@@ -149,7 +137,7 @@ Volunteer <- R6::R6Class("Volunteer",
         return(private$.url_linkedin)
       } else {
         if (!is.na(value)) {
-          private$assert_url(value, "url_linkedin", domain = "linkedin.com")
+          assert_url(value, "url_linkedin", domain = "linkedin.com")
         }
         private$.url_linkedin <- value
         invisible(self)
@@ -162,7 +150,7 @@ Volunteer <- R6::R6Class("Volunteer",
         return(private$.url_xing)
       } else {
         if (!is.na(value)) {
-          private$assert_url(value, "url_xing", domain = "xing.com")
+          assert_url(value, "url_xing", domain = "xing.com")
         }
         private$.url_xing <- value
         invisible(self)

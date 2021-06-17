@@ -14,7 +14,7 @@ Description <- R6::R6Class("Description",
   ),
   active = list(
     #' @field summary
-    #' tibble. Returns the summary list of the project. 
+    #' tibble. Returns or sets the summary list of the project. 
     summary = function(value) {
       if (missing(value)) {
         return(private$.summary)
@@ -25,7 +25,7 @@ Description <- R6::R6Class("Description",
       invisible(self)
     },
     #' @field title
-    #' tibble. Returns the summary title of the project. 
+    #' tibble. Returns or sets the summary title of the project. 
     title = function(value) {
       if (missing(value)) {
         return(private$.summary)
@@ -36,7 +36,7 @@ Description <- R6::R6Class("Description",
       invisible(self)
     },
     #' @field problem
-    #' tibble. Returns the problem list of the project. 
+    #' tibble. Returns or sets the problem list of the project. 
     problem = function(value) {
       if (missing(value)) {
         return(private$.problem)
@@ -47,7 +47,7 @@ Description <- R6::R6Class("Description",
       invisible(self)
     },
     #' @field data
-    #' tibble. Returns the data list of the project. 
+    #' tibble. Returns or sets the data list of the project. 
     data = function(value) {
       if (missing(value)) {
         return(private$.data)
@@ -58,7 +58,7 @@ Description <- R6::R6Class("Description",
       invisible(self)
     },
     #' @field approach
-    #' tibble. Returns the approach list of the project. 
+    #' tibble. Returns or sets the approach list of the project. 
     approach = function(value) {
       if (missing(value)) {
         return(private$.approach)
@@ -69,7 +69,7 @@ Description <- R6::R6Class("Description",
       invisible(self)
     },
     #' @field impact
-    #' tibble. Returns the impact list of the project. 
+    #' tibble. Returns or sets the impact list of the project. 
     impact = function(value) {
       if (missing(value)) {
         return(private$.impact)
@@ -81,7 +81,7 @@ Description <- R6::R6Class("Description",
     },
 
     #' @field further_links
-    #' tibble. Returns or sets the further links list of the project.
+    #' tibble. Returns or sets or sets the further links list of the project.
     further_links = function(value) {
       if (missing(value)) {
         return(private$.further_links)

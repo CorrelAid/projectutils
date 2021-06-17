@@ -102,3 +102,16 @@ unify_project_id_formats <- function(char_vec) {
         id_path(char_vec), 
         char_vec)
 }
+
+assert_url <- function(value, arg_name, domain = NA) {
+  # see https://cran.r-project.org/web/packages/rex/vignettes/url_parsing.html
+  if (!checkmate::test_character(value, pattern = "^(?:(?:http(?:s)?|ftp)://)(?:\\S+(?::(?:\\S)*)?@)?(?:(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)(?:\\.(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)*(?:\\.(?:[a-z0-9\u00a1-\uffff]){2,})(?::(?:\\d){2,5})?(?:/(?:\\S)*)?$")) {
+    usethis::ui_stop(glue::glue("Invalid URL for {arg_name}"))
+  }
+
+  if (!is.na(domain)) {
+    if (!checkmate::test_character(value, pattern = domain)) {
+      usethis::ui_stop(glue::glue("URL for {arg_name} must include domain {domain}."))
+    }
+  }
+}
