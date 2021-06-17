@@ -4,12 +4,12 @@
 \alias{get_kobo}
 \title{get_kobo}
 \usage{
-get_kobo(url, token = Sys.getenv("KOBO_CORRELAID_TOKEN"))
+get_kobo(url, token = Sys.getenv("KOBO_TOKEN"))
 }
 \arguments{
 \item{url}{character. URL to download.}
 
-\item{token}{character. API token. defaults to Sys.getenv("KOBO_CORRELAID_TOKEN")}
+\item{token}{character. API token. defaults to Sys.getenv("KOBO_TOKEN")}
 }
 \description{
 load an asset by its url

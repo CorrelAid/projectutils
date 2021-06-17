@@ -4,7 +4,7 @@ utils::globalVariables(".")
 #' load project applications from Kobo
 #' @description loads the applications for a given project
 #' @param asset_url character. URL of the Kobo asset corresponding to the survey.
-#' @param project_id character. ID of the project, e.g. 2020-03-ERL. Defaults to NULL which means not to filter by project
+#' @param project_id character. ID of the project, e.g. 2020-04-ERL. Defaults to NULL which means not to filter by project
 #' @return data frame containing the responses to the questions
 #' @export
 #' @importFrom dplyr filter
@@ -13,58 +13,65 @@ load_applications <- function(asset_url, project_id = NULL) {
 
   survey_list <- get_kobo(asset_url)
 
+  clean_kobo(survey_list, project_id = project_id)
+}
+
+#' convert applications into tibble
+#' @description cleans the list of applications into a tibble in long format (one person-application row)
+#' @param survey_list list list of applications returned by get_kobo
+#' @param project_id character. ID of the project, e.g. 2020-04-ERL.
+#' @return data frame containing the responses to the questions
+#' @export
+clean_kobo <- function(survey_list, project_id) {
+  
   survey_df <- survey_list %>%
     purrr::map_dfr(function(sub) purrr::compact(sub) %>%  tibble::as_tibble()) %>% 
     janitor::clean_names() %>% 
     dplyr::rename(applicant_id = .data$id,
                   motivation_why_involved = .data$motivation_why)
-
-    # create self-id column if it does not exist (because nobody used it)
-    if (!"gender_self_identification" %in% colnames(survey_df)) {
-      survey_df$gender_self_identification <- NA
-    }
-
+  
+  # create self-id column if it does not exist (because nobody used it)
+  if (!"gender_self_identification" %in% colnames(survey_df)) {
+    survey_df$gender_self_identification <- NA
+  }
   # DATA CLEANING - this could probably be done more efficiently
   # tibble with project ids the person applied to (1 row per person-project)
   project_ids_df <- survey_df %>% 
     dplyr::select(.data$applicant_id, .data$project_id) %>% 
     dplyr::mutate(applied_to = .data$project_id) %>% # store this before separating the rows
     tidyr::separate_rows(.data$project_id, sep = " ") %>% 
-    dplyr::distinct() %>% 
-    dplyr::group_by(.data$applicant_id)
-
+    dplyr::mutate(project_id = unify_project_id_formats(.data$project_id)) %>% 
+    dplyr::distinct()
+  
   # tibble with project roles (1 person-project row)
   project_roles_df <- survey_df %>% 
     dplyr::select(.data$applicant_id, dplyr::starts_with("project_role")) %>% 
     tidyr::pivot_longer(dplyr::starts_with("project_role"), names_to = "project_id", values_to = "project_role")%>% 
-    dplyr::mutate(project_id = .data$project_id %>% 
-              stringr::str_extract("\\w{3}_\\d{2}_\\d{4}") %>% 
-              stringr::str_replace_all("_", "-") %>% 
-              stringr::str_to_upper() %>% stringr::str_trim()) %>% 
+    dplyr::mutate(project_id = extract_ids_from_kobo_columnnames(.data$project_id)) %>% 
     dplyr::filter(.data$project_role != "DNA") %>% # TODO: proper checking that applicants did not mess up here. 
     dplyr::distinct()
-
+  
   # 1 person row
   personal_info_df <- survey_df %>% 
     dplyr::select(.data$applicant_id, dplyr::starts_with("gender"), .data$first_name, .data$last_name, email = .data$email_address,
                   .data$german_skills, dplyr::starts_with("rating"), dplyr::starts_with("motivation"),
-                  .data$consent_privacy_policy) %>% 
+                  .data$consent_privacy_policy, dplyr::starts_with("past_")) %>% 
     dplyr::distinct() %>% 
     janitor::clean_names() %>% 
     dplyr::rename_with(~stringr::str_replace_all(.x, "rating_technologies_tools", "skills"), dplyr::starts_with("rating_technologies_tools")) %>% 
     dplyr::rename_with(~stringr::str_replace_all(.x, "rating_", ""), dplyr::starts_with("rating"))
-
+  
   # coalesce gender columns into one
   personal_info_df <- personal_info_df %>% 
     dplyr::mutate(gender = dplyr::if_else(.data$gender == "self_identification", NA_character_, .data$gender))
   personal_info_df$gender <- dplyr::coalesce(personal_info_df$gender,
-                                              personal_info_df$gender_self_identification)
-
+                                             personal_info_df$gender_self_identification)
+  
   # join 
   cleaned_df <- project_ids_df %>% 
     dplyr::left_join(project_roles_df, by = c("applicant_id", "project_id")) %>% 
     dplyr::left_join(personal_info_df, by = "applicant_id")
-
+  
   # filter if the user wants to filter 
   if (!is.null(project_id)) {
     proj_id <- project_id
@@ -75,13 +82,15 @@ load_applications <- function(asset_url, project_id = NULL) {
   if (nrow(cleaned_df) == 0) {
     usethis::ui_warn(glue::glue("No applicants present after filtering for {project_id}. Did you specify the ID in the correct format?"))
   }
-
+  
   cleaned_df <- cleaned_df %>% 
-    dplyr::select(.data$applicant_id, .data$gender, dplyr::everything())
-
+    dplyr::select(.data$applicant_id, .data$gender, .data$email, dplyr::ends_with('name'),
+                  dplyr::starts_with('project'), .data$applied_to, dplyr::starts_with('past'),
+                  dplyr::starts_with('skills'), dplyr::starts_with('techniques'), dplyr::starts_with('topics'), 
+                  dplyr::everything())
+  
   return(cleaned_df)
 }
-
 #' anonymize_applications
 #' @param survey_df tibble. Tibble with the applications. 
 #' @importFrom rlang .data
@@ -172,7 +181,7 @@ use_team_selection_workflow <- function(project_id, data_folder = ".") {
   prefix <- tolower(stringr::str_extract(project_id, '[:alpha:]+')) 
   usethis::use_template(
     "send_confirmation_emails.R",
-    save_as = fs::path(team_selection_folder, glue::glue("02_{prefix}_send_confirmation_emails.R")),
+    save_as = fs::path(team_selection_folder, glue::glue("{project_id}_02_send_confirmation_emails.R")),
     data = list(project_id = project_id),
     package = "projectutils",
     open = FALSE
@@ -194,7 +203,7 @@ use_team_selection_workflow <- function(project_id, data_folder = ".") {
 
   usethis::use_template(
     "prepare_team_selection.R",
-    save_as = fs::path(team_selection_folder, glue::glue("01_{prefix}_prepare_team_selection.R")),
+    save_as = fs::path(team_selection_folder, glue::glue("{project_id}_01_prepare_team_selection.R")),
     data = list(project_id = project_id),
     package = "projectutils",
     open = TRUE

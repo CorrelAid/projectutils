@@ -3,8 +3,7 @@ projectutils
 
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/CorrelAid/projectutils/branch/master/graph/badge.svg)](https://codecov.io/gh/CorrelAid/projectutils?branch=main)
+[![codecov](https://codecov.io/gh/CorrelAid/projectutils/branch/main/graph/badge.svg?token=1AxThNtabA)](https://codecov.io/gh/CorrelAid/projectutils)
 [![R build
 status](https://github.com/CorrelAid/projectutils/workflows/R-CMD-check/badge.svg)](https://github.com/CorrelAid/projectutils/actions)
 [![Lifecycle:
