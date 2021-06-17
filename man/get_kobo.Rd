@@ -9,7 +9,7 @@ get_kobo(url, token = Sys.getenv("KOBO_TOKEN"))
 \arguments{
 \item{url}{character. URL to download.}
 
-\item{token}{character. API token. defaults to Sys.getenv("KOBO_TOKEN")}
+\item{token}{character. API token. defaults to Sys.getenv("KOBO_CORRELAID_TOKEN")}
 }
 \description{
 load an asset by its url
