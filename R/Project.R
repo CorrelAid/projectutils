@@ -331,7 +331,7 @@ Project <- R6::R6Class("Project",
       if (missing(value)) {
         return(private$.organization_id)
       } else {
-        checkmate::assert_character(organization_id, len = 1, pattern = '^[[:upper:]]{3}$')
+        checkmate::assert_character(value, len = 1, pattern = '^[[:upper:]]{3}$')
         private$.organization_id <- value
       }
       invisible(self)
