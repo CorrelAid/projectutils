@@ -56,7 +56,7 @@ projectutils::status to see the available status and the corresponding ids.}
 
 \item{\code{slack_channel}}{character. Returns or sets the name of the Slack channel for the project.}
 
-\item{\code{organization_id}}{integer. Returns or sets the integer corresponding to the partner organization of the project.
+\item{\code{organization_id}}{integer. Returns or sets the three letter, uppercase ID corresponding to the partner organization of the project. e.g. COR for CorrelAid
 create a project}
 }
 \if{html}{\out{</div>}}

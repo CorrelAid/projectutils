@@ -23,7 +23,7 @@ Project <- R6::R6Class("Project",
     .slack_channel = NA_character_,
     .status_id = NA_integer_,
     .status = NA_character_,
-    .organization_id = NA_integer_,
+    .organization_id = NA_character_,
     assert_name = function(value) {
       checkmate::assert_character(value, min.len = 1, max.len = 1)
     }
@@ -326,12 +326,12 @@ Project <- R6::R6Class("Project",
     },
 
     #' @field organization_id
-    #' integer. Returns or sets the integer corresponding to the partner organization of the project.
+    #' integer. Returns or sets the three letter, uppercase ID corresponding to the partner organization of the project. e.g. COR for CorrelAid
     organization_id = function(value) {
       if (missing(value)) {
         return(private$.organization_id)
       } else {
-        checkmate::assert_number(value, lower = 1)
+        checkmate::assert_character(organization_id, len = 1, pattern = '^[[:upper:]]{3}$')
         private$.organization_id <- value
       }
       invisible(self)

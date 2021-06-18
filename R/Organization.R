@@ -3,7 +3,7 @@
 #' @export
 Organization <- R6::R6Class("Organization",
   private = list(
-    .organization_id = NA_integer_,
+    .organization_id = NA_character_,
     .organization_name = NA_character_,
     .website = NA_character_,
     .about = list(de = '', en = '')
