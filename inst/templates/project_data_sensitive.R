@@ -1,31 +1,14 @@
----
-params:
-  anon_path: "data/applications.csv"
-output: 
-  html_document:
-    toc: true
-    toc_depth: 2
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(include = FALSE)
 library(magrittr)
 library(projectutils)
 PROJECT_ID <- "{{{project_id}}}"
-```
 
----
-title: "Sensitive/private project data `r PROJECT_ID`"
----
-```{r}
+
 #read from rds file
 proj %>% readr::read_rds(glue::glue("{PROJECT_ID}.rds"))
 ```
 
-# Project members
+# Project members --------
 
-```{r}
 # Project team members
 members <- tibble::tribble(
     ~volunteer_id, ~role,
@@ -39,10 +22,7 @@ members %>%
     purrr::pmap(proj$add_project_member)
 
 proj$project_members
-```
 
 
-```{r}
 # write to rds file
 proj %>% readr::write_rds(glue::glue("{PROJECT_ID}.rds"))
-```

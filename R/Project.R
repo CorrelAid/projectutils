@@ -361,11 +361,7 @@ Project <- R6::R6Class("Project",
     #' print 
     #' @description print the project
     print = function() {
-      cat(glue::glue("
-      Project {self$project_id}
-      Status: {self$status}
-      \n"))
-      invisible(self)
+      self$to_tibble() %>% dplyr::glimpse()
     },
     #' add a new tag to the project
     #' @param category character. the tag category. see projectutils::tags for available values.

@@ -54,15 +54,15 @@
 #'@export 
 use_r6_templates <- function(project_id, data_folder = ".") {
   usethis::use_template(
-    "project_data_public.Rmd",
-    save_as = fs::path(data_folder, project_id, glue::glue("{project_id}_project_data_public.Rmd")),
+    "project_data_public.R",
+    save_as = fs::path(data_folder, project_id, glue::glue("{project_id}_project_data_public.R")),
     data = list(project_id = project_id),
     package = "projectutils",
     open = TRUE
   )
   usethis::use_template(
-    "project_data_sensitive.Rmd",
-    save_as = fs::path(data_folder, project_id, glue::glue("{project_id}_project_data_sensitive.Rmd")),
+    "project_data_sensitive.R",
+    save_as = fs::path(data_folder, project_id, glue::glue("{project_id}_project_data_sensitive.R")),
     data = list(project_id = project_id),
     package = "projectutils",
     open = FALSE

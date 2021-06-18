@@ -1,28 +1,13 @@
----
-output: 
-  html_document:
-    toc: true
-    toc_depth: 2
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(include = FALSE)
 library(magrittr)
 library(projectutils)
 PROJECT_ID <- "{{{project_id}}}"
-```
 
----
-title: "Public project data `r PROJECT_ID`"
----
+# GET DATA FROM GITHUB ISSUE ----------
+gh_data <- get_gh_issue_data(PROJECT_ID)
 
-```{r}
-#read from rds file
-proj <- readr::read_rds(glue::glue("{PROJECT_ID}.rds"))
-```
-
-```{r}
+# CREATE PROJECT OBJECT ------------
+proj <- Project$new(PROJECT_ID, gh_data$name)
+proj$num_gh_issue <- gh_data$num_gh_issue
 # properties set through the constructor -----
 # only uncomment if you want to change something
 # you can also create the object again with correct parameters
@@ -38,44 +23,40 @@ proj$end_ym_predicted <- "1970-01"
 proj$is_internal <- FALSE
 proj$slack_channel <- "foochannel"
 # urls
-proj$num_gh_issue <- 10000
 proj$url_git_repo <- "https://github.com/CorrelAid/foobar"
+
+# pad links
+print(gh_data$pad_links)
 proj$url_ideation_pad <- "https://pad.correlaid.org/aaaaaaaaaaaaaaaaa"
+proj$url_call_pad <- "https://pad.correlaid.org/aaaaaaaaaaaaaaaaa"
 
 # publish to website
 proj$is_public <- FALSE
-proj$slug <- "a-slug-for-the-website"
 
 # RELATED TABLES ----------------
 # set status
-projectutils::status
-proj$set_status(status = "Team selection / Onboarding  / Kickoff")
+proj$set_status(get_project_status(proj$num_gh_issue))
 proj$status_id
 
 # set local chapters
-projectutils::local_chapters
-proj$add_local_chapter(lc_name = "munich")
-proj$add_local_chapter(lc_name = "paris")
-proj$add_local_chapter("berlin")
+gh_data$lc
+gh_data$lc %>% 
+     purrr::walk(function(lc) proj$add_local_chapter(lc_name = lc))
 proj$local_chapters
 
 # add tags
-available_tags <- projectutils::tags
-available_tags
-proj$add_tag("data", "administrative")
-proj$add_tag("lc", "berlin")
-proj$add_tag("internal")
+gh_data$tags
+gh_data$tags %>% 
+     purrr::pmap(function(category, value) proj$add_tag(category, value))
 proj$tags
-```
 
 
 
-# Description of the project 
+# PROJECT DESCRIPTION ----------
 
-```{r proj-description}
 get_description_section <- function(section) {
-    de <- readr::read_lines(glue::glue("de/{section}.md")) %>% paste(collapse = "\n")
-    en <- readr::read_lines(glue::glue("en/{section}.md")) %>% paste(collapse = "\n")
+    de <- readr::read_lines(here::here(PROJECT_ID, glue::glue("de/{section}.md"))) %>% paste(collapse = "\n")
+    en <- readr::read_lines(here::here(PROJECT_ID, glue::glue("en/{section}.md"))) %>% paste(collapse = "\n")
     list(en = en, de = de)
 }
 
@@ -95,21 +76,17 @@ desc$further_links <- list(
 )
 proj$description <- desc
 
-```
 
-```{r}
+# TIBBLE AND TABLES -----
 # tibble representation of a project
 proj$to_tibble()$tags
-proj$to_tibble()$url_ideation_pad
-```
+proj$to_tibble() %>% dplyr::glimpse()
 
-```{r}
 # tables
 proj$get_sql_tables()
-```
 
 
-```{r}
+# SAVE 
 # write to rds file
-proj %>% readr::write_rds(glue::glue("{PROJECT_ID}.rds"))
-```
+proj %>% readr::write_rds(here::here(PROJECT_ID, glue::glue("{PROJECT_ID}.rds")))
+
