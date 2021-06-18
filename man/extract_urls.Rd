@@ -6,6 +6,12 @@
 \usage{
 extract_urls(txt)
 }
+\arguments{
+\item{txt}{character. text of the github issue.}
+}
+\value{
+character. vector of urls
+}
 \description{
 extract urls
 }

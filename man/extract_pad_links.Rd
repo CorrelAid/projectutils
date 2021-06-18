@@ -6,6 +6,12 @@
 \usage{
 extract_pad_links(txt)
 }
+\arguments{
+\item{txt}{character. text of the github issue.}
+}
+\value{
+character. vector of pad links
+}
 \description{
 extract codimd pad links from text
 }
