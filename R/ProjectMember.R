@@ -194,6 +194,7 @@ ProjectMember <- R6::R6Class("ProjectMember",
       private$.role_id <- roles  %>% 
             dplyr::filter(role == .env$role) %>% 
             dplyr::pull(role_id)
+      private$.role <- role
       invisible(self)
     }, 
 
