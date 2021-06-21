@@ -6,12 +6,13 @@ output: rmdformats::robobook
 title: "Applications for project `r toupper(params$project_id)`"
 ---
 <!-- THIS FILE IS NOT SUPPOSED TO BE KNITTED DIRECTLY
-    INSTEAD IT IS KNIT FROM 01_preparte_team_selection.R
+    INSTEAD IT IS KNIT FROM 01_prepare_team_selection.R
     IF YOU WANT TO KNIT THIS BY HAND, SET THE PARAMETERS ACCORDINGLY
 -->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 ```
 
 ```{r include=FALSE, message=FALSE}
