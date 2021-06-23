@@ -19,6 +19,7 @@ library(tibble)
 library(ggplot2)
 library(readr)
 library(stringr)
+library(forcats)
 
 lvls <- tibble(level_num = c(0, 1, 2, 3), level = c("beginner", "user", "advanced", "expert"))
 # theme and palette
@@ -54,6 +55,8 @@ a_skills <- a %>%
  
 **Projects they applied to**: `r a$applied_to %>% stringr::str_replace_all(' ', ', ')`
 
+**German skills**: `r a$german_skills`
+
 ### Past applications
 ```{r results='asis'}
 if (is.na(a$past_applications)) {
@@ -65,16 +68,9 @@ if (a$past_applications == 'first_application') {
 } else if(a$past_applications == 'successful') {
     cat(glue::glue('The applicant has **successfully applied** to a CorrelAid project before.'))
 } else if(a$past_applications == 'not_successful') {
-    glue::glue('The applicant was **not successful** with their application(s) so far. They specified the following when asked about when/where they have applied in the past:<br><br> > foo')
+    cat(glue::glue("The applicant was **not successful** with their application(s) so far. They specified the following when asked about when/where they have applied in the past:\n\n > {a$past_applications_details}"))
 }
 ```
-
-```{r results='asis'}
-if (a$past_applications == 'not_successful') {
-  cat(glue::glue("**Details: {a$past_applications_details}**"))
-}
-```
-
 
 ### What skills qualify you?
 
