@@ -74,21 +74,6 @@ load_projects <- function(data_folder = here::here()) {
   return(projects)
 }
 
-#'updates a top level field of a project
-#' @param project list. the project to be updated.
-#' @param field character. the field that needs to be updated. only top-level fields work currently 
-#' @param value the new value.
-#' @return list. the project.
-#' @export
-update_project <- function(project, field, value) {
-  if (is.null(project[[field]])) {
-    usethis::ui_stop(glue::glue("Field {field} does not exist."))
-  }
-  project[[field]] <- value
-  return(project)
-}
-
-
 #'update the list of projects
 #'@param data_folder character. path to data folder starting at root of the project. defaults to here::here()
 #'@description loads the data for all projects and writes the list as json to the data subfolder

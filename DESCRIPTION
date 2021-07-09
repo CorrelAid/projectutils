@@ -1,6 +1,6 @@
 Package: projectutils
 Title: "Small Utility Functions Managing CorrelAid Projects"
-Version: 0.7.1
+Version: 0.8.0
 Authors@R: 
     person(given = "Frie",
            family = "Preu",
@@ -27,6 +27,9 @@ Imports:
     rlang,
     purrr,
     stringr, 
+    RMariaDB,
+    DBI, 
+    gh,
     checkmate
 Suggests: 
     mockery,

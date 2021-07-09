@@ -1,3 +1,7 @@
+# projectutils 0.8.0
+- introduces several R6 classes to hold data related to a project: Project, Description, Organization, Volunteer, ProjectMember, LocalChapter, Tag
+- rework the templates to use the new classes
+
 # projectutils 0.7.1
 - improvement: improved report for applications, using CorrelAid theme and HTML instead of PDF (#28)
 

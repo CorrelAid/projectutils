@@ -12,6 +12,7 @@ output: rmdformats::robobook
 ```{r include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 
 library(dplyr)
 library(tidyr)
@@ -19,7 +20,6 @@ library(tibble)
 library(ggplot2)
 library(readr)
 library(stringr)
-library(forcats)
 
 lvls <- tibble(level_num = c(0, 1, 2, 3), level = c("beginner", "user", "advanced", "expert"))
 # theme and palette
@@ -85,8 +85,8 @@ if (a$past_applications == 'first_application') {
 ```{r fig.height=8, fig.width=6}
 ggplot(a_skills, aes(x = category, y = level_num, group = question)) +
   geom_segment(aes(
-    x = category,
-    xend = category,
+    x = fct_rev(category),
+    xend = fct_rev(category),
     y = 0,
     yend = level_num
   )) +
@@ -103,7 +103,7 @@ ggplot(a_skills, aes(x = category, y = level_num, group = question)) +
     breaks = seq(0, max(lvls$level_num), 1),
     labels = lvls$level
   ) +
-  facet_wrap( ~ question, nrow = 3, scales = "free_y") +
+  facet_wrap(~question, nrow = 3, scales = "free_y") +
   xlab("")
 ```
 
