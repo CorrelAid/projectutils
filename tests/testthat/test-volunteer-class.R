@@ -1,31 +1,31 @@
 test_that("volunteer class initialization errors when inputs are not valid", {
     expect_error(Volunteer$new())
 
-    expect_error(Volunteer$new(), regexp = "^argument \"first_name\" is missing, with no default")
+    expect_error(Volunteer$new(1), regexp = "^argument \"first_name\" is missing, with no default")
 
     # invalid email
-    expect_error(Volunteer$new(first_name = "lisa", last_name = "simpson", email = "invalid"), regexp = "Invalid email address.")
+    expect_error(Volunteer$new(1, first_name = "lisa", last_name = "simpson", email = "invalid"), regexp = "Invalid email address.")
 
     # invalid length
-    expect_error(Volunteer$new(first_name = c("lisa", "bert"), last_name = "mustermann", email = "lisa@gmail.com"), regexp = "Assertion on 'first_name' failed: Must have length 1, but has length 2.")
+    expect_error(Volunteer$new(1, first_name = c("lisa", "bert"), last_name = "mustermann", email = "lisa@gmail.com"), regexp = "Assertion on 'first_name' failed: Must have length 1, but has length 2.")
 })
 
 test_that("volunteer class initialization works", {
     # tag without value
-    vol <- Volunteer$new(first_name = "lisa", last_name = "simpson", email = "lisa.simpson@gmail.com")
+    vol <- Volunteer$new(12, first_name = "lisa", last_name = "simpson", email = "lisa.simpson@gmail.com")
     expect_equal(vol$first_name, "lisa")
     expect_equal(vol$last_name, "simpson")
 })
 
 test_that("batch creating volunteers works", {
     args_df <- tibble::tribble(
-        ~first_name, ~last_name, ~email,
-        "lisa", "simpson", "lisa@simpson.com",
-        "bart", "simpson", "bart@simpson.com"
+        ~volunteer_id, ~first_name, ~last_name, ~email,
+        1, "lisa", "simpson", "lisa@simpson.com",
+        2, "bart", "simpson", "bart@simpson.com"
     )
     vols <- args_df %>%
-        purrr::pmap_dfr(function(first_name, last_name, email) {
-            vol <- projectutils::Volunteer$new(first_name, last_name, email)
+        purrr::pmap_dfr(function(volunteer_id, first_name, last_name, email) {
+            vol <- projectutils::Volunteer$new(volunteer_id, first_name, last_name, email)
             vol$to_tibble()
         })
     expect_equal(nrow(vols), 2)
@@ -34,7 +34,7 @@ test_that("batch creating volunteers works", {
 })
 
 test_that("setting volunteer usernames works as expected", {
-    vol <- Volunteer$new(first_name = "lisa", last_name = "simpson", email = "lisa.simpson@gmail.com")
+    vol <- Volunteer$new(1, first_name = "lisa", last_name = "simpson", email = "lisa.simpson@gmail.com")
 
     # setting username works
     vol$user_gh <- "lisas"
@@ -65,7 +65,7 @@ test_that("setting volunteer usernames works as expected", {
 
 
 test_that("setting volunteer URLs works as expected", {
-    vol <- Volunteer$new(first_name = "lisa", last_name = "simpson", email = "lisa.simpson@gmail.com")
+    vol <- Volunteer$new(1, first_name = "lisa", last_name = "simpson", email = "lisa.simpson@gmail.com")
 
     # invalid urls results in errors
     expect_error(
@@ -88,7 +88,7 @@ test_that("setting volunteer URLs works as expected", {
 
 
 test_that("setting volunteer local chapter works as expected", {
-    vol <- Volunteer$new(first_name = "lisa", last_name = "simpson", email = "lisa.simpson@gmail.com")
+    vol <- Volunteer$new(1, first_name = "lisa", last_name = "simpson", email = "lisa.simpson@gmail.com")
 
     # invalid chapter
     expect_error(

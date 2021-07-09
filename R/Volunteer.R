@@ -31,6 +31,20 @@ Volunteer <- R6::R6Class("Volunteer",
     }
   ),
   active = list(
+    #' @field volunteer_id
+    #' integer. id of the volunteer
+    volunteer_id = function(value) {
+      if (missing(value)) {
+        return(private$.volunteer_id)
+      } else { 
+        first_name <- value
+        checkmate::assert_character(first_name, len = 1)
+        private$assert_name(first_name)
+        private$.first_name <- first_name
+        invisible(self)
+      }
+    },
+
     #' @field first_name
     #' character. first_name of the volunteer
     first_name = function(value) {
@@ -169,6 +183,7 @@ Volunteer <- R6::R6Class("Volunteer",
   ),
   public = list(
     #' create a volunteer
+    #' @param volunteer_id integer. id of the volunteer. refer to kobo applications or specify manually.
     #' @param first_name character. first name of the volunteer
     #' @param last_name character. last name of the volunteer
     #' @param email character. email of the volunteer
@@ -179,11 +194,13 @@ Volunteer <- R6::R6Class("Volunteer",
     #' @param url_linkedin character. URL to Linkedin profile of the volunteer. defaults to NA
     #' @param url_xing character. URL to Xing profile of the volunteer. defaults to NA
     #' @param lc_name character. Name of the local chapter of the volunteer. defaults to NA
-    initialize = function(first_name, last_name, email,
+    initialize = function(volunteer_id, first_name, last_name, email,
                           user_gh = NA_character_, user_gl = NA_character_,
                           user_twitter = NA_character_, url_website = NA_character_,
                           url_linkedin = NA_character_,
                           url_xing = NA_character_, lc_name = NA_character_) {
+      checkmate::assert_number(volunteer_id, lower = 1)
+      private$.volunteer_id <- volunteer_id
       self$first_name <- first_name
       self$last_name <- last_name
       self$email <- email

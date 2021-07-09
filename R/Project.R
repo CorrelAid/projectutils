@@ -6,6 +6,7 @@ Project <- R6::R6Class("Project",
     .tags = list(),
     .local_chapters = list(),
     .project_members = list(),
+    .volunteers = list(),
     .description = NULL,
     .project_id = "",
     .name = "",
@@ -76,6 +77,24 @@ Project <- R6::R6Class("Project",
         description <- value
         checkmate::assert_class(description, c("Description", "R6"))
         private$.description <- description
+      }
+      invisible(self)
+    },
+
+    #' @field volunteers
+    #' tibble. Returns the volunteers of the project as a tibble. Read-only.
+    volunteers = function(value) {
+      if (missing(value)) {
+        if (length(private$.volunteers) == 0) {
+          return(tibble::tibble())
+        }
+        volunteers_df <- private$.volunteers %>%
+          purrr::map_dfr(function(pm) {
+            pm$to_tibble()
+        })
+        return(volunteers_df)
+      } else {
+        usethis::ui_stop("Can't set volunteers. Please use the add_volunteer function to add a volunteer to the project.")
       }
       invisible(self)
     },
@@ -385,7 +404,34 @@ Project <- R6::R6Class("Project",
       invisible(self)
     },
 
-    #' add a local chapter to the project
+    #' add a volunteer to the project
+    #' @param volunteer_id integer. id of the volunteer. refer to kobo applications or specify manually.
+    #' @param first_name character. first name of the volunteer
+    #' @param last_name character. last name of the volunteer
+    #' @param email character. email of the volunteer
+    #' @param user_gh character. GitHub username of the volunteer. defaults to NA
+    #' @param user_gl character. GitLab username of the volunteer. defaults to NA
+    #' @param user_twitter character. Twitter username of the volunteer. defaults to NA
+    #' @param url_website character. Personal website of the volunteer. defaults to NA
+    #' @param url_linkedin character. URL to Linkedin profile of the volunteer. defaults to NA
+    #' @param url_xing character. URL to Xing profile of the volunteer. defaults to NA
+    #' @param lc_name character. Name of the local chapter of the volunteer. defaults to NA
+    add_volunteer = function(volunteer_id, first_name, last_name, email,
+                          user_gh = NA_character_, user_gl = NA_character_,
+                          user_twitter = NA_character_, url_website = NA_character_,
+                          url_linkedin = NA_character_,
+                          url_xing = NA_character_, lc_name = NA_character_) {
+      vol <- Volunteer$new(first_name, last_name, email,
+                          user_gh = user_gh, user_gl = user_gl,
+                          user_twitter = user_twitter, url_website = url_website,
+                          url_linkedin = url_linkedin,
+                          url_xing = url_xing, lc_name = lc_name)
+      private$.volunteers <- c(private$.volunteers, vol) 
+      invisible(self)
+    },
+
+
+    #' add a project member to the project
     #' @param volunteer_id integer. id of the volunteer.
     #' @param role character. role of the volunteer. see projectutils::roles for available options.
     #' @param ... optional arguments for ProjectMember constructor
@@ -447,6 +493,47 @@ Project <- R6::R6Class("Project",
       )
     },
 
+    #' to_website_list
+    #' @description convert project to list/json that can be displayed on the CorrelAid website
+    #' @return list list that can be written to json
+    to_website_list = function() {
+      l <- list(
+        project_id = self$project_id,
+        published = self$is_public,
+        title = self$description$title,
+        repo = list(
+          url = self$url_git_repo
+        ), 
+        links = self$description$further_links,
+        organization = list(
+          about = list(
+            de = list(
+              text = self$description$de
+            ),
+            en = list(
+              text = self$description$en
+            ),
+          ),
+          description = list(
+            de = list(
+              summary = self$description$summary$de, 
+              problem = self$description$problem$de, 
+              data = self$description$data$de, 
+              approach = self$description$approach$de, 
+              impact = self$description$impact$de
+            ),
+            en = list(
+              summary = self$description$summary$en, 
+              problem = self$description$problem$en, 
+              data = self$description$data$en, 
+              approach = self$description$approach$en, 
+              impact = self$description$impact$en
+            )
+          )
+        )
+      )
+      return(l)
+    }, 
     #' get_sql_tables
     #' @description function that returns a tibble for each table
     get_sql_tables = function() {
