@@ -28,7 +28,7 @@ Description <- R6::R6Class("Description",
     #' tibble. Returns or sets the summary title of the project. 
     title = function(value) {
       if (missing(value)) {
-        return(private$.summary)
+        return(private$.title)
       } else {
         assert_lang_list(value)
         private$.title <- value
