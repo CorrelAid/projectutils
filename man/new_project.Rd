@@ -4,14 +4,14 @@
 \alias{new_project}
 \title{creates folder for a new project and adds templates for all the necessary files.}
 \usage{
-new_project(project_id, name = "", data_folder = ".")
+new_project(project_id, data_folder = here::here())
 }
 \arguments{
 \item{project_id}{character. ID of the project, e.g. 2021-03-COR. see description for details.}
 
-\item{name}{character. short name of the project. defaults to "".}
-
 \item{data_folder}{character. path to data folder starting at root of the project. defaults to "."}
+
+\item{name}{character. short name of the project. defaults to "".}
 }
 \description{
 creates folder for a new project and adds templates for all the necessary files.

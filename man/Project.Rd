@@ -20,6 +20,8 @@ class representing the basic properties of a CorrelAid Project
 
 \item{\code{description}}{tibble. Returns the description of the project as a Description object.}
 
+\item{\code{organization}}{tibble. Returns the organization of the project as a Organization object.}
+
 \item{\code{project_members}}{tibble. Returns the project_members of the project as a tibble. Read-only.}
 
 \item{\code{project_id}}{character. id of the project, in the form YYYY-mm-ABB where ABB is any three-character, uppercase abbreviation}
@@ -56,7 +58,7 @@ projectutils::status to see the available status and the corresponding ids.}
 
 \item{\code{slack_channel}}{character. Returns or sets the name of the Slack channel for the project.}
 
-\item{\code{organization_id}}{integer. Returns or sets the three letter, uppercase ID corresponding to the partner organization of the project. e.g. COR for CorrelAid
+\item{\code{organization_id}}{integer. Returns the three letter, uppercase ID corresponding to the partner organization of the project. e.g. COR for CorrelAid
 create a project}
 }
 \if{html}{\out{</div>}}
