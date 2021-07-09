@@ -6,12 +6,13 @@ output: rmdformats::robobook
 title: "Applications for project `r toupper(params$project_id)`"
 ---
 <!-- THIS FILE IS NOT SUPPOSED TO BE KNITTED DIRECTLY
-    INSTEAD IT IS KNIT FROM 01_preparte_team_selection.R
+    INSTEAD IT IS KNIT FROM 01_prepare_team_selection.R
     IF YOU WANT TO KNIT THIS BY HAND, SET THE PARAMETERS ACCORDINGLY
 -->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 ```
 
 ```{r include=FALSE, message=FALSE}
@@ -140,23 +141,4 @@ res <- lapply(not_disclosed, function(x) {
 
 cat(unlist(res), sep = '\n')
 ```
-
-
-# Applicants who did not disclose their gender
-```{r not-disclosed, results='asis'}
-not_disclosed <- appl %>% 
-  filter(gender == "not_disclosed") %>% 
-  arrange(applicant_id) %>% 
-  pull(applicant_id)
-
-res <- lapply(not_disclosed, function(x) {
-  params <- list(applicant_id = x, anon_path = ANON_PATH)
-  knitr::knit_child(
-    'zzz_template_application_single.Rmd', envir = environment(), quiet = TRUE
-  )
-})
-
-cat(unlist(res), sep = '\n')
-```
-
 
