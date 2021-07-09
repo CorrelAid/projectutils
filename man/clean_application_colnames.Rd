@@ -21,5 +21,4 @@ tibble with clean column names
 \description{
 cleans surveymonkey column names. snakecases column names and splits the title into "project_id" and "project_title"
 
-cleans surveymonkey column names. snakecases column names and splits the title into "project_id" and "project_title"
 }

@@ -9,12 +9,6 @@ load_applications_export(
   project_id_surveymonkey = NULL,
   lang = "en"
 )
-
-load_applications_export(
-  export_csv_path,
-  project_id_surveymonkey = NULL,
-  lang = "en"
-)
 }
 \arguments{
 \item{export_csv_path}{character. path to csv export from surveymonkey containing the applications}

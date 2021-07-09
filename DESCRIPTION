@@ -27,10 +27,10 @@ Imports:
     rlang,
     purrr,
     stringr, 
-    checkmate, 
     RMariaDB,
     DBI, 
-    gh
+    gh,
+    checkmate
 Suggests: 
     mockery,
     here,

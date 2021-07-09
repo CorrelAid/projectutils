@@ -5,8 +5,6 @@
 \title{Use team selection workflow}
 \usage{
 use_team_selection_workflow(project_id, data_folder = ".")
-
-use_team_selection_workflow(project_id, data_folder = ".")
 }
 \arguments{
 \item{project_id}{project id in path form, e.g. 2020-11-COR}
