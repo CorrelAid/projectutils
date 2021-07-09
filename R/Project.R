@@ -360,8 +360,9 @@ Project <- R6::R6Class("Project",
       assert_project_id(project_id)
       private$.project_id <- project_id
 
-      # initialize description
+      # initialize description and organization
       private$.description <- Description$new(project_id)
+
       # start_ym can be derived from project id
       private$.start_ym <- stringr::str_extract(project_id, "\\d{4}\\-\\d{2}")
       
@@ -438,6 +439,10 @@ Project <- R6::R6Class("Project",
     #' to_tibble
     #' @description returns a one row tibble representation of the Project object.
     to_tibble = function() {
+      org <- tibble::tibble()
+      if (!is.null(self$organization)) {
+        org <- self$organization$to_tibble()
+      }
       tibble::tibble(
         project_id = private$.project_id,
         name = self$name,
@@ -458,14 +463,14 @@ Project <- R6::R6Class("Project",
         status_id = self$status_id,
         status = self$status,
         description = list(self$description$to_tibble()),
-        organization = list(self$organization$to_tibble())
+        organization = list(org)
       )
     },
 
     #' get_sql_tables
     #' @description function that returns a tibble for each table
     get_sql_tables = function() {
-      list( 
+      l <- list( 
         project = self$to_tibble() %>% 
             dplyr::select(-tags, -local_chapters, -project_members, -status, -description),
         projecttag = tibble::tibble(
@@ -478,8 +483,13 @@ Project <- R6::R6Class("Project",
           lc_id = self$local_chapters$lc_id
         ),
         projectmember = self$project_members,
-        description = self$description$to_tibble()
+        description = self$description$to_tibble(),
+        organization = tibble::tibble()
       )
+      if (!is.null(self$organization)) {
+        l$organization <- self$organization$to_tibble()
+      }
+      l 
     }
   )
 )
