@@ -7,6 +7,7 @@ Project <- R6::R6Class("Project",
     .local_chapters = list(),
     .project_members = list(),
     .description = NULL,
+    .organization = NULL,
     .project_id = "",
     .name = "",
     .slug = NA_character_,
@@ -80,6 +81,20 @@ Project <- R6::R6Class("Project",
       invisible(self)
     },
 
+    #' @field organization
+    #' tibble. Returns the organization of the project as a Organization object.
+    organization = function(value) {
+      if (missing(value)) {
+        return(private$.organization)
+      } else {
+        organization <- value
+        checkmate::assert_class(organization, c("Organization", "R6"))
+        private$.organization <- organization
+        private$.organization_id <- organization$organization_id
+      }
+      invisible(self)
+    },
+    
     #' @field project_members
     #' tibble. Returns the project_members of the project as a tibble. Read-only.
     project_members = function(value) {
@@ -326,13 +341,12 @@ Project <- R6::R6Class("Project",
     },
 
     #' @field organization_id
-    #' integer. Returns or sets the three letter, uppercase ID corresponding to the partner organization of the project. e.g. COR for CorrelAid
+    #' integer. Returns the three letter, uppercase ID corresponding to the partner organization of the project. e.g. COR for CorrelAid
     organization_id = function(value) {
       if (missing(value)) {
         return(private$.organization_id)
       } else {
-        checkmate::assert_character(value, len = 1, pattern = '^[[:upper:]]{3}$')
-        private$.organization_id <- value
+        usethis::ui_stop('read only. set by setting organization field.')
       }
       invisible(self)
     }
@@ -443,7 +457,8 @@ Project <- R6::R6Class("Project",
         project_members = list(self$project_members),
         status_id = self$status_id,
         status = self$status,
-        description = list(self$description$to_tibble())
+        description = list(self$description$to_tibble()),
+        organization = list(self$organization$to_tibble())
       )
     },
 

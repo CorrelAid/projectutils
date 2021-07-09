@@ -15,6 +15,12 @@ proj$num_gh_issue <- gh_data$num_gh_issue
 # proj$start_ym <- "2021-03"
 # proj$project_id <- "2021-03-HAC"
 
+# ORGANIZATION - delete if internal project
+org <- Organization$new(organization_id = 'EXA',
+                        organization_name = 'Exxample org',
+                        website = 'https://example.org')
+org$about <- get_description_section('00_about')
+
 # basic properties ---------------
 proj$end_ym <- "1970-02"
 proj$end_ym_predicted <- "1970-01"
