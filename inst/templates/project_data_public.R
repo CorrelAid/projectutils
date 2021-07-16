@@ -20,7 +20,7 @@ org <- Organization$new(organization_id = 'EXA',
                         organization_name = 'Example org',
                         website = 'https://example.org')
 org$about <- get_description_section('00_about')
-proj$org <- org 
+proj$organization <- org 
 # basic properties ---------------
 proj$end_ym <- NA
 proj$end_ym_predicted <- NA
