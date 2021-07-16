@@ -68,7 +68,7 @@ Project <- R6::R6Class("Project",
       }
       invisible(self)
     },
-    
+
     #' @field description
     #' tibble. Returns the description of the project as a Description object.
     description = function(value) {
@@ -95,7 +95,7 @@ Project <- R6::R6Class("Project",
       }
       invisible(self)
     },
-    
+
     #' @field project_members
     #' tibble. Returns the project_members of the project as a tibble. Read-only.
     project_members = function(value) {
@@ -106,14 +106,14 @@ Project <- R6::R6Class("Project",
         project_members_df <- private$.project_members %>%
           purrr::map_dfr(function(pm) {
             pm$to_tibble()
-        })
+          })
         return(project_members_df)
       } else {
         usethis::ui_stop("Can't set project_members. Please use the add_project_member function to add a project member to the project.")
       }
       invisible(self)
     },
-    
+
     #' @field project_id
     #' character. id of the project, in the form YYYY-mm-ABB where ABB is any three-character, uppercase abbreviation
     project_id = function(value) {
@@ -183,13 +183,8 @@ Project <- R6::R6Class("Project",
       } else {
         checkmate::assert_logical(value)
         if (value & !private$.is_public) {
-          answer <- usethis::ui_yeah("Setting is_public to TRUE will publish the project to the CorrelAid website under correlaid.org/projects once you push this. Are you sure you want to continue?")
-          if (answer) {
-            private$.is_public <- value
-            usethis::ui_done("Set is_public to TRUE.")
-          } else {
-            usethis::ui_info("Not setting is_public to TRUE.")
-          }
+          private$.is_public <- value
+          usethis::ui_done("Set is_public to TRUE.")
         } else {
           private$.is_public <- value
         }
@@ -363,7 +358,7 @@ Project <- R6::R6Class("Project",
       if (missing(value)) {
         return(private$.organization_id)
       } else {
-        usethis::ui_stop('read only. set by setting organization field.')
+        usethis::ui_stop("read only. set by setting organization field.")
       }
       invisible(self)
     }
@@ -382,7 +377,7 @@ Project <- R6::R6Class("Project",
 
       # start_ym can be derived from project id
       private$.start_ym <- stringr::str_extract(project_id, "\\d{4}\\-\\d{2}")
-      
+
       # name needs to be character
       checkmate::assert_character(name, min.len = 1, max.len = 1)
       private$.name <- name
@@ -390,7 +385,7 @@ Project <- R6::R6Class("Project",
       invisible(self)
     },
 
-    #' print 
+    #' print
     #' @description print the project
     print = function() {
       self$to_tibble() %>% dplyr::glimpse()
@@ -429,14 +424,13 @@ Project <- R6::R6Class("Project",
 
     #' get team member by volunteer id
     #' @param volunteer_id integer. numeric id of the volunteer.
-    get_team_member = function(volunteer_id) { 
-
-      tm <- private$.project_members %>% 
-            purrr::keep(function(pm) pm$volunteer_id == volunteer_id) 
-       if (length(tm) == 0) {
-         usethis::ui_stop(glue::glue("Volunteer {volunteer_id} is not part of the project."))
-       }
-       tm[[1]]
+    get_team_member = function(volunteer_id) {
+      tm <- private$.project_members %>%
+        purrr::keep(function(pm) pm$volunteer_id == volunteer_id)
+      if (length(tm) == 0) {
+        usethis::ui_stop(glue::glue("Volunteer {volunteer_id} is not part of the project."))
+      }
+      tm[[1]]
     },
     #' set status of the project
     #' @param status character. the status. See projectutils::status for options.
@@ -471,7 +465,7 @@ Project <- R6::R6Class("Project",
         team_size = self$team_size,
         url_git_repo = self$url_git_repo,
         url_gh_issue = self$url_gh_issue,
-        url_ideation_pad = self$url_ideation_pad, 
+        url_ideation_pad = self$url_ideation_pad,
         url_call_pad = self$url_call_pad,
         slack_channel = self$slack_channel,
         organization_id = self$organization_id,
@@ -488,13 +482,13 @@ Project <- R6::R6Class("Project",
     #' get_sql_tables
     #' @description function that returns a tibble for each table
     get_sql_tables = function() {
-      l <- list( 
-        project = self$to_tibble() %>% 
-            dplyr::select(-tags, -local_chapters, -project_members, -team_size, -status, -description),
+      l <- list(
+        project = self$to_tibble() %>%
+          dplyr::select(-tags, -local_chapters, -project_members, -team_size, -status, -description),
         projecttag = tibble::tibble(
           project_id = private$.project_id,
           tag_id = self$tags$tag_id
-        ), 
+        ),
         tag = projectutils::tags,
         projectlocalchapter = tibble::tibble(
           project_id = private$.project_id,
@@ -507,7 +501,7 @@ Project <- R6::R6Class("Project",
       if (!is.null(self$organization)) {
         l$organization <- self$organization$to_tibble()
       }
-      l 
+      l
     }
   )
 )
