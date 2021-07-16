@@ -24,6 +24,7 @@ proj$org <- org
 # basic properties ---------------
 proj$end_ym <- NA
 proj$end_ym_predicted <- NA
+proj$team_size <- 4
 
 # misc
 proj$is_internal <- FALSE

@@ -6,6 +6,7 @@ Project <- R6::R6Class("Project",
     .tags = list(),
     .local_chapters = list(),
     .project_members = list(),
+    .team_size = NA_integer_,
     .description = NULL,
     .organization = NULL,
     .project_id = "",
@@ -307,6 +308,20 @@ Project <- R6::R6Class("Project",
       }
       invisible(self)
     },
+
+    #' @field team_size
+    #' integer. Team size of the project.
+    team_size = function(value) {
+      if (missing(value)) {
+        return(private$.team_size)
+      } else {
+        value <- as.integer(value)
+        checkmate::assert_integer(value, lower = 1)
+        private$.team_size <- value
+      }
+      invisible(self)
+    },
+
     #' @field url_ideation_pad
     #' character. Returns or sets the full URL to the CodiMD Pad for the ideation phase of the project.
     url_ideation_pad = function(value) {
@@ -453,6 +468,7 @@ Project <- R6::R6Class("Project",
         end_ym = self$end_ym,
         is_public = self$is_public,
         is_internal = self$is_internal,
+        team_size = self$team_size,
         url_git_repo = self$url_git_repo,
         url_gh_issue = self$url_gh_issue,
         url_ideation_pad = self$url_ideation_pad, 
@@ -474,7 +490,7 @@ Project <- R6::R6Class("Project",
     get_sql_tables = function() {
       l <- list( 
         project = self$to_tibble() %>% 
-            dplyr::select(-tags, -local_chapters, -project_members, -status, -description),
+            dplyr::select(-tags, -local_chapters, -project_members, -team_size, -status, -description),
         projecttag = tibble::tibble(
           project_id = private$.project_id,
           tag_id = self$tags$tag_id
