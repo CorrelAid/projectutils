@@ -17,13 +17,13 @@ proj$num_gh_issue <- gh_data$num_gh_issue
 
 # ORGANIZATION - delete if internal project
 org <- Organization$new(organization_id = 'EXA',
-                        organization_name = 'Exxample org',
+                        organization_name = 'Example org',
                         website = 'https://example.org')
 org$about <- get_description_section('00_about')
 proj$org <- org 
 # basic properties ---------------
-proj$end_ym <- "1970-02"
-proj$end_ym_predicted <- "1970-01"
+proj$end_ym <- NA
+proj$end_ym_predicted <- NA
 
 # misc
 proj$is_internal <- FALSE

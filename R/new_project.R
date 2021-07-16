@@ -45,8 +45,8 @@ new_project <- function(project_id, name, data_folder = here::here()) {
       }
     )
   }
-  use_team_selection_workflow(project_id, data_folder)
-  use_r6_templates(project_id, data_folder)
+  use_team_selection_workflow(project_id)
+  use_r6_templates(project_id)
 }
 
 #'Use R6 templates
