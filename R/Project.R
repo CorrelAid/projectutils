@@ -181,7 +181,7 @@ Project <- R6::R6Class("Project",
         return(private$.is_public)
       } else {
         checkmate::assert_logical(value)
-        if (value) {
+        if (value & !private$.is_public) {
           answer <- usethis::ui_yeah("Setting is_public to TRUE will publish the project to the CorrelAid website under correlaid.org/projects once you push this. Are you sure you want to continue?")
           if (answer) {
             private$.is_public <- value
@@ -189,6 +189,8 @@ Project <- R6::R6Class("Project",
           } else {
             usethis::ui_info("Not setting is_public to TRUE.")
           }
+        } else {
+          private$.is_public <- value
         }
       }
       invisible(self)
