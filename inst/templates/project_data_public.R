@@ -5,6 +5,13 @@ PROJECT_ID <- "{{{project_id}}}"
 # GET DATA FROM GITHUB ISSUE ----------
 gh_data <- get_gh_issue_data(PROJECT_ID)
 
+
+get_description_section <- function(section) {
+    de <- readr::read_lines(here::here(PROJECT_ID, glue::glue("de/{section}.md"))) %>% paste(collapse = "\n")
+    en <- readr::read_lines(here::here(PROJECT_ID, glue::glue("en/{section}.md"))) %>% paste(collapse = "\n")
+    list(en = en, de = de)
+}
+
 # CREATE PROJECT OBJECT ------------
 proj <- Project$new(PROJECT_ID, gh_data$name)
 proj$num_gh_issue <- gh_data$num_gh_issue
@@ -60,13 +67,6 @@ proj$tags
 
 
 # PROJECT DESCRIPTION ----------
-
-get_description_section <- function(section) {
-    de <- readr::read_lines(here::here(PROJECT_ID, glue::glue("de/{section}.md"))) %>% paste(collapse = "\n")
-    en <- readr::read_lines(here::here(PROJECT_ID, glue::glue("en/{section}.md"))) %>% paste(collapse = "\n")
-    list(en = en, de = de)
-}
-
 desc <- Description$new(PROJECT_ID)
 desc$title <- list(
      de = "",
