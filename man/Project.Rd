@@ -52,6 +52,8 @@ projectutils::status to see the available status and the corresponding ids.}
 
 \item{\code{num_gh_issue}}{integer. Returns the number of the issue in the projects repository. read-only (use u)}
 
+\item{\code{team_size}}{integer. Team size of the project.}
+
 \item{\code{url_ideation_pad}}{character. Returns or sets the full URL to the CodiMD Pad for the ideation phase of the project.}
 
 \item{\code{url_call_pad}}{character. Returns or sets the full URL to the CodiMD Pad for the call for applications for the project.}
