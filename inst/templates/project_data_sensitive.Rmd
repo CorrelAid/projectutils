@@ -1,14 +1,22 @@
+---
+title: "{{{project_id}}}: Sensitive Project Data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 library(magrittr)
 library(projectutils)
 PROJECT_ID <- "{{{project_id}}}"
-
-
 #read from rds file
-proj %>% readr::read_rds(glue::glue("{PROJECT_ID}.rds"))
+proj <- readr::read_rds(glue::glue("{PROJECT_ID}.rds"))
 ```
 
-# Project members --------
+## Team members 
 
+```{r members, include=FALSE}
+
+# Project members --------
 # Project team members
 members <- tibble::tribble(
     ~volunteer_id, ~role,
@@ -26,3 +34,6 @@ proj$project_members
 
 # write to rds file
 proj %>% readr::write_rds(glue::glue("{PROJECT_ID}.rds"))
+```
+
+## Notes on team work 

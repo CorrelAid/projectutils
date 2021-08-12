@@ -1,0 +1,3 @@
+#### In welchen Arbeitsbereich der Organisation fällt das Projekt? (z.B. Fundraising, Mitgliedergewinnung, Marketing, Reichweite / Sichtbarkeit, Evaluation)
+#### An welche Grenzen ist die Organisationen gestoßen? Was sind die derzeitigen *pain points*? Was sind die Auswirkungen dieser Einschränkungen? 
+#### Was braucht die Organisation? Welche Erkenntnisse will die Organisation aus ihren Daten gewinnen? 

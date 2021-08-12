@@ -30,18 +30,18 @@ new_project <- function(project_id, name, data_folder = here::here()) {
   # markdown files
   markdown_files <- c("00_about.md", "00_summary.md", "01_problem.md", "02_data.md", "03_approach.md", "04_impact.md")
   for (lang in c("de", "en")) {
+    
     dir.create(fs::path(data_folder, project_id, lang), showWarnings = FALSE)
 
+
     purrr::walk(markdown_files, function(x) {
-        file_path <- fs::path(data_folder, project_id, lang, x)
-        
-        answer <- TRUE
-        if (file.exists(file_path)) {
-          usethis::ui_warn(glue::glue("{file_path} already exists."))
-          answer <- usethis::ui_yeah("Do you want to overwrite it?", yes = "Yes", no = "No", shuffle = FALSE)
-        }
-        if (answer) file.create(file_path)
-        usethis::ui_done(glue::glue("created {x} at {file_path}"))
+      
+        usethis::use_template(
+          glue::glue("description/{lang}/{x}"),
+          save_as = fs::path(project_id, lang, x),
+          package = "projectutils",
+          open = FALSE
+        )
       }
     )
   }
@@ -62,8 +62,8 @@ use_r6_templates <- function(project_id, data_folder = ".") {
     open = TRUE
   )
   usethis::use_template(
-    "project_data_sensitive.R",
-    save_as = fs::path(data_folder, project_id, glue::glue("{project_id}_project_data_sensitive.R")),
+    "project_data_sensitive.Rmd",
+    save_as = fs::path(data_folder, project_id, glue::glue("{project_id}_project_data_sensitive.Rmd")),
     data = list(project_id = project_id),
     package = "projectutils",
     open = FALSE

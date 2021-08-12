@@ -1,0 +1,1 @@
+Zusammenfassung des Projekts in drei Sätzen

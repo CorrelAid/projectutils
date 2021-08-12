@@ -1,0 +1,1 @@
+Beschreibung der Partner-Organisation (kann kopiert werden von Website, bitte in diesem Fall Quelle angeben)
