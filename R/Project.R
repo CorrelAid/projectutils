@@ -37,7 +37,7 @@ Project <- R6::R6Class("Project",
       if (missing(value)) {
         if (length(private$.tags) == 0) {
           # return empty tibble if no tags have been assigned
-          return(tibble::tibble(tag_id = character(), category = character(), value = character()))
+          return(tibble::tibble(tag_id = integer(), category = character(), value = character()))
         }
         tags_df <- private$.tags %>%
           purrr::map_dfr(function(tag) {
