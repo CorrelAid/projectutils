@@ -118,7 +118,9 @@ proj_l$team <- list(
 )
 # set to TRUE if the repository is public and should be linked on the website
 proj_l$repo$public <- FALSE 
-
-proj_l %>%
-  jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE) %>%
-  readr::write_lines(glue::glue('{PROJECT_ID}/{PROJECT_ID}.json'))
+                 
+if (proj$is_public) {
+     proj_l %>%
+          jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE) %>%
+          readr::write_lines(glue::glue("docs/{PROJECT_ID}.json"))
+}
