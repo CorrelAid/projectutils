@@ -117,7 +117,7 @@ proj_l$team <- list(
      )
 )
 # set to TRUE if the repository is public and should be linked on the website
-proj_l$repo$is_public <- FALSE 
+proj_l$repo$public <- FALSE 
 
 proj_l %>%
   jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE) %>%
