@@ -144,3 +144,9 @@ test_that("data frame representation works", {
   expect_equal(nrow(proj_df$project_members[[1]]), 0)
   expect_true(is.na(proj$status_id))
 })
+
+test_that("website format conversion works", {
+  proj <- Project$new(project_id = "2020-01-FOO", name = "an awesome project")
+  proj_list <- proj$to_website_json()
+  expect_setequal(names(proj_list), c('title', 'published', 'project_id', 'project_id_path', 'repo', 'links', 'organization', 'description'))
+})
