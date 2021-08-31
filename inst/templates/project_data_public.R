@@ -7,9 +7,9 @@ gh_data <- get_gh_issue_data(PROJECT_ID)
 
 
 get_description_section <- function(section) {
-    de <- readr::read_lines(here::here(PROJECT_ID, glue::glue("de/{section}.md"))) %>% paste(collapse = "\n")
-    en <- readr::read_lines(here::here(PROJECT_ID, glue::glue("en/{section}.md"))) %>% paste(collapse = "\n")
-    list(en = en, de = de)
+     de <- readr::read_lines(here::here(PROJECT_ID, glue::glue("de/{section}.md"))) %>% paste(collapse = "\n")
+     en <- readr::read_lines(here::here(PROJECT_ID, glue::glue("en/{section}.md"))) %>% paste(collapse = "\n")
+     list(en = en, de = de)
 }
 
 # CREATE PROJECT OBJECT ------------
@@ -18,20 +18,22 @@ proj$num_gh_issue <- gh_data$num_gh_issue
 # properties set through the constructor -----
 # only uncomment if you want to change something
 # you can also create the object again with correct parameters
-# proj$name <- "an awesome new title" 
+# proj$name <- "an awesome new title"
 # proj$start_ym <- "2021-03"
 # proj$project_id <- "2021-03-HAC"
 
 # ORGANIZATION - delete if internal project
-org <- Organization$new(organization_id = 'EXA',
-                        organization_name = 'Example org',
-                        website = 'https://example.org')
-org$about <- get_description_section('00_about')
-proj$organization <- org 
+org <- Organization$new(
+     organization_id = "EXA",
+     organization_name = "Example org",
+     website = "https://example.org"
+)
+org$about <- get_description_section("00_about")
+proj$organization <- org
 # basic properties ---------------
 proj$end_ym <- NA
 proj$end_ym_predicted <- NA
-proj$team_size <- 4
+proj$team_size <- NA
 
 # misc
 proj$is_internal <- FALSE
@@ -54,13 +56,13 @@ proj$status_id
 
 # set local chapters
 gh_data$lc
-gh_data$lc %>% 
+gh_data$lc %>%
      purrr::walk(function(lc) proj$add_local_chapter(lc_name = lc))
 proj$local_chapters
 
 # add tags
 gh_data$tags
-gh_data$tags %>% 
+gh_data$tags %>%
      purrr::pmap(function(category, value) proj$add_tag(category, value))
 proj$tags
 
@@ -93,7 +95,32 @@ proj$to_tibble() %>% dplyr::glimpse()
 proj$get_sql_tables()
 
 
-# SAVE 
+# SAVE
 # write to rds file
 proj %>% readr::write_rds(here::here(PROJECT_ID, glue::glue("{PROJECT_ID}.rds")))
 
+
+# FOR WEBSITE
+proj_l <- proj$to_website_json()
+
+# add a few things that are not part of the class /
+# cannot currently be extracted from the class system
+proj_l$team <- list(
+     list(
+          first_name = "",
+          last_name = "",
+          github = "",
+          twitter = "",
+          linkedin = "",
+          website = "",
+          xing = ""
+     )
+)
+# set to TRUE if the repository is public and should be linked on the website
+proj_l$repo$public <- FALSE 
+                 
+if (proj$is_public) {
+     proj_l %>%
+          jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE) %>%
+          readr::write_lines(glue::glue("docs/{PROJECT_ID}.json"))
+}

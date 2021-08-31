@@ -37,7 +37,7 @@ Project <- R6::R6Class("Project",
       if (missing(value)) {
         if (length(private$.tags) == 0) {
           # return empty tibble if no tags have been assigned
-          return(tibble::tibble(tag_id = character(), category = character(), value = character()))
+          return(tibble::tibble(tag_id = integer(), category = character(), value = character()))
         }
         tags_df <- private$.tags %>%
           purrr::map_dfr(function(tag) {
@@ -502,6 +502,49 @@ Project <- R6::R6Class("Project",
         l$organization <- self$organization$to_tibble()
       }
       l
+    },
+    #' to_website_json
+    #' @description function that returns list that can be used for the website (will need to add team separately)
+    to_website_json = function() {
+      l <- list(
+        project_id = self$project_id,
+        project_id_path = self$project_id,
+        published = self$is_public,
+        title = self$description$title,
+        repo = list(url = self$url_git_repo, public = FALSE),
+        links = self$description$further_links,
+        organization = list(
+          name = self$organization$organization_name,
+          website = self$organization$website,
+          about = list(
+            de = list(
+              text = self$organization$about$de,
+              source = "[Quelle](https://mare-liberum.org/)"
+            ),
+            en = list(
+              text = self$organization$about$en,
+              source = "[Source](https://mare-liberum.org/)"
+            )
+          )
+        ),
+        description = list(
+          de = list(
+            summary = self$description$summary$de,
+            problem = self$description$problem$de,
+            data = self$description$data$de,
+            approach = self$description$approach$de,
+            impact = self$description$impact$de
+          ),
+          en = list(
+            summary = self$description$summary$en,
+            problem = self$description$problem$en,
+            data = self$description$data$en,
+            approach = self$description$approach$en,
+            impact = self$description$impact$en
+          )
+        )
+      )
+      return (l)
     }
   )
 )
