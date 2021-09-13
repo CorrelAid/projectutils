@@ -13,23 +13,23 @@ load_applications <- function(asset_url, project_id = NULL) {
 
   survey_list <- get_kobo(asset_url)
 
-  clean_kobo(survey_list, project_id = project_id)
+  survey_df <- survey_list %>%
+    purrr::map_dfr(function(sub) purrr::compact(sub) %>%  tibble::as_tibble()) %>% 
+    janitor::clean_names() 
+  
+  clean_kobo(survey_df, project_id = project_id)
 }
 
 #' convert applications into tibble
 #' @description cleans the list of applications into a tibble in long format (one person-application row)
-#' @param survey_list list list of applications returned by get_kobo
+#' @param survey_df tibble tibble of responses with cleaned column names
 #' @param project_id character. ID of the project, e.g. 2020-04-ERL.
 #' @return data frame containing the responses to the questions
 #' @export
-clean_kobo <- function(survey_list, project_id) {
-  
-  survey_df <- survey_list %>%
-    purrr::map_dfr(function(sub) purrr::compact(sub) %>%  tibble::as_tibble()) %>% 
-    janitor::clean_names() %>% 
+clean_kobo <- function(survey_df, project_id) {
+  survey_df <- survey_df %>% 
     dplyr::rename(applicant_id = .data$id,
                   motivation_why_involved = .data$motivation_why)
-  
   # create self-id column if it does not exist (because nobody used it)
   if (!"gender_self_identification" %in% colnames(survey_df)) {
     survey_df$gender_self_identification <- NA

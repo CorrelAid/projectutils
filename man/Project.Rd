@@ -77,6 +77,7 @@ create a project}
 \item \href{#method-set_status}{\code{Project$set_status()}}
 \item \href{#method-to_tibble}{\code{Project$to_tibble()}}
 \item \href{#method-get_sql_tables}{\code{Project$get_sql_tables()}}
+\item \href{#method-to_website_json}{\code{Project$to_website_json()}}
 \item \href{#method-clone}{\code{Project$clone()}}
 }
 }
@@ -217,8 +218,19 @@ get_sql_tables
 \if{latex}{\out{\hypertarget{method-get_sql_tables}{}}}
 \subsection{Method \code{get_sql_tables()}}{
 function that returns a tibble for each table
+to_website_json
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Project$get_sql_tables()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-to_website_json"></a>}}
+\if{latex}{\out{\hypertarget{method-to_website_json}{}}}
+\subsection{Method \code{to_website_json()}}{
+function that returns list that can be used for the website (will need to add team separately)
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Project$to_website_json()}\if{html}{\out{</div>}}
 }
 
 }

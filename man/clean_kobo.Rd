@@ -4,10 +4,10 @@
 \alias{clean_kobo}
 \title{convert applications into tibble}
 \usage{
-clean_kobo(survey_list, project_id)
+clean_kobo(survey_df, project_id)
 }
 \arguments{
-\item{survey_list}{list list of applications returned by get_kobo}
+\item{survey_df}{tibble tibble of responses with cleaned column names}
 
 \item{project_id}{character. ID of the project, e.g. 2020-04-ERL.}
 }
