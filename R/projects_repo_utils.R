@@ -14,7 +14,7 @@ get_project_status <- function(gh_issue_num, github_board_id = '3771798') {
 
     cards <- columns %>%
         purrr::map_dfr(function(column) {
-            issue_urls <- gh::gh(column$cards_url, .accept = "application/vnd.github.inertia-preview+json") %>%
+            issue_urls <- gh::gh(column$cards_url, .accept = "application/vnd.github.inertia-preview+json", .limit = 100) %>%
                 purrr::map_chr("content_url", .default = NA)
             tibble::tibble(name = column$name, issue_url = issue_urls) %>%
                 dplyr::mutate(issue_num = stringr::str_replace_all(.data$issue_url, ".+?/(\\d{1,})$", "\\1"))
