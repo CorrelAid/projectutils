@@ -17,14 +17,14 @@ creates a tag object
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Tag$new()}}
-\item \href{#method-to_tibble}{\code{Tag$to_tibble()}}
-\item \href{#method-clone}{\code{Tag$clone()}}
+\item \href{#method-NA-new}{\code{Tag$new()}}
+\item \href{#method-NA-to_tibble}{\code{Tag$to_tibble()}}
+\item \href{#method-unknown-clone}{\code{Tag$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-NA-new"></a>}}
+\if{latex}{\out{\hypertarget{method-NA-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Tag$new(category, value = NA)}\if{html}{\out{</div>}}
@@ -42,8 +42,8 @@ to_tibble}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_tibble"></a>}}
-\if{latex}{\out{\hypertarget{method-to_tibble}{}}}
+\if{html}{\out{<a id="method-NA-to_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-NA-to_tibble}{}}}
 \subsection{Method \code{to_tibble()}}{
 representation of tag as a one-row tibble
 \subsection{Usage}{
@@ -52,8 +52,8 @@ representation of tag as a one-row tibble
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-unknown-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-unknown-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -40,16 +40,16 @@ create a volunteer}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Volunteer$new()}}
-\item \href{#method-to_tibble}{\code{Volunteer$to_tibble()}}
-\item \href{#method-set_local_chapter}{\code{Volunteer$set_local_chapter()}}
-\item \href{#method-get_sql_tables}{\code{Volunteer$get_sql_tables()}}
-\item \href{#method-clone}{\code{Volunteer$clone()}}
+\item \href{#method-Volunteer-new}{\code{Volunteer$new()}}
+\item \href{#method-Volunteer-to_tibble}{\code{Volunteer$to_tibble()}}
+\item \href{#method-Volunteer-set_local_chapter}{\code{Volunteer$set_local_chapter()}}
+\item \href{#method-Volunteer-get_sql_tables}{\code{Volunteer$get_sql_tables()}}
+\item \href{#method-Volunteer-clone}{\code{Volunteer$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Volunteer-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Volunteer-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Volunteer$new(
@@ -94,8 +94,8 @@ to_tibble}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_tibble"></a>}}
-\if{latex}{\out{\hypertarget{method-to_tibble}{}}}
+\if{html}{\out{<a id="method-Volunteer-to_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-Volunteer-to_tibble}{}}}
 \subsection{Method \code{to_tibble()}}{
 returns a one row tibble representation of the Volunteer object.
 set_local_chapter
@@ -105,8 +105,8 @@ set_local_chapter
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_local_chapter"></a>}}
-\if{latex}{\out{\hypertarget{method-set_local_chapter}{}}}
+\if{html}{\out{<a id="method-Volunteer-set_local_chapter"></a>}}
+\if{latex}{\out{\hypertarget{method-Volunteer-set_local_chapter}{}}}
 \subsection{Method \code{set_local_chapter()}}{
 sets the local chapter of the volunteer
 get_sql_tables
@@ -123,8 +123,8 @@ get_sql_tables
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_sql_tables"></a>}}
-\if{latex}{\out{\hypertarget{method-get_sql_tables}{}}}
+\if{html}{\out{<a id="method-Volunteer-get_sql_tables"></a>}}
+\if{latex}{\out{\hypertarget{method-Volunteer-get_sql_tables}{}}}
 \subsection{Method \code{get_sql_tables()}}{
 a list function that returns tibble for each table
 \subsection{Usage}{
@@ -133,8 +133,8 @@ a list function that returns tibble for each table
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Volunteer-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Volunteer-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

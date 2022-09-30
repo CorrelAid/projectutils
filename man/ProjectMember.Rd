@@ -40,17 +40,17 @@ create a volunteer}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ProjectMember$new()}}
-\item \href{#method-to_tibble}{\code{ProjectMember$to_tibble()}}
-\item \href{#method-set_role}{\code{ProjectMember$set_role()}}
-\item \href{#method-set_behaviour}{\code{ProjectMember$set_behaviour()}}
-\item \href{#method-get_sql_tables}{\code{ProjectMember$get_sql_tables()}}
-\item \href{#method-clone}{\code{ProjectMember$clone()}}
+\item \href{#method-ProjectMember-new}{\code{ProjectMember$new()}}
+\item \href{#method-ProjectMember-to_tibble}{\code{ProjectMember$to_tibble()}}
+\item \href{#method-ProjectMember-set_role}{\code{ProjectMember$set_role()}}
+\item \href{#method-ProjectMember-set_behaviour}{\code{ProjectMember$set_behaviour()}}
+\item \href{#method-ProjectMember-get_sql_tables}{\code{ProjectMember$get_sql_tables()}}
+\item \href{#method-ProjectMember-clone}{\code{ProjectMember$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ProjectMember-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ProjectMember-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ProjectMember$new(
@@ -89,8 +89,8 @@ to_tibble}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_tibble"></a>}}
-\if{latex}{\out{\hypertarget{method-to_tibble}{}}}
+\if{html}{\out{<a id="method-ProjectMember-to_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-ProjectMember-to_tibble}{}}}
 \subsection{Method \code{to_tibble()}}{
 returns a one row tibble representation of the Volunteer object.
 set_role
@@ -100,8 +100,8 @@ set_role
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_role"></a>}}
-\if{latex}{\out{\hypertarget{method-set_role}{}}}
+\if{html}{\out{<a id="method-ProjectMember-set_role"></a>}}
+\if{latex}{\out{\hypertarget{method-ProjectMember-set_role}{}}}
 \subsection{Method \code{set_role()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ProjectMember$set_role(role)}\if{html}{\out{</div>}}
@@ -117,8 +117,8 @@ set_behaviour}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_behaviour"></a>}}
-\if{latex}{\out{\hypertarget{method-set_behaviour}{}}}
+\if{html}{\out{<a id="method-ProjectMember-set_behaviour"></a>}}
+\if{latex}{\out{\hypertarget{method-ProjectMember-set_behaviour}{}}}
 \subsection{Method \code{set_behaviour()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ProjectMember$set_behaviour(flag, description = NA)}\if{html}{\out{</div>}}
@@ -136,8 +136,8 @@ get_sql_tables}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_sql_tables"></a>}}
-\if{latex}{\out{\hypertarget{method-get_sql_tables}{}}}
+\if{html}{\out{<a id="method-ProjectMember-get_sql_tables"></a>}}
+\if{latex}{\out{\hypertarget{method-ProjectMember-get_sql_tables}{}}}
 \subsection{Method \code{get_sql_tables()}}{
 a list function that returns tibble for each table
 \subsection{Usage}{
@@ -146,8 +146,8 @@ a list function that returns tibble for each table
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ProjectMember-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ProjectMember-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

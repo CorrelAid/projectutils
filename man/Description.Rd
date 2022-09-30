@@ -34,15 +34,15 @@ create a description of a project}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Description$new()}}
-\item \href{#method-to_tibble}{\code{Description$to_tibble()}}
-\item \href{#method-get_sql_tables}{\code{Description$get_sql_tables()}}
-\item \href{#method-clone}{\code{Description$clone()}}
+\item \href{#method-Description-new}{\code{Description$new()}}
+\item \href{#method-Description-to_tibble}{\code{Description$to_tibble()}}
+\item \href{#method-Description-get_sql_tables}{\code{Description$get_sql_tables()}}
+\item \href{#method-Description-clone}{\code{Description$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Description-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Description-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Description$new(project_id)}\if{html}{\out{</div>}}
@@ -58,8 +58,8 @@ to_tibble}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_tibble"></a>}}
-\if{latex}{\out{\hypertarget{method-to_tibble}{}}}
+\if{html}{\out{<a id="method-Description-to_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-Description-to_tibble}{}}}
 \subsection{Method \code{to_tibble()}}{
 returns a one row tibble representation of the Description object.
 get_sql_tables
@@ -69,8 +69,8 @@ get_sql_tables
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_sql_tables"></a>}}
-\if{latex}{\out{\hypertarget{method-get_sql_tables}{}}}
+\if{html}{\out{<a id="method-Description-get_sql_tables"></a>}}
+\if{latex}{\out{\hypertarget{method-Description-get_sql_tables}{}}}
 \subsection{Method \code{get_sql_tables()}}{
 function that returns a tibble for each table
 \subsection{Usage}{
@@ -79,8 +79,8 @@ function that returns a tibble for each table
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Description-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Description-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

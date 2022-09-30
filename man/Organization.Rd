@@ -28,15 +28,15 @@ create a organization}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Organization$new()}}
-\item \href{#method-to_tibble}{\code{Organization$to_tibble()}}
-\item \href{#method-get_sql_tables}{\code{Organization$get_sql_tables()}}
-\item \href{#method-clone}{\code{Organization$clone()}}
+\item \href{#method-Organization-new}{\code{Organization$new()}}
+\item \href{#method-Organization-to_tibble}{\code{Organization$to_tibble()}}
+\item \href{#method-Organization-get_sql_tables}{\code{Organization$get_sql_tables()}}
+\item \href{#method-Organization-clone}{\code{Organization$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Organization-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Organization-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Organization$new(organization_id, organization_name, website = NA)}\if{html}{\out{</div>}}
@@ -56,8 +56,8 @@ to_tibble}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_tibble"></a>}}
-\if{latex}{\out{\hypertarget{method-to_tibble}{}}}
+\if{html}{\out{<a id="method-Organization-to_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-Organization-to_tibble}{}}}
 \subsection{Method \code{to_tibble()}}{
 returns a one row tibble representation of the Volunteer object.
 get_sql_tables
@@ -67,8 +67,8 @@ get_sql_tables
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_sql_tables"></a>}}
-\if{latex}{\out{\hypertarget{method-get_sql_tables}{}}}
+\if{html}{\out{<a id="method-Organization-get_sql_tables"></a>}}
+\if{latex}{\out{\hypertarget{method-Organization-get_sql_tables}{}}}
 \subsection{Method \code{get_sql_tables()}}{
 a list function that returns tibble for each table
 \subsection{Usage}{
@@ -77,8 +77,8 @@ a list function that returns tibble for each table
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Organization-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Organization-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

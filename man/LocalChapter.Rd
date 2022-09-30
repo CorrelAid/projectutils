@@ -17,14 +17,14 @@ creates a local chapter object
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{LocalChapter$new()}}
-\item \href{#method-to_tibble}{\code{LocalChapter$to_tibble()}}
-\item \href{#method-clone}{\code{LocalChapter$clone()}}
+\item \href{#method-NA-new}{\code{LocalChapter$new()}}
+\item \href{#method-NA-to_tibble}{\code{LocalChapter$to_tibble()}}
+\item \href{#method-unknown-clone}{\code{LocalChapter$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-NA-new"></a>}}
+\if{latex}{\out{\hypertarget{method-NA-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LocalChapter$new(lc_name)}\if{html}{\out{</div>}}
@@ -40,8 +40,8 @@ to_tibble}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_tibble"></a>}}
-\if{latex}{\out{\hypertarget{method-to_tibble}{}}}
+\if{html}{\out{<a id="method-NA-to_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-NA-to_tibble}{}}}
 \subsection{Method \code{to_tibble()}}{
 representation of local chapter as a one-row tibble
 \subsection{Usage}{
@@ -50,8 +50,8 @@ representation of local chapter as a one-row tibble
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-unknown-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-unknown-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

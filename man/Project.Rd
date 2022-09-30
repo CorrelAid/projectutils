@@ -56,7 +56,7 @@ projectutils::status to see the available status and the corresponding ids.}
 
 \item{\code{url_ideation_pad}}{character. Returns or sets the full URL to the CodiMD Pad for the ideation phase of the project.}
 
-\item{\code{url_call_pad}}{character. Returns or sets the full URL to the CodiMD Pad for the call for applications for the project.}
+\item{\code{url_call_pad}}{character. Returns or sets the full URL for the call for applications for the project.}
 
 \item{\code{slack_channel}}{character. Returns or sets the name of the Slack channel for the project.}
 
@@ -68,22 +68,22 @@ create a project}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Project$new()}}
-\item \href{#method-print}{\code{Project$print()}}
-\item \href{#method-add_tag}{\code{Project$add_tag()}}
-\item \href{#method-add_local_chapter}{\code{Project$add_local_chapter()}}
-\item \href{#method-add_project_member}{\code{Project$add_project_member()}}
-\item \href{#method-get_team_member}{\code{Project$get_team_member()}}
-\item \href{#method-set_status}{\code{Project$set_status()}}
-\item \href{#method-to_tibble}{\code{Project$to_tibble()}}
-\item \href{#method-get_sql_tables}{\code{Project$get_sql_tables()}}
-\item \href{#method-to_website_json}{\code{Project$to_website_json()}}
-\item \href{#method-clone}{\code{Project$clone()}}
+\item \href{#method-Project-new}{\code{Project$new()}}
+\item \href{#method-Project-print}{\code{Project$print()}}
+\item \href{#method-Project-add_tag}{\code{Project$add_tag()}}
+\item \href{#method-Project-add_local_chapter}{\code{Project$add_local_chapter()}}
+\item \href{#method-Project-add_project_member}{\code{Project$add_project_member()}}
+\item \href{#method-Project-get_team_member}{\code{Project$get_team_member()}}
+\item \href{#method-Project-set_status}{\code{Project$set_status()}}
+\item \href{#method-Project-to_tibble}{\code{Project$to_tibble()}}
+\item \href{#method-Project-get_sql_tables}{\code{Project$get_sql_tables()}}
+\item \href{#method-Project-to_website_json}{\code{Project$to_website_json()}}
+\item \href{#method-Project-clone}{\code{Project$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Project-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Project$new(project_id, name)}\if{html}{\out{</div>}}
@@ -101,8 +101,8 @@ print}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-Project-print"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-print}{}}}
 \subsection{Method \code{print()}}{
 print the project
 add a new tag to the project
@@ -112,8 +112,8 @@ add a new tag to the project
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_tag"></a>}}
-\if{latex}{\out{\hypertarget{method-add_tag}{}}}
+\if{html}{\out{<a id="method-Project-add_tag"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-add_tag}{}}}
 \subsection{Method \code{add_tag()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Project$add_tag(category, value = NA)}\if{html}{\out{</div>}}
@@ -131,8 +131,8 @@ add a local chapter to the project}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_local_chapter"></a>}}
-\if{latex}{\out{\hypertarget{method-add_local_chapter}{}}}
+\if{html}{\out{<a id="method-Project-add_local_chapter"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-add_local_chapter}{}}}
 \subsection{Method \code{add_local_chapter()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Project$add_local_chapter(lc_name)}\if{html}{\out{</div>}}
@@ -148,8 +148,8 @@ add a local chapter to the project}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_project_member"></a>}}
-\if{latex}{\out{\hypertarget{method-add_project_member}{}}}
+\if{html}{\out{<a id="method-Project-add_project_member"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-add_project_member}{}}}
 \subsection{Method \code{add_project_member()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Project$add_project_member(volunteer_id, role, ...)}\if{html}{\out{</div>}}
@@ -169,8 +169,8 @@ get team member by volunteer id}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_team_member"></a>}}
-\if{latex}{\out{\hypertarget{method-get_team_member}{}}}
+\if{html}{\out{<a id="method-Project-get_team_member"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-get_team_member}{}}}
 \subsection{Method \code{get_team_member()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Project$get_team_member(volunteer_id)}\if{html}{\out{</div>}}
@@ -186,8 +186,8 @@ set status of the project}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_status"></a>}}
-\if{latex}{\out{\hypertarget{method-set_status}{}}}
+\if{html}{\out{<a id="method-Project-set_status"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-set_status}{}}}
 \subsection{Method \code{set_status()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Project$set_status(status)}\if{html}{\out{</div>}}
@@ -203,8 +203,8 @@ to_tibble}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_tibble"></a>}}
-\if{latex}{\out{\hypertarget{method-to_tibble}{}}}
+\if{html}{\out{<a id="method-Project-to_tibble"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-to_tibble}{}}}
 \subsection{Method \code{to_tibble()}}{
 returns a one row tibble representation of the Project object.
 get_sql_tables
@@ -214,8 +214,8 @@ get_sql_tables
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_sql_tables"></a>}}
-\if{latex}{\out{\hypertarget{method-get_sql_tables}{}}}
+\if{html}{\out{<a id="method-Project-get_sql_tables"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-get_sql_tables}{}}}
 \subsection{Method \code{get_sql_tables()}}{
 function that returns a tibble for each table
 to_website_json
@@ -225,8 +225,8 @@ to_website_json
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_website_json"></a>}}
-\if{latex}{\out{\hypertarget{method-to_website_json}{}}}
+\if{html}{\out{<a id="method-Project-to_website_json"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-to_website_json}{}}}
 \subsection{Method \code{to_website_json()}}{
 function that returns list that can be used for the website (will need to add team separately)
 \subsection{Usage}{
@@ -235,8 +235,8 @@ function that returns list that can be used for the website (will need to add te
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Project-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Project-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

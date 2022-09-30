@@ -329,12 +329,12 @@ Project <- R6::R6Class("Project",
       invisible(self)
     },
     #' @field url_call_pad
-    #' character. Returns or sets the full URL to the CodiMD Pad for the call for applications for the project.
+    #' character. Returns or sets the full URL for the call for applications for the project.
     url_call_pad = function(value) {
       if (missing(value)) {
         return(private$.url_call_pad)
       } else {
-        checkmate::assert_character(value, pattern = "^https://pad.correlaid.org/.+?$")
+        #checkmate::assert_character(value, pattern = "^https://pad.correlaid.org/.+?$")
         private$.url_call_pad <- value
       }
       invisible(self)
